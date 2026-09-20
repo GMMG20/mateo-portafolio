@@ -1,0 +1,207 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matriz de Riesgos</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
+  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
+  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
+  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
+  --r-bajo:#22C55E; --r-mod:#FFBF00; --r-alto:#F97316; --r-ext:#DB0000;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
+  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
+.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
+  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
+.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
+.app-name{color:#fff;font-size:14px;font-weight:600;}
+.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
+.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1180px;margin:0 auto;width:100%;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
+.card h3{font-size:15px;margin-bottom:4px;}
+.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
+.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
+.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
+.banner-amb{background:var(--amb-bg);color:#7A5514;border-left:3px solid var(--amb);}
+.cols{display:grid;grid-template-columns:1fr 1.05fr;gap:16px;align-items:start;}
+@media(max-width:900px){.cols{grid-template-columns:1fr;}}
+button{font-family:inherit;}
+.btn{background:var(--acc-dk);color:#fff;border:none;padding:9px 16px;border-radius:5px;
+  cursor:pointer;font-size:13px;font-weight:700;}
+.btn:hover{background:#09524D;}
+.btn2{background:#fff;border:1px solid var(--line);color:var(--tx);padding:8px 14px;
+  border-radius:5px;cursor:pointer;font-size:12.5px;}
+.btn2:hover{background:var(--bg);}
+input,select{font-family:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:5px;background:#fff;color:var(--tx);width:100%;}
+label{display:block;font-size:11.5px;font-weight:700;color:var(--tx-2);margin-bottom:4px;}
+.g3{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:10px;align-items:end;}
+@media(max-width:620px){.g3{grid-template-columns:1fr;}}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:8px 10px;background:var(--bg);color:var(--tx-2);font-weight:700;
+  border-bottom:2px solid var(--line);font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:#FAFBFB;}
+.mag{display:inline-block;padding:2px 10px;border-radius:11px;font-size:11px;font-weight:700;
+  color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.22);}
+.combo{font-size:11px;color:var(--tx-3);font-weight:600;margin-left:6px;}
+.x{background:none;border:none;color:var(--tx-3);cursor:pointer;font-size:14px;padding:2px 6px;}
+.x:hover{color:var(--r-ext);}
+/* Mapa de calor */
+.heat{border-collapse:separate;border-spacing:4px;width:auto;margin:0 auto;}
+.heat td{width:74px;height:52px;text-align:center;border-radius:5px;font-weight:700;font-size:11px;
+  color:#17262B;position:relative;padding:3px;}
+.heat .ax{background:transparent!important;color:var(--tx-2);font-weight:600;font-size:10.5px;
+  width:auto;min-width:64px;padding:0 6px;}
+.heat .ax.col{text-align:center;min-width:0;}
+.cell-n{display:block;font-size:9.5px;font-weight:700;opacity:.72;}
+.dot{display:inline-block;background:rgba(0,0,0,.62);color:#fff;border-radius:50%;
+  padding:1px 7px;font-size:11px;font-weight:700;}
+.leyenda{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:12px;font-size:12px;color:var(--tx-2);}
+.leyenda span.li{display:inline-flex;align-items:center;gap:6px;}
+.sw{width:13px;height:13px;border-radius:4px;border:1px solid rgba(0,0,0,.16);}
+.vacio{padding:26px 16px;text-align:center;color:var(--tx-2);font-size:13px;}
+footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
+footer b{color:#fff;}
+footer .wrap2{max-width:1180px;margin:0 auto;}
+.toast{position:fixed;top:70px;right:20px;background:var(--acc-dk);color:#fff;padding:11px 16px;
+  border-radius:6px;font-size:13px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:99;
+  transition:opacity .3s;}
+</style>
+
+<div class="app-header">
+  <span class="logo">MM</span>
+  <div class="sep"></div>
+  <div>
+    <div class="app-name">Matriz de Riesgos de Procesos</div>
+    <div class="app-tag">La magnitud se define por combinación, no por una fórmula</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="banner banner-info">
+    <b>Cómo funciona.</b> En la mayoría de matrices la magnitud sale de multiplicar
+    probabilidad por impacto. Aquí cada una de las <b>25 combinaciones</b> tiene su magnitud asignada
+    a mano. Por eso <b>P1 × I5 es Extremo</b> aunque su producto sea apenas 5: un impacto catastrófico
+    no se diluye porque sea poco probable.
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h3>Riesgos</h3>
+      <p class="hint">Agregue un riesgo y vea dónde cae en la matriz.</p>
+      <div class="g3" style="margin:14px 0">
+        <div><label>Nombre del riesgo</label><input id="nom" placeholder="Ej.: Interrupción del suministro"></div>
+        <div><label>Probabilidad</label><select id="prob"></select></div>
+        <div><label>Impacto</label><select id="imp"></select></div>
+      </div>
+      <button class="btn" onclick="agregar()">+ Agregar riesgo</button>
+      <div id="lista" style="margin-top:16px"></div>
+    </div>
+
+    <div class="card">
+      <h3>Mapa de calor</h3>
+      <p class="hint">Eje vertical: probabilidad · Eje horizontal: impacto. El número indica cuántos riesgos caen en esa combinación.</p>
+      <div style="overflow-x:auto;margin-top:14px"><div id="mapa"></div></div>
+      <div class="leyenda" id="leyenda"></div>
+    </div>
+  </div>
+  </div>
+
+<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+
+<script>
+/* Herramienta enfocada en un solo flujo de trabajo. */
+var ZONAS=[
+  {id:'bajo',    nombre:'Bajo',     color:'#22C55E'},
+  {id:'moderado',nombre:'Moderado', color:'#FFBF00'},
+  {id:'alto',    nombre:'Alto',     color:'#F97316'},
+  {id:'extremo', nombre:'Extremo',  color:'#DB0000'}
+];
+/* Filas = probabilidad 1..5 · Columnas = impacto 1..5 */
+var MATRIZ=[
+  ['bajo',    'bajo',    'moderado','alto',   'extremo'],
+  ['bajo',    'moderado','moderado','alto',   'extremo'],
+  ['bajo',    'moderado','alto',    'extremo','extremo'],
+  ['moderado','moderado','alto',    'extremo','extremo'],
+  ['moderado','alto',    'extremo', 'extremo','extremo']
+];
+var PROBS=['Muy Baja','Baja','Media','Alta','Muy Alta'];
+var IMPS =['Insignificante','Menor','Moderado','Mayor','Catastrófico'];
+
+var riesgos=[
+  {nombre:'Interrupción no programada de planta', prob:3, imp:4},
+  {nombre:'Fuga de información de clientes',      prob:2, imp:5},
+  {nombre:'Retraso en entregas a cliente clave',  prob:4, imp:2},
+  {nombre:'Error de digitación en conciliaciones',prob:4, imp:1}
+];
+
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function zonaDe(p,i){
+  var id=MATRIZ[p-1][i-1];
+  for(var k=0;k<ZONAS.length;k++){ if(ZONAS[k].id===id) return ZONAS[k]; }
+  return null;
+}
+function llenarSelects(){
+  document.getElementById('prob').innerHTML=PROBS.map(function(n,i){
+    return '<option value="'+(i+1)+'" '+(i===2?'selected':'')+'>'+(i+1)+' · '+n+'</option>'; }).join('');
+  document.getElementById('imp').innerHTML=IMPS.map(function(n,i){
+    return '<option value="'+(i+1)+'" '+(i===2?'selected':'')+'>'+(i+1)+' · '+n+'</option>'; }).join('');
+}
+function agregar(){
+  var el=document.getElementById('nom'), n=el.value.trim();
+  if(!n){ aviso('Escriba el nombre del riesgo'); el.focus(); return; }
+  riesgos.push({nombre:n, prob:parseInt(document.getElementById('prob').value),
+                imp:parseInt(document.getElementById('imp').value)});
+  el.value=''; el.focus(); pintar();
+}
+function quitar(i){ riesgos.splice(i,1); pintar(); }
+function aviso(msg){
+  var t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){t.remove();},320); },2200);
+}
+function pintarLista(){
+  var c=document.getElementById('lista');
+  if(!riesgos.length){ c.innerHTML='<div class="vacio">Sin riesgos. Agregue el primero arriba.</div>'; return; }
+  c.innerHTML='<table><thead><tr><th>Riesgo</th><th>Magnitud</th><th></th></tr></thead><tbody>'+
+    riesgos.map(function(r,i){
+      var z=zonaDe(r.prob,r.imp);
+      return '<tr><td>'+escH(r.nombre)+'</td>'+
+        '<td><span class="mag" style="background:'+z.color+'">'+z.nombre+'</span>'+
+        '<span class="combo">P'+r.prob+' × I'+r.imp+'</span></td>'+
+        '<td style="text-align:right"><button class="x" title="Quitar" onclick="quitar('+i+')">✕</button></td></tr>';
+    }).join('')+'</tbody></table>';
+}
+function pintarMapa(){
+  var celdas={};
+  riesgos.forEach(function(r){ var k=r.prob+'-'+r.imp; (celdas[k]=celdas[k]||[]).push(r.nombre); });
+  var h='<table class="heat"><tbody>';
+  for(var p=5;p>=1;p--){
+    h+='<tr><td class="ax"><b>'+p+'</b> · '+escH(PROBS[p-1])+'</td>';
+    for(var i=1;i<=5;i++){
+      var z=zonaDe(p,i), k=p+'-'+i, ns=celdas[k]||[];
+      var dentro = ns.length? '<span class="dot" title="'+escH(ns.join(', '))+'">'+ns.length+'</span>'
+                            : '<span class="cell-n">P'+p+'·I'+i+'</span>';
+      h+='<td style="background:'+z.color+'" title="Probabilidad '+p+' × Impacto '+i+' → '+z.nombre+'">'+
+         '<span class="cell-n" style="opacity:.9">'+z.nombre+'</span>'+dentro+'</td>';
+    }
+    h+='</tr>';
+  }
+  h+='<tr><td class="ax"></td>';
+  for(var j=1;j<=5;j++){ h+='<td class="ax col"><b>'+j+'</b><br>'+escH(IMPS[j-1])+'</td>'; }
+  h+='</tr></tbody></table>';
+  document.getElementById('mapa').innerHTML=h;
+  document.getElementById('leyenda').innerHTML=ZONAS.map(function(z){
+    return '<span class="li"><span class="sw" style="background:'+z.color+'"></span>'+z.nombre+'</span>'; }).join('');
+}
+function pintar(){ pintarLista(); pintarMapa(); }
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter' && document.activeElement && document.activeElement.id==='nom') agregar();
+});
+llenarSelects(); pintar();
+</script>

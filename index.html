@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Básico y Metadatos -->
+  <title>Mateo Meléndez — Consultor de Riesgos Empresariales</title>
+  <meta name="description" content="Portafolio de Mateo Meléndez. Riesgos que se gestionan, no que se documentan. Explora herramientas interactivas de gestión de riesgos, Bow Tie y muestreo de auditoría.">
+  <meta name="author" content="Mateo Meléndez">
+  
+  <!-- Open Graph / Compartibilidad (LinkedIn, WhatsApp) -->
+  <meta property="og:title" content="Mateo Meléndez — Consultor de Riesgos">
+  <meta property="og:description" content="Explora demostraciones interactivas de software para la gestión operacional y estratégica de riesgos.">
+  <meta property="og:type" content="website">
+  <!-- 【DECISIÓN REQUERIDA】: Reemplaza esta URL con la ruta real de tu imagen Open Graph -->
+  <meta property="og:image" content="https://tu-usuario.github.io/tu-repo/og-image.jpg">
+  <!-- 【DECISIÓN REQUERIDA】: Reemplaza esta URL con la ruta real de tu portafolio -->
+  <meta property="og:url" content="https://tu-usuario.github.io/tu-repo/">
+
+  <!-- Favicon optimizado en línea (SVG) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2b3c'/><text x='50%' y='50%' font-family='sans-serif' font-size='45' font-weight='bold' fill='%2300a88f' text-anchor='middle' dominant-baseline='central'>MM</text></svg>" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --ink: #0f2b3c;
+      --ink-light: #1e3e54;
+      --acc: #00a88f;
+      --acc-hover: #008f7a;
+      --gold: #d4af37;
+      --mist: #f4f7f6;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #475569; /* Contraste mejorado para accesibilidad */
+      --border: #e2e8f0;
+      --shadow: 0 10px 25px -5px rgba(15, 43, 60, 0.08);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--mist);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Accesibilidad: Estilos de foco global */
+    *:focus-visible {
+      outline: 3px solid var(--acc);
+      outline-offset: 2px;
+    }
+
+    /* Header */
+    header {
+      background-color: var(--ink);
+      color: #ffffff;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--acc), var(--gold));
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+    }
+
+    .brand-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%);
+      color: #ffffff;
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-subtitle {
+      color: var(--acc);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 2.75rem); /* Tipografía fluida para móviles */
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      color: #e2e8f0;
+      margin-bottom: 2rem;
+    }
+
+    .quote-badge {
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.08);
+      border-left: 4px solid var(--acc);
+      padding: 0.75rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: #f8fafc;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: -2rem auto 4rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .section-header {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .section-header h2 {
+      color: var(--ink);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+    }
+
+    /* Grid de Herramientas */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado minmax para móviles pequeños */
+      gap: 1.75rem;
+    }
+
+    .tool-card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    @media (hover: hover) {
+      .tool-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px -5px rgba(15, 43, 60, 0.15);
+      }
+    }
+
+    .tool-category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--acc);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-title {
+      color: var(--ink);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-description {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .btn-open {
+      background-color: var(--ink);
+      color: #ffffff;
+      border: none;
+      padding: 0.85rem 1.25rem; /* Área táctil ampliada para móviles */
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s ease;
+      width: 100%;
+    }
+
+    .btn-open:hover, .btn-open:active {
+      background-color: var(--acc);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(15, 43, 60, 0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem; /* Reducido para maximizar espacio en móvil */
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 1280px;
+      height: 95vh; /* Altura generosa para iframes en móvil */
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-header {
+      background-color: var(--ink);
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 1rem;
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid transparent;
+      padding: 0.5rem 1rem; /* Área táctil optimizada */
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s ease;
+    }
+
+    .btn-close:hover, .btn-close:focus-visible {
+      background: rgba(239, 68, 68, 0.9);
+      border-color: #fca5a5;
+    }
+
+    .modal-body {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background: #f8fafc;
+      position: relative;
+    }
+    
+    /* Skeleton loader visual mientras carga el iframe */
+    .iframe-loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--text-muted);
+      font-weight: 500;
+      z-index: 1;
+    }
+
+    .modal-body iframe {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--ink);
+      color: #94a3b8;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--ink-light);
+    }
+
+    footer p span {
+      color: #ffffff;
+    }
+
+    /* Ajustes específicos para móviles */
+    @media (max-width: 480px) {
+      .container {
+        margin-top: -1rem;
+      }
+      .section-header, .tool-card {
+        padding: 1.25rem;
+      }
+      header {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="/" class="brand" aria-label="Mateo Meléndez - Inicio">
+      <div class="logo-badge" aria-hidden="true">MM</div>
+      <div class="brand-title">Mateo Meléndez</div>
+    </a>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-content">
+      <p class="hero-subtitle">Consultor de Riesgos Empresariales</p>
+      <h1 id="hero-title">Portafolio de Herramientas Digitales</h1>
+      <div class="quote-badge">
+        “Riesgos que se gestionan, no que se documentan. Construyo las herramientas con las que ese sistema se opera.”
+      </div>
+    </div>
+  </section>
+
+  <!-- Contenido principal -->
+  <main class="container">
+    <div class="section-header">
+      <h2>Demostraciones Interactivas</h2>
+      <p>Explora y prueba en vivo las soluciones de software desarrolladas para la gestión operacional y estratégica de riesgos.</p>
+    </div>
+
+    <div class="tools-grid">
+      <!-- Tarjeta 1 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Matriz de Riesgo</div>
+          <h3 class="tool-title">Matriz de Riesgos de Procesos</h3>
+          <p class="tool-description">Evaluación, priorización y mapa interactivo de riesgos operativos ajustado a la dinámica del negocio.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">
+          Abrir Herramienta <span aria-hidden="true">→</span>
+        </button>
+      </article>
+
+      <!-- Tarjeta 2 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Análisis Causa-Efecto</div>
+          <h3 class="tool-title">RiskVantage — Bow Tie</h3>
+          <p class="tool-description">Visualización gráfica de causas, eventos principales, consecuencias y barreras preventivas o mitigantes.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">
+          Abrir Herramienta <span aria-hidden="true">→</span>
+        </button>
+      </article>
+
+      <!-- Tarjeta 3 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Normalización de Datos</div>
+          <h3 class="tool-title">Consolidador de Matrices</h3>
+          <p class="tool-description">Herramienta de unificación que homologa estructuras de riesgo diversas e identifica posibles duplicidades.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">
+          Abrir Herramienta <span aria-hidden="true">→</span>
+        </button>
+      </article>
+
+      <!-- Tarjeta 4 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Capacidad y Exposición</div>
+          <h3 class="tool-title">Apetito y Tolerancia al Riesgo</h3>
+          <p class="tool-description">Cálculo dinámico de la capacidad financiera, zonas de apetito, tolerancia y niveles de exposición frente al riesgo.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">
+          Abrir Herramienta <span aria-hidden="true">→</span>
+        </button>
+      </article>
+
+      <!-- Tarjeta 5 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Control y Auditoría</div>
+          <h3 class="tool-title">Muestreo de Auditoría</h3>
+          <p class="tool-description">Determinación de tamaños de muestra estadísticos para pruebas de controles internos y cumplimiento.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
+          Abrir Herramienta <span aria-hidden="true">→</span>
+        </button>
+      </article>
+    </div>
+  </main>
+
+  <!-- Modal para visualizar la herramienta -->
+  <div class="modal-overlay" id="toolModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Cargando herramienta...</h2>
+        <button class="btn-close" onclick="closeTool()" id="closeModalBtn" aria-label="Cerrar herramienta">✕ Cerrar</button>
+      </div>
+      <div class="modal-body">
+        <div class="iframe-loader">Cargando...</div>
+        <!-- Rendimiento: Se agrega loading="lazy" -->
+        <iframe id="toolFrame" src="about:blank" loading="lazy" title="Visor de herramienta interactiva"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© Mateo Meléndez · <span>Consultor de Riesgos Empresariales</span></p>
+  </footer>
+
+  <!-- Lógica JavaScript -->
+  <script>
+    const toolsData = {
+      matriz: { title: "Matriz de Riesgos de Procesos", src: "herramientas/Matriz_Riesgos_Demo.html" },
+      bowtie: { title: "RiskVantage — Bow Tie", src: "herramientas/RiskVantage_Demo.html" },
+      consolidador: { title: "Consolidador de Matrices", src: "herramientas/Consolidador_Demo.html" },
+      apetito: { title: "Apetito y Tolerancia al Riesgo", src: "herramientas/Apetito_Demo.html" },
+      muestreo: { title: "Muestreo de Auditoría", src: "herramientas/Papeles_Demo.html" }
+    };
+
+    let triggerButton = null; // Para devolver el foco al botón al cerrar el modal (Accesibilidad)
+
+    function openTool(toolKey, btnElement) {
+      const tool = toolsData[toolKey];
+      if (!tool) return;
+
+      triggerButton = btnElement;
+      triggerButton.setAttribute('aria-expanded', 'true');
+
+      const modal = document.getElementById('toolModal');
+      const frame = document.getElementById('toolFrame');
+      const title = document.getElementById('modalTitle');
+      const closeBtn = document.getElementById('closeModalBtn');
+
+      title.textContent = tool.title;
+      frame.title = `Herramienta: ${tool.title}`; // Accesibilidad dinámica para el iframe
+      frame.src = tool.src;
+      
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden'; // Previene scroll en el fondo
+      
+      // Mover el foco al botón de cerrar por accesibilidad de teclado
+      setTimeout(() => closeBtn.focus(), 100);
+    }
+
+    function closeTool() {
+      const modal = document.getElementById('toolModal');
+      const frame = document.getElementById('toolFrame');
+
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      
+      // Limpiar iframe para liberar memoria
+      setTimeout(() => { frame.src = 'about:blank'; }, 300); 
+      
+      document.body.style.overflow = '';
+
+      // Devolver el foco al botón que originó la acción
+      if (triggerButton) {
+        triggerButton.setAttribute('aria-expanded', 'false');
+        triggerButton.focus();
+        triggerButton = null;
+      }
+    }
+
+    // Cerrar modal al presionar la tecla ESC
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && document.getElementById('toolModal').classList.contains('active')) {
+        closeTool();
+      }
+    });
+
+    // Cerrar modal al hacer clic fuera del contenido
+    document.getElementById('toolModal').addEventListener('click', function(event) {
+      if (event.target === this) {
+        closeTool();
+      }
+    });
+  </script>
+</body>
+</html>

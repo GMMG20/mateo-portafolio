@@ -1,0 +1,206 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muestreo de Auditoría</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
+  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
+  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
+  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
+  --ok:#15803D; --ok-bg:#DCFCE7; --err:#DC2626; --err-bg:#FEE2E2;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
+  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
+.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
+  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
+.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
+.app-name{color:#fff;font-size:14px;font-weight:600;}
+.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
+.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1000px;margin:0 auto;width:100%;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
+.card h3{font-size:15px;margin-bottom:4px;}
+.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
+.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
+.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
+.banner-amb{background:var(--amb-bg);color:#7A5514;border-left:3px solid var(--amb);}
+.banner-ok{background:var(--ok-bg);color:#14532D;border-left:3px solid var(--ok);}
+input,select{font-family:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:5px;background:#fff;color:var(--tx);width:100%;}
+label{display:block;font-size:11.5px;font-weight:700;color:var(--tx-2);margin-bottom:4px;}
+button{font-family:inherit;}
+.btn{background:var(--acc-dk);color:#fff;border:none;padding:10px 18px;border-radius:5px;
+  cursor:pointer;font-size:13.5px;font-weight:700;}
+.btn:hover{background:#09524D;}
+.btn2{background:#fff;border:1px solid var(--line);color:var(--tx);padding:9px 15px;
+  border-radius:5px;cursor:pointer;font-size:13px;font-weight:600;}
+.btn2:hover{background:var(--bg);}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+.mono{font-variant-numeric:tabular-nums;}
+.resultado{background:var(--mist);border-left:3px solid var(--ink);border-radius:0 7px 7px 0;
+  padding:16px 18px;margin-top:14px;}
+.resultado .n{font-size:34px;font-weight:800;color:var(--acc-dk);line-height:1;}
+.resultado .l{font-size:12.5px;color:var(--ink);margin-top:4px;line-height:1.5;}
+.muestra{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.num{background:#fff;border:1px solid var(--line);border-radius:5px;padding:5px 9px;
+  font-size:12px;font-weight:700;color:var(--tx-2);font-variant-numeric:tabular-nums;}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+.tbl th{text-align:center;padding:7px 8px;background:var(--bg);color:var(--tx-2);font-weight:700;
+  border-bottom:2px solid var(--line);font-size:10.5px;text-transform:uppercase;}
+.tbl td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:center;}
+.tbl td:first-child{text-align:left;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl .marca{background:var(--mist);font-weight:800;color:var(--acc-dk);}
+footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
+footer b{color:#fff;}
+footer .wrap2{max-width:1000px;margin:0 auto;}
+</style>
+
+<div class="app-header">
+  <span class="logo">MM</span>
+  <div class="sep"></div>
+  <div>
+    <div class="app-name">Muestreo de Auditoría</div>
+    <div class="app-tag">Un tamaño de muestra que se puede defender</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="banner banner-info">
+    <b>Cómo funciona.</b> Cuando el cliente pregunta por qué se revisaron 30 documentos
+    y no 60, la respuesta no puede ser «me pareció suficiente». Aquí el tamaño sale de la
+    <b>tabla de muestreo por atributos</b>, y la selección es <b>reproducible</b>: con la misma semilla
+    se vuelve a generar exactamente la misma muestra ante una revisión de calidad.
+  </div>
+
+  <div class="card">
+    <h3>1 · Parámetros de la prueba</h3>
+    <div class="g4" style="margin-top:12px">
+      <div><label>Población (N)</label>
+        <input type="number" id="pob" class="mono" value="1200" min="1" oninput="calcular()"></div>
+      <div><label>Nivel de confianza</label>
+        <select id="conf" onchange="calcular()"><option value="90">90 %</option><option value="95" selected>95 %</option></select></div>
+      <div><label>Desviación tolerable</label>
+        <select id="tol" onchange="calcular()"></select></div>
+      <div><label>Semilla de selección</label>
+        <input id="sem" value="OC-2026" oninput="calcular()"></div>
+    </div>
+    <div class="resultado" id="res"></div>
+  </div>
+
+  <div class="card">
+    <h3>2 · Selección aleatoria</h3>
+    <p class="hint">Los números corresponden a la posición del documento dentro de la población.
+    Cambie la semilla y verá otra muestra; vuelva a la anterior y reaparece la misma.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <button class="btn" onclick="generar()">🎲 Generar selección</button>
+      <button class="btn2" onclick="comprobar()">Comprobar que es reproducible</button>
+    </div>
+    <div id="salida"></div>
+  </div>
+
+  <div class="card">
+    <h3>Tabla de referencia</h3>
+    <p class="hint">Tamaño de muestra para una desviación esperada de 0 %. Se resalta la celda aplicada.</p>
+    <div style="overflow-x:auto"><table class="tbl" id="tabla"></table></div>
+  </div>
+  </div>
+
+<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+
+<script>
+/* Herramienta enfocada en un solo flujo de trabajo. */
+var TABLA={
+  90:{2:114,3:76,4:57,5:45,6:38,7:32,8:28,9:25,10:22,15:15,20:11},
+  95:{2:149,3:99,4:74,5:59,6:49,7:42,8:36,9:32,10:29,15:19,20:14}
+};
+var TOLERABLES=[2,3,4,5,6,7,8,9,10,15,20];
+
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function tamano(conf,tol,N){
+  var n=TABLA[conf][tol];
+  /* Corrección por población finita */
+  if(N>0){
+    n=Math.round(n/(1+n/N));
+    if(n>N) n=N;
+    if(N<=25) n=N;          /* población pequeña: se revisa el 100 % */
+  }
+  return Math.max(1,n);
+}
+/* Generador con semilla: la misma semilla produce siempre la misma secuencia */
+function rng(sem){
+  var s=0; for(var i=0;i<String(sem).length;i++) s=(s*31+String(sem).charCodeAt(i))>>>0;
+  if(s===0) s=123456789;
+  return function(){ s^=s<<13; s>>>=0; s^=s>>17; s^=s<<5; s>>>=0; return s/4294967296; };
+}
+function seleccion(N,n,sem){
+  var r=rng(sem), vistos={}, out=[], intentos=0;
+  if(n>=N){ for(var i=1;i<=N;i++) out.push(i); return out; }
+  while(out.length<n && intentos<n*40){
+    var v=Math.floor(r()*N)+1;
+    if(!vistos[v]){ vistos[v]=1; out.push(v); }
+    intentos++;
+  }
+  return out.sort(function(a,b){return a-b;});
+}
+function llenarTol(){
+  document.getElementById('tol').innerHTML=TOLERABLES.map(function(t){
+    return '<option value="'+t+'" '+(t===5?'selected':'')+'>'+t+' %</option>'; }).join('');
+}
+function params(){
+  return { N:Math.max(1,parseInt(document.getElementById('pob').value)||1),
+           conf:parseInt(document.getElementById('conf').value),
+           tol:parseInt(document.getElementById('tol').value),
+           sem:document.getElementById('sem').value||'demo' };
+}
+function calcular(){
+  var p=params();
+  var base=TABLA[p.conf][p.tol];
+  var n=tamano(p.conf,p.tol,p.N);
+  var cob=Math.round(n/p.N*1000)/10;
+  document.getElementById('res').innerHTML=
+    '<div class="n mono">'+n+'</div>'+
+    '<div class="l">ítems a revisar de una población de <b>'+p.N.toLocaleString('es-CO')+'</b> · cobertura del '+cob+' %<br>'+
+    'Tabla: <b>'+base+'</b> para '+p.conf+' % de confianza y '+p.tol+' % de desviación tolerable'+
+    (p.N<=25? ' · población pequeña, se revisa el 100 %' :
+     (n!==base? ' · ajustado por población finita' : ''))+'</div>';
+  pintarTabla();
+  document.getElementById('salida').innerHTML='';
+}
+function generar(){
+  var p=params(), n=tamano(p.conf,p.tol,p.N);
+  var sel=seleccion(p.N,n,p.sem);
+  document.getElementById('salida').innerHTML=
+    '<div class="banner banner-ok" style="margin-top:14px"><b>'+sel.length+' ítems seleccionados</b> '+
+    'con la semilla «'+escH(p.sem)+'». Esta selección queda registrada en los papeles de trabajo.</div>'+
+    '<div class="muestra">'+sel.map(function(v){return '<span class="num">'+v+'</span>';}).join('')+'</div>';
+}
+function comprobar(){
+  var p=params(), n=tamano(p.conf,p.tol,p.N);
+  var a=seleccion(p.N,n,p.sem), b=seleccion(p.N,n,p.sem), c=seleccion(p.N,n,p.sem+'-otra');
+  var iguales=JSON.stringify(a)===JSON.stringify(b);
+  var distintas=JSON.stringify(a)!==JSON.stringify(c);
+  document.getElementById('salida').innerHTML=
+    '<div class="banner banner-ok" style="margin-top:14px">'+
+    '<b>'+(iguales?'✓':'✕')+' Misma semilla, misma muestra.</b> Se generó dos veces con «'+escH(p.sem)+
+    '» y el resultado fue '+(iguales?'idéntico':'distinto')+'.<br>'+
+    '<b>'+(distintas?'✓':'✕')+' Otra semilla, otra muestra.</b> Con «'+escH(p.sem)+'-otra» la selección '+
+    (distintas?'cambió por completo':'no cambió')+'.<br>'+
+    '<span style="font-weight:400">Por eso la muestra es defendible: cualquiera puede reproducirla partiendo de la semilla registrada.</span></div>'+
+    '<div class="muestra">'+a.slice(0,20).map(function(v){return '<span class="num">'+v+'</span>';}).join('')+
+    (a.length>20? '<span class="num" style="background:var(--bg)">+'+(a.length-20)+'</span>':'')+'</div>';
+}
+function pintarTabla(){
+  var p=params();
+  var h='<thead><tr><th>Desviación tolerable</th><th>90 % confianza</th><th>95 % confianza</th></tr></thead><tbody>';
+  TOLERABLES.forEach(function(t){
+    h+='<tr><td>'+t+' %</td>'+
+       '<td class="'+(p.conf===90&&p.tol===t?'marca':'')+'">'+TABLA[90][t]+'</td>'+
+       '<td class="'+(p.conf===95&&p.tol===t?'marca':'')+'">'+TABLA[95][t]+'</td></tr>';
+  });
+  document.getElementById('tabla').innerHTML=h+'</tbody>';
+}
+llenarTol(); calcular();
+</script>
