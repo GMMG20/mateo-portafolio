@@ -351,6 +351,71 @@
     }
 
     /* Ajustes específicos para móviles */
+    /* ---- Cierre: contacto ---- */
+    .contact {
+      background-color: var(--ink);
+      color: #cbd5e1;
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+    }
+    .contact-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .contact h2 {
+      color: #ffffff;
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .contact > .contact-inner > p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0 1.5rem;
+    }
+    .btn-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1.6rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.98rem;
+      text-decoration: none;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+      border: 2px solid transparent;
+    }
+    .btn-contact.primary {
+      background-color: var(--acc);
+      color: var(--ink);
+    }
+    .btn-contact.secondary {
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+    }
+    @media (hover: hover) {
+      .btn-contact.primary:hover { background-color: #2ac2ab; transform: translateY(-2px); }
+      .btn-contact.secondary:hover { border-color: var(--acc); color: var(--acc); transform: translateY(-2px); }
+    }
+    .contact-note {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      border-top: 1px solid var(--ink-light);
+      padding-top: 1.5rem;
+    }
+    .contact-note strong { color: #e2e8f0; font-weight: 600; }
+    @media (max-width: 480px) {
+      .contact { padding: 2.5rem 1.25rem; }
+      .contact h2 { font-size: 1.45rem; }
+      .contact-actions { flex-direction: column; }
+      .btn-contact { justify-content: center; }
+    }
+
     @media (max-width: 480px) {
       .container {
         margin-top: -1rem;
@@ -454,6 +519,25 @@
       </article>
     </div>
   </main>
+
+  <!-- Cierre: contacto -->
+  <section class="contact" aria-labelledby="contact-title">
+    <div class="contact-inner">
+      <h2 id="contact-title">Conversemos</h2>
+      <p>Si algo de esto le sirve a tu organización, o si estás montando un área de riesgos y no sabes por dónde empezar, escríbeme. Respondo todo.</p>
+      <div class="contact-actions">
+        <a class="btn-contact primary" href="https://www.linkedin.com/in/mateo-melendez" target="_blank" rel="noopener noreferrer">
+          Conectar en LinkedIn <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="btn-contact secondary" href="mailto:mmelendezgomez@gmail.com?subject=Contacto%20desde%20el%20portafolio">
+          Escribirme un correo
+        </a>
+      </div>
+      <p class="contact-note">
+        <strong>&iquest;Necesitas mi hoja de vida?</strong> P&iacute;demela por correo y te la env&iacute;o.
+      </p>
+    </div>
+  </section>
 
   <!-- Modal para visualizar la herramienta -->
   <div class="modal-overlay" id="toolModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
