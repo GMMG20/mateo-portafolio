@@ -616,9 +616,11 @@
     }
     /* Con el contenedor mas ancho, la columna de texto crecia a 87 car./linea.
        Se reequilibra el reparto para mantener la medida de lectura. */
-    .about-grid,
-    .sec-grid {
-      grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+    @media (min-width: 1001px) {
+      .about-grid,
+      .sec-grid {
+        grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+      }
     }
     /* La tarjeta 6 usa un enlace donde las otras usan boton */
     a.btn-open { text-decoration: none; }
