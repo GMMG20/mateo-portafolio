@@ -416,6 +416,32 @@
       .btn-contact { justify-content: center; }
     }
 
+    /* ---- Presentación ---- */
+    .about {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .about p {
+      color: var(--text-muted);
+      font-size: 1.02rem;
+      line-height: 1.75;
+    }
+    .about .about-punch {
+      margin-top: 1.5rem;
+      padding-left: 1.1rem;
+      border-left: 4px solid var(--acc);
+      color: var(--ink);
+      font-weight: 600;
+    }
+    @media (max-width: 480px) {
+      .about { padding: 1.25rem; }
+      .about p { font-size: 0.98rem; }
+    }
+
     @media (max-width: 480px) {
       .container {
         margin-top: -1rem;
@@ -452,6 +478,12 @@
 
   <!-- Contenido principal -->
   <main class="container">
+    <!-- Presentación -->
+    <section class="about">
+      <p>Soy consultor de riesgos empresariales en Marsh. Antes pas&eacute; cinco a&ntilde;os en Deloitte como auditor interno senior, donde ejecut&eacute; m&aacute;s de diez auditor&iacute;as y lider&eacute; el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy dise&ntilde;o metodolog&iacute;as, pol&iacute;ticas e indicadores clave de riesgo para empresas de varios sectores y tama&ntilde;os, y facilito los talleres donde esos riesgos se discuten con los comit&eacute;s directivos.</p>
+      <p class="about-punch">Las herramientas de esta p&aacute;gina salieron de ese trabajo: las constru&iacute; porque las necesitaba.</p>
+    </section>
+
     <div class="section-header">
       <h2>Instrumentos de trabajo</h2>
       <p>Cada uno resuelve un problema que me he encontrado en campo: valorar y priorizar, mapear causas y barreras, homologar matrices dispares, fijar umbrales de apetito y decidir cuánto probar. Están en vivo: ábrelos y úsalos.</p>
