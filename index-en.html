@@ -7,6 +7,7 @@
   <!-- SEO Básico y Metadatos -->
   <title>Mateo Meléndez — Enterprise Risk Consultant</title>
   <meta name="description" content="Mateo Meléndez, enterprise risk consultant. Risk that gets managed, not documented: risk matrix, Bow Tie, risk appetite and audit sampling, in working order.">
+  <meta name="robots" content="noindex, nofollow">
   <meta name="author" content="Mateo Meléndez">
   
   <!-- Open Graph / Compartibilidad (LinkedIn, WhatsApp) -->
@@ -90,6 +91,29 @@
       border-radius: 8px;
     }
 
+    .badge-demo {
+      display: inline-block;
+      margin-left: 0.5rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 4px;
+      background-color: var(--mist);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.62rem;
+      letter-spacing: 0.5px;
+      vertical-align: middle;
+    }
+    .demo-note {
+      margin-top: 1.25rem;
+      padding: 0.9rem 1.1rem;
+      background-color: var(--mist);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.93rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+    .demo-note strong { color: var(--ink); }
     .lang-switch {
       display: flex;
       gap: 0.25rem;
@@ -528,13 +552,14 @@
     <div class="section-header">
       <h2>The instruments I work with</h2>
       <p>Each one solves a problem I have run into in the field: valuing and prioritising, mapping causes and barriers, reconciling mismatched matrices, setting appetite thresholds and deciding how much to test. They are live — open them and use them. The interfaces are in Spanish; the frameworks behind them are COSO and ISO 31000.</p>
+      <p class="demo-note"><strong>These are demonstration versions.</strong> They are deliberately simplified and carry sample data: they exist to show the approach in five minutes, not to run on. The full versions are configured to each organisation’s methodology, rating scales and reporting. If one of them is genuinely useful to you, write to me and I will show you the working version.</p>
     </div>
 
     <div class="tools-grid">
       <!-- Tarjeta 1 -->
       <article class="tool-card">
         <div>
-          <div class="tool-category">Risk Matrix</div>
+          <div class="tool-category">Risk Matrix <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Process Risk Matrix</h3>
           <p class="tool-description">You have forty risks on the matrix and capacity for five. Rank them by real magnitude and justify to the committee why those five.</p>
         </div>
@@ -546,7 +571,7 @@
       <!-- Tarjeta 2 -->
       <article class="tool-card">
         <div>
-          <div class="tool-category">Cause and Effect</div>
+          <div class="tool-category">Cause and Effect <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">RiskVantage — Bow Tie</h3>
           <p class="tool-description">An event materialised and the question is how it got through and which barrier failed. Separate causes from consequences and expose where you are uncovered.</p>
         </div>
@@ -558,7 +583,7 @@
       <!-- Tarjeta 3 -->
       <article class="tool-card">
         <div>
-          <div class="tool-category">Data Normalisation</div>
+          <div class="tool-category">Data Normalisation <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Matrix Consolidator</h3>
           <p class="tool-description">Every area handed in its matrix in a different format. Reconcile the structures, catch the same risk written three ways and end up with a single base.</p>
         </div>
@@ -570,7 +595,7 @@
       <!-- Tarjeta 4 -->
       <article class="tool-card">
         <div>
-          <div class="tool-category">Capacity and Exposure</div>
+          <div class="tool-category">Capacity and Exposure <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Risk Appetite and Tolerance</h3>
           <p class="tool-description">The board asks how much risk the company can carry. Translate financial capacity into appetite and tolerance thresholds you can defend.</p>
         </div>
@@ -582,7 +607,7 @@
       <!-- Tarjeta 5 -->
       <article class="tool-card">
         <div>
-          <div class="tool-category">Control and Audit</div>
+          <div class="tool-category">Control and Audit <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Audit Sampling</h3>
           <p class="tool-description">You have to test a control and do not know how many items to pull. Calculate the sample size and leave the statistical basis documented.</p>
         </div>
