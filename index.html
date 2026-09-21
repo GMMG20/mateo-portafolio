@@ -609,6 +609,19 @@
       .demo-note { padding: 0.8rem 0.85rem; }
       .tool-card { padding: 1.15rem; }
     }
+    /* El contenido llegaba solo a 1200px: en un monitor de 1920 quedaban
+       350px muertos a cada lado. */
+    .container {
+      max-width: 1400px;
+    }
+    /* Con el contenedor mas ancho, la columna de texto crecia a 87 car./linea.
+       Se reequilibra el reparto para mantener la medida de lectura. */
+    .about-grid,
+    .sec-grid {
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+    }
+    /* La tarjeta 6 usa un enlace donde las otras usan boton */
+    a.btn-open { text-decoration: none; }
   </style>
 </head>
 <body>
@@ -736,6 +749,18 @@
         <button class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
           Abrir herramienta <span aria-hidden="true">→</span>
         </button>
+      </article>
+
+      <!-- Tarjeta 6: cierra la rejilla y lleva al contacto -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">A la medida</div>
+          <h3 class="tool-title">&iquest;Su caso no est&aacute; aqu&iacute;?</h3>
+          <p class="tool-description">Estas cinco salieron de necesidades concretas. Si la suya es otra, probablemente se resuelve con el mismo m&eacute;todo: escr&iacute;bame y la miramos.</p>
+        </div>
+        <a class="btn-open" href="mailto:mmelendezgomez@gmail.com?subject=Contacto%20desde%20el%20portafolio">
+          Escribirme <span aria-hidden="true">&rarr;</span>
+        </a>
       </article>
     </div>
   </main>

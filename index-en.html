@@ -609,6 +609,19 @@
       .demo-note { padding: 0.8rem 0.85rem; }
       .tool-card { padding: 1.15rem; }
     }
+    /* El contenido llegaba solo a 1200px: en un monitor de 1920 quedaban
+       350px muertos a cada lado. */
+    .container {
+      max-width: 1400px;
+    }
+    /* Con el contenedor mas ancho, la columna de texto crecia a 87 car./linea.
+       Se reequilibra el reparto para mantener la medida de lectura. */
+    .about-grid,
+    .sec-grid {
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+    }
+    /* La tarjeta 6 usa un enlace donde las otras usan boton */
+    a.btn-open { text-decoration: none; }
   </style>
 </head>
 <body>
@@ -736,6 +749,18 @@
         <button class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
           Open tool <span aria-hidden="true">→</span>
         </button>
+      </article>
+
+      <!-- Card 6: completes the grid and leads to contact -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Bespoke</div>
+          <h3 class="tool-title">Your case not here?</h3>
+          <p class="tool-description">These five came out of concrete needs. If yours is different, it probably yields to the same method: write to me and we will look at it.</p>
+        </div>
+        <a class="btn-open" href="mailto:mmelendezgomez@gmail.com?subject=Contact%20from%20the%20portfolio">
+          Send me an email <span aria-hidden="true">&rarr;</span>
+        </a>
       </article>
     </div>
   </main>
