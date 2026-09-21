@@ -564,9 +564,10 @@
       margin-bottom: 1.4rem;
     }
     .creds ul:last-child { margin-bottom: 0; }
+    .creds li { max-width: 62ch; }
     .creds li b { color: var(--text); font-weight: 600; }
     .sec-grid .demo-note { margin-top: 0; }
-    @media (max-width: 880px) {
+    @media (max-width: 1000px) {
       .about-grid,
       .sec-grid {
         grid-template-columns: 1fr;
@@ -593,9 +594,13 @@
       inset: -6px -2px;
     }
     .badge-demo {
-      font-size: 0.68rem;
+      font-size: 0.72rem;
     }
 
+    @media (max-width: 420px) {
+      .demo-note { padding: 0.8rem 0.85rem; }
+      .tool-card { padding: 1.15rem; }
+    }
   </style>
 </head>
 <body>
