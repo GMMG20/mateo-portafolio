@@ -63,6 +63,11 @@ label{display:block;font-size:11.5px;font-weight:700;color:var(--tx-2);margin-bo
 footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
 footer b{color:#fff;}
 footer .wrap2{max-width:1000px;margin:0 auto;}
+.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
+  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
+  transition:opacity .2s ease,border-color .2s ease;}
+.volver:hover{opacity:1;border-color:var(--acc);}
+.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
 </style>
 
 <div class="app-header">
@@ -187,4 +192,18 @@ function calcular(){
     (Math.round(p*10)/10)+'%</b> del límite aprobado.<br><span style="font-weight:400">'+escH(acc)+'</span></div>';
 }
 calcular();
+</script>
+<script>
+/* Enlace de regreso al portafolio. Solo aparece si la herramienta se abrio
+   por su URL directa: dentro del visor modal del portafolio sobraria. */
+(function () {
+  if (window.self !== window.top) return;
+  var h = document.querySelector('.app-header');
+  if (!h) return;
+  var a = document.createElement('a');
+  a.className = 'volver';
+  a.href = '../index.html';
+  a.textContent = '\u2190 Portafolio';
+  h.appendChild(a);
+})();
 </script>

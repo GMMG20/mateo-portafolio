@@ -53,6 +53,11 @@ footer .wrap2{max-width:1180px;margin:0 auto;}
 .toast{position:fixed;top:70px;right:20px;background:var(--acc-dk);color:#fff;padding:11px 16px;
   border-radius:6px;font-size:13px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:99;
   transition:opacity .3s;}
+.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
+  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
+  transition:opacity .2s ease,border-color .2s ease;}
+.volver:hover{opacity:1;border-color:var(--acc);}
+.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
 </style>
 
 <div class="app-header">
@@ -205,4 +210,18 @@ document.addEventListener('keydown',function(e){
   else if(a.id==='inConse') add('k');
 });
 pintar();
+</script>
+<script>
+/* Enlace de regreso al portafolio. Solo aparece si la herramienta se abrio
+   por su URL directa: dentro del visor modal del portafolio sobraria. */
+(function () {
+  if (window.self !== window.top) return;
+  var h = document.querySelector('.app-header');
+  if (!h) return;
+  var a = document.createElement('a');
+  a.className = 'volver';
+  a.href = '../index.html';
+  a.textContent = '\u2190 Portafolio';
+  h.appendChild(a);
+})();
 </script>

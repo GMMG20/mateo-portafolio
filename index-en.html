@@ -114,6 +114,19 @@
       color: var(--text-muted);
     }
     .demo-note strong { color: var(--ink); }
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 200;
+      background-color: var(--acc);
+      color: var(--ink);
+      padding: 0.7rem 1.1rem;
+      border-radius: 0 0 8px 0;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .skip-link:focus { left: 0; }
     .lang-switch {
       display: flex;
       gap: 0.25rem;
@@ -517,6 +530,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#contenido">Skip to content</a>
 
   <!-- Header -->
   <header>
@@ -542,7 +556,7 @@
   </section>
 
   <!-- Contenido principal -->
-  <main class="container">
+  <main class="container" id="contenido">
     <!-- Presentación -->
     <section class="about">
       <p>I am an enterprise risk consultant at Marsh. Before that I spent five years at Deloitte as a senior internal auditor, where I ran more than ten internal audits and led control testing under the Sarbanes-Oxley Act. Today I design risk methodologies, policies and key risk indicators for companies across sectors and sizes, and I facilitate the workshops where those risks get discussed with executive committees.</p>

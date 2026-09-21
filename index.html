@@ -114,6 +114,19 @@
       color: var(--text-muted);
     }
     .demo-note strong { color: var(--ink); }
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 200;
+      background-color: var(--acc);
+      color: var(--ink);
+      padding: 0.7rem 1.1rem;
+      border-radius: 0 0 8px 0;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .skip-link:focus { left: 0; }
     .lang-switch {
       display: flex;
       gap: 0.25rem;
@@ -517,6 +530,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
   <!-- Header -->
   <header>
@@ -542,7 +556,7 @@
   </section>
 
   <!-- Contenido principal -->
-  <main class="container">
+  <main class="container" id="contenido">
     <!-- Presentación -->
     <section class="about">
       <p>Soy consultor de riesgos empresariales en Marsh. Antes pas&eacute; cinco a&ntilde;os en Deloitte como auditor interno senior, donde ejecut&eacute; m&aacute;s de diez auditor&iacute;as y lider&eacute; el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy dise&ntilde;o metodolog&iacute;as, pol&iacute;ticas e indicadores clave de riesgo para empresas de varios sectores y tama&ntilde;os, y facilito los talleres donde esos riesgos se discuten con los comit&eacute;s directivos.</p>
