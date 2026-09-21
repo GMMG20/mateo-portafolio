@@ -442,6 +442,18 @@
       .about p { font-size: 0.98rem; }
     }
 
+    /* ---- Tablet y móvil grande ---- */
+    @media (max-width: 768px) {
+      header { padding: 1.1rem 1.5rem; }
+      .hero { padding: 3.5rem 1.5rem 3rem; }
+      .container { padding: 0 1rem; }
+      .section-header, .about { padding: 1.5rem; }
+      .tool-card { padding: 1.5rem; }
+      .tools-grid { gap: 1.25rem; }
+      .contact { padding: 3rem 1.5rem; }
+      .modal-container { height: 92vh; }
+    }
+
     @media (max-width: 480px) {
       .container {
         margin-top: -1rem;
@@ -495,7 +507,7 @@
         <div>
           <div class="tool-category">Matriz de Riesgo</div>
           <h3 class="tool-title">Matriz de Riesgos de Procesos</h3>
-          <p class="tool-description">Evaluación, priorización y mapa interactivo de riesgos operativos ajustado a la dinámica del negocio.</p>
+          <p class="tool-description">Tienes cuarenta riesgos en la matriz y capacidad para atender cinco. Ordénalos por magnitud real y sustenta ante el comité por qué esos cinco.</p>
         </div>
         <button class="btn-open" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">
           Abrir Herramienta <span aria-hidden="true">→</span>
@@ -507,7 +519,7 @@
         <div>
           <div class="tool-category">Análisis Causa-Efecto</div>
           <h3 class="tool-title">RiskVantage — Bow Tie</h3>
-          <p class="tool-description">Visualización gráfica de causas, eventos principales, consecuencias y barreras preventivas o mitigantes.</p>
+          <p class="tool-description">Un evento se materializó y la pregunta es por dónde entró y qué barrera falló. Separa causas de consecuencias y deja ver dónde estás descubierto.</p>
         </div>
         <button class="btn-open" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">
           Abrir Herramienta <span aria-hidden="true">→</span>
@@ -519,7 +531,7 @@
         <div>
           <div class="tool-category">Normalización de Datos</div>
           <h3 class="tool-title">Consolidador de Matrices</h3>
-          <p class="tool-description">Herramienta de unificación que homologa estructuras de riesgo diversas e identifica posibles duplicidades.</p>
+          <p class="tool-description">Cada área entregó su matriz en un formato distinto. Homologa las estructuras, detecta el mismo riesgo escrito de tres maneras y deja una sola base.</p>
         </div>
         <button class="btn-open" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">
           Abrir Herramienta <span aria-hidden="true">→</span>
@@ -531,7 +543,7 @@
         <div>
           <div class="tool-category">Capacidad y Exposición</div>
           <h3 class="tool-title">Apetito y Tolerancia al Riesgo</h3>
-          <p class="tool-description">Cálculo dinámico de la capacidad financiera, zonas de apetito, tolerancia y niveles de exposición frente al riesgo.</p>
+          <p class="tool-description">La junta pregunta cuánto riesgo puede asumir la compañía. Traduce la capacidad financiera a umbrales de apetito y tolerancia que puedas defender.</p>
         </div>
         <button class="btn-open" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">
           Abrir Herramienta <span aria-hidden="true">→</span>
@@ -543,7 +555,7 @@
         <div>
           <div class="tool-category">Control y Auditoría</div>
           <h3 class="tool-title">Muestreo de Auditoría</h3>
-          <p class="tool-description">Determinación de tamaños de muestra estadísticos para pruebas de controles internos y cumplimiento.</p>
+          <p class="tool-description">Tienes que probar un control y no sabes cuántas partidas revisar. Calcula el tamaño de muestra y deja documentado el sustento estadístico.</p>
         </div>
         <button class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
           Abrir Herramienta <span aria-hidden="true">→</span>
@@ -591,6 +603,27 @@
     <p>© Mateo Meléndez · <span>Consultor de Riesgos Empresariales</span></p>
   </footer>
 
+  <!-- Analítica (opcional, sin cookies). Para activarla, crea una cuenta gratis en
+       goatcounter.com y escribe aquí el código de tu sitio. Vacío = no se carga nada. -->
+  <script>
+    const ANALYTICS_CODE = "";
+
+    (function () {
+      if (!ANALYTICS_CODE) return;
+      const s = document.createElement("script");
+      s.async = true;
+      s.dataset.goatcounter = "https://" + ANALYTICS_CODE + ".goatcounter.com/count";
+      s.src = "//gc.zgo.at/count.js";
+      document.head.appendChild(s);
+    })();
+
+    function trackTool(toolKey, toolTitle) {
+      if (!ANALYTICS_CODE) return;
+      if (!window.goatcounter || typeof window.goatcounter.count !== "function") return;
+      window.goatcounter.count({ path: "herramienta/" + toolKey, title: toolTitle, event: true });
+    }
+  </script>
+
   <!-- Lógica JavaScript -->
   <script>
     const toolsData = {
@@ -609,6 +642,7 @@
 
       triggerButton = btnElement;
       triggerButton.setAttribute('aria-expanded', 'true');
+      trackTool(toolKey, tool.title);
 
       const modal = document.getElementById('toolModal');
       const frame = document.getElementById('toolFrame');
