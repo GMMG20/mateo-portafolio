@@ -29,6 +29,7 @@
       --ink: #0f2b3c;
       --ink-light: #1e3e54;
       --acc: #00a88f;
+      --acc-text: #00806b;
       --acc-hover: #008f7a;
       --gold: #d4af37;
       --mist: #f4f7f6;
@@ -527,6 +528,30 @@
         padding: 1rem;
       }
     }
+    /* ---- Ajustes finales: van al final para vencer en la cascada ---- */
+    /* Medida de lectura: sin tope, estos parrafos corrian a 130 caracteres por linea */
+    .about p,
+    .demo-note,
+    .section-header > p {
+      max-width: 68ch;
+    }
+    /* Contraste AA para texto pequeno sobre blanco */
+    .tool-category {
+      color: var(--acc-text);
+    }
+    /* Area tactil de 44px sin alterar el aspecto del selector */
+    .lang-switch a {
+      position: relative;
+    }
+    .lang-switch a::after {
+      content: "";
+      position: absolute;
+      inset: -6px -2px;
+    }
+    .badge-demo {
+      font-size: 0.68rem;
+    }
+
   </style>
 </head>
 <body>
@@ -573,12 +598,12 @@
       <!-- Tarjeta 1 -->
       <article class="tool-card">
         <div>
-          <div class="tool-category">Matriz de Riesgo <span class="badge-demo">Demo</span></div>
+          <div class="tool-category">Matriz de Riesgos <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Matriz de Riesgos de Procesos</h3>
           <p class="tool-description">Tienes cuarenta riesgos en la matriz y capacidad para atender cinco. Ordénalos por magnitud real y sustenta ante el comité por qué esos cinco.</p>
         </div>
         <button class="btn-open" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir Herramienta <span aria-hidden="true">→</span>
+          Abrir herramienta <span aria-hidden="true">→</span>
         </button>
       </article>
 
@@ -590,7 +615,7 @@
           <p class="tool-description">Un evento se materializó y la pregunta es por dónde entró y qué barrera falló. Separa causas de consecuencias y deja ver dónde estás descubierto.</p>
         </div>
         <button class="btn-open" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir Herramienta <span aria-hidden="true">→</span>
+          Abrir herramienta <span aria-hidden="true">→</span>
         </button>
       </article>
 
@@ -602,7 +627,7 @@
           <p class="tool-description">Cada área entregó su matriz en un formato distinto. Homologa las estructuras, detecta el mismo riesgo escrito de tres maneras y deja una sola base.</p>
         </div>
         <button class="btn-open" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir Herramienta <span aria-hidden="true">→</span>
+          Abrir herramienta <span aria-hidden="true">→</span>
         </button>
       </article>
 
@@ -614,7 +639,7 @@
           <p class="tool-description">La junta pregunta cuánto riesgo puede asumir la compañía. Traduce la capacidad financiera a umbrales de apetito y tolerancia que puedas defender.</p>
         </div>
         <button class="btn-open" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir Herramienta <span aria-hidden="true">→</span>
+          Abrir herramienta <span aria-hidden="true">→</span>
         </button>
       </article>
 
@@ -626,7 +651,7 @@
           <p class="tool-description">Tienes que probar un control y no sabes cuántas partidas revisar. Calcula el tamaño de muestra y deja documentado el sustento estadístico.</p>
         </div>
         <button class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir Herramienta <span aria-hidden="true">→</span>
+          Abrir herramienta <span aria-hidden="true">→</span>
         </button>
       </article>
     </div>
