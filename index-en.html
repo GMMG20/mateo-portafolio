@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Básico y Metadatos -->
+  <title>Mateo Meléndez — Enterprise Risk Consultant</title>
+  <meta name="description" content="Mateo Meléndez, enterprise risk consultant. Risk that gets managed, not documented: risk matrix, Bow Tie, risk appetite and audit sampling, in working order.">
+  <meta name="author" content="Mateo Meléndez">
+  
+  <!-- Open Graph / Compartibilidad (LinkedIn, WhatsApp) -->
+  <meta property="og:title" content="Mateo Meléndez — Enterprise Risk Consultant">
+  <meta property="og:description" content="The instruments I use to manage operational and strategic risk. In working order, not on slides.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://gmmg20.github.io/mateo-portafolio/Imagen_G.jpg">
+  <meta property="og:url" content="https://gmmg20.github.io/mateo-portafolio/index-en.html">
+
+  <!-- Favicon optimizado en línea (SVG) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2b3c'/><text x='50%' y='50%' font-family='sans-serif' font-size='45' font-weight='bold' fill='%2300a88f' text-anchor='middle' dominant-baseline='central'>MM</text></svg>" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --ink: #0f2b3c;
+      --ink-light: #1e3e54;
+      --acc: #00a88f;
+      --acc-hover: #008f7a;
+      --gold: #d4af37;
+      --mist: #f4f7f6;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #475569; /* Contraste mejorado para accesibilidad */
+      --border: #e2e8f0;
+      --shadow: 0 10px 25px -5px rgba(15, 43, 60, 0.08);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--mist);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Accesibilidad: Estilos de foco global */
+    *:focus-visible {
+      outline: 3px solid var(--acc);
+      outline-offset: 2px;
+    }
+
+    /* Header */
+    header {
+      background-color: var(--ink);
+      color: #ffffff;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--acc), var(--gold));
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+    .lang-switch a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      transition: color 0.2s ease, background-color 0.2s ease;
+    }
+    .lang-switch a[aria-current="page"] {
+      color: var(--ink);
+      background-color: var(--acc);
+    }
+    @media (hover: hover) {
+      .lang-switch a:not([aria-current]):hover {
+        color: #ffffff;
+        background-color: var(--ink-light);
+      }
+    }
+    .brand-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%);
+      color: #ffffff;
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-subtitle {
+      color: var(--acc);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 2.75rem); /* Tipografía fluida para móviles */
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      color: #e2e8f0;
+      margin-bottom: 2rem;
+    }
+
+    .quote-badge {
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.08);
+      border-left: 4px solid var(--acc);
+      padding: 0.75rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: #f8fafc;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: -2rem auto 4rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .section-header {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .section-header h2 {
+      color: var(--ink);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+    }
+
+    /* Grid de Herramientas */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado minmax para móviles pequeños */
+      gap: 1.75rem;
+    }
+
+    .tool-card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    @media (hover: hover) {
+      .tool-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px -5px rgba(15, 43, 60, 0.15);
+      }
+    }
+
+    .tool-category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--acc);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-title {
+      color: var(--ink);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-description {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .btn-open {
+      background-color: var(--ink);
+      color: #ffffff;
+      border: none;
+      padding: 0.85rem 1.25rem; /* Área táctil ampliada para móviles */
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s ease;
+      width: 100%;
+    }
+
+    .btn-open:hover, .btn-open:active {
+      background-color: var(--acc);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(15, 43, 60, 0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem; /* Reducido para maximizar espacio en móvil */
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 1280px;
+      height: 95vh; /* Altura generosa para iframes en móvil */
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-header {
+      background-color: var(--ink);
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 1rem;
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid transparent;
+      padding: 0.5rem 1rem; /* Área táctil optimizada */
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s ease;
+    }
+
+    .btn-close:hover, .btn-close:focus-visible {
+      background: rgba(239, 68, 68, 0.9);
+      border-color: #fca5a5;
+    }
+
+    .modal-body {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background: #f8fafc;
+      position: relative;
+    }
+    
+    /* Skeleton loader visual mientras carga el iframe */
+    .iframe-loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--text-muted);
+      font-weight: 500;
+      z-index: 1;
+    }
+
+    .modal-body iframe {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--ink);
+      color: #94a3b8;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--ink-light);
+    }
+
+    footer p span {
+      color: #ffffff;
+    }
+
+    /* Ajustes específicos para móviles */
+    /* ---- Cierre: contacto ---- */
+    .contact {
+      background-color: var(--ink);
+      color: #cbd5e1;
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+    }
+    .contact-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .contact h2 {
+      color: #ffffff;
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .contact > .contact-inner > p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0 1.5rem;
+    }
+    .btn-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1.6rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.98rem;
+      text-decoration: none;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+      border: 2px solid transparent;
+    }
+    .btn-contact.primary {
+      background-color: var(--acc);
+      color: var(--ink);
+    }
+    .btn-contact.secondary {
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+    }
+    @media (hover: hover) {
+      .btn-contact.primary:hover { background-color: #2ac2ab; transform: translateY(-2px); }
+      .btn-contact.secondary:hover { border-color: var(--acc); color: var(--acc); transform: translateY(-2px); }
+    }
+    .contact-note {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      border-top: 1px solid var(--ink-light);
+      padding-top: 1.5rem;
+    }
+    .contact-note strong { color: #e2e8f0; font-weight: 600; }
+    @media (max-width: 480px) {
+      .contact { padding: 2.5rem 1.25rem; }
+      .contact h2 { font-size: 1.45rem; }
+      .contact-actions { flex-direction: column; }
+      .btn-contact { justify-content: center; }
+    }
+
+    /* ---- Presentación ---- */
+    .about {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .about p {
+      color: var(--text-muted);
+      font-size: 1.02rem;
+      line-height: 1.75;
+    }
+    .about .about-punch {
+      margin-top: 1.5rem;
+      padding-left: 1.1rem;
+      border-left: 4px solid var(--acc);
+      color: var(--ink);
+      font-weight: 600;
+    }
+    @media (max-width: 480px) {
+      .about { padding: 1.25rem; }
+      .about p { font-size: 0.98rem; }
+    }
+
+    /* ---- Tablet y móvil grande ---- */
+    @media (max-width: 768px) {
+      header { padding: 1.1rem 1.5rem; }
+      .hero { padding: 3.5rem 1.5rem 3rem; }
+      .container { padding: 0 1rem; }
+      .section-header, .about { padding: 1.5rem; }
+      .tool-card { padding: 1.5rem; }
+      .tools-grid { gap: 1.25rem; }
+      .contact { padding: 3rem 1.5rem; }
+      .modal-container { height: 92vh; }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin-top: -1rem;
+      }
+      .section-header, .tool-card {
+        padding: 1.25rem;
+      }
+      header {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="./" class="brand" aria-label="Mateo Meléndez - Home">
+      <div class="logo-badge" aria-hidden="true">MM</div>
+      <div class="brand-title">Mateo Meléndez</div>
+    </a>
+    <nav class="lang-switch" aria-label="Language">
+      <a href="./">ES</a>
+      <a href="index-en.html" aria-current="page">EN</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-content">
+      <p class="hero-subtitle">Enterprise Risk Consultant</p>
+      <h1 id="hero-title">Risk management, in working order</h1>
+      <div class="quote-badge">
+        “Risk that gets managed, not documented. These are the instruments I do it with.”
+      </div>
+    </div>
+  </section>
+
+  <!-- Contenido principal -->
+  <main class="container">
+    <!-- Presentación -->
+    <section class="about">
+      <p>I am an enterprise risk consultant at Marsh. Before that I spent five years at Deloitte as a senior internal auditor, where I ran more than ten internal audits and led control testing under the Sarbanes-Oxley Act. Today I design risk methodologies, policies and key risk indicators for companies across sectors and sizes, and I facilitate the workshops where those risks get discussed with executive committees.</p>
+      <p class="about-punch">The tools on this page came out of that work: I built them because I needed them.</p>
+    </section>
+
+    <div class="section-header">
+      <h2>The instruments I work with</h2>
+      <p>Each one solves a problem I have run into in the field: valuing and prioritising, mapping causes and barriers, reconciling mismatched matrices, setting appetite thresholds and deciding how much to test. They are live — open them and use them. The interfaces are in Spanish; the frameworks behind them are COSO and ISO 31000.</p>
+    </div>
+
+    <div class="tools-grid">
+      <!-- Tarjeta 1 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Risk Matrix</div>
+          <h3 class="tool-title">Process Risk Matrix</h3>
+          <p class="tool-description">You have forty risks on the matrix and capacity for five. Rank them by real magnitude and justify to the committee why those five.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">
+          Open tool <span aria-hidden="true">→</span>
+        </button>
+      </article>
+
+      <!-- Tarjeta 2 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Cause and Effect</div>
+          <h3 class="tool-title">RiskVantage — Bow Tie</h3>
+          <p class="tool-description">An event materialised and the question is how it got through and which barrier failed. Separate causes from consequences and expose where you are uncovered.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">
+          Open tool <span aria-hidden="true">→</span>
+        </button>
+      </article>
+
+      <!-- Tarjeta 3 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Data Normalisation</div>
+          <h3 class="tool-title">Matrix Consolidator</h3>
+          <p class="tool-description">Every area handed in its matrix in a different format. Reconcile the structures, catch the same risk written three ways and end up with a single base.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">
+          Open tool <span aria-hidden="true">→</span>
+        </button>
+      </article>
+
+      <!-- Tarjeta 4 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Capacity and Exposure</div>
+          <h3 class="tool-title">Risk Appetite and Tolerance</h3>
+          <p class="tool-description">The board asks how much risk the company can carry. Translate financial capacity into appetite and tolerance thresholds you can defend.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">
+          Open tool <span aria-hidden="true">→</span>
+        </button>
+      </article>
+
+      <!-- Tarjeta 5 -->
+      <article class="tool-card">
+        <div>
+          <div class="tool-category">Control and Audit</div>
+          <h3 class="tool-title">Audit Sampling</h3>
+          <p class="tool-description">You have to test a control and do not know how many items to pull. Calculate the sample size and leave the statistical basis documented.</p>
+        </div>
+        <button class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
+          Open tool <span aria-hidden="true">→</span>
+        </button>
+      </article>
+    </div>
+  </main>
+
+  <!-- Cierre: contacto -->
+  <section class="contact" aria-labelledby="contact-title">
+    <div class="contact-inner">
+      <h2 id="contact-title">Let’s talk</h2>
+      <p>If any of this is useful to your organisation, or you are standing up a risk function and do not know where to start, write to me. I answer everything.</p>
+      <div class="contact-actions">
+        <a class="btn-contact primary" href="https://www.linkedin.com/in/mateo-melendez" target="_blank" rel="noopener noreferrer">
+          Connect on LinkedIn <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="btn-contact secondary" href="mailto:mmelendezgomez@gmail.com?subject=Contact%20from%20the%20portfolio">
+          Send me an email
+        </a>
+      </div>
+      <p class="contact-note">
+        <strong>Need my CV?</strong> Ask for it by email and I will send it over.
+      </p>
+    </div>
+  </section>
+
+  <!-- Modal para visualizar la herramienta -->
+  <div class="modal-overlay" id="toolModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Loading tool...</h2>
+        <button class="btn-close" onclick="closeTool()" id="closeModalBtn" aria-label="Close tool">✕ Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="iframe-loader">Loading...</div>
+        <!-- Rendimiento: Se agrega loading="lazy" -->
+        <iframe id="toolFrame" src="about:blank" loading="lazy" title="Interactive tool viewer"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© Mateo Meléndez · <span>Enterprise Risk Consultant</span></p>
+  </footer>
+
+  <!-- Analítica (opcional, sin cookies). Para activarla, crea una cuenta gratis en
+       goatcounter.com y escribe aquí el código de tu sitio. Vacío = no se carga nada. -->
+  <script>
+    const ANALYTICS_CODE = "";
+
+    (function () {
+      if (!ANALYTICS_CODE) return;
+      const s = document.createElement("script");
+      s.async = true;
+      s.dataset.goatcounter = "https://" + ANALYTICS_CODE + ".goatcounter.com/count";
+      s.src = "//gc.zgo.at/count.js";
+      document.head.appendChild(s);
+    })();
+
+    function trackTool(toolKey, toolTitle) {
+      if (!ANALYTICS_CODE) return;
+      if (!window.goatcounter || typeof window.goatcounter.count !== "function") return;
+      window.goatcounter.count({ path: "herramienta/" + toolKey, title: toolTitle, event: true });
+    }
+  </script>
+
+  <!-- Lógica JavaScript -->
+  <script>
+    const toolsData = {
+      matriz: { title: "Process Risk Matrix", src: "herramientas/Matriz_Riesgos_Demo.html" },
+      bowtie: { title: "RiskVantage — Bow Tie", src: "herramientas/RiskVantage_Demo.html" },
+      consolidador: { title: "Matrix Consolidator", src: "herramientas/Consolidador_Demo.html" },
+      apetito: { title: "Risk Appetite and Tolerance", src: "herramientas/Apetito_Demo.html" },
+      muestreo: { title: "Audit Sampling", src: "herramientas/Papeles_Demo.html" }
+    };
+
+    let triggerButton = null; // Para devolver el foco al botón al cerrar el modal (Accesibilidad)
+
+    function openTool(toolKey, btnElement) {
+      const tool = toolsData[toolKey];
+      if (!tool) return;
+
+      triggerButton = btnElement;
+      triggerButton.setAttribute('aria-expanded', 'true');
+      trackTool(toolKey, tool.title);
+
+      const modal = document.getElementById('toolModal');
+      const frame = document.getElementById('toolFrame');
+      const title = document.getElementById('modalTitle');
+      const closeBtn = document.getElementById('closeModalBtn');
+
+      title.textContent = tool.title;
+      frame.title = `Tool: ${tool.title}`; // Accesibilidad dinámica para el iframe
+      frame.src = tool.src;
+      
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden'; // Previene scroll en el fondo
+      
+      // Mover el foco al botón de cerrar por accesibilidad de teclado
+      setTimeout(() => closeBtn.focus(), 100);
+    }
+
+    function closeTool() {
+      const modal = document.getElementById('toolModal');
+      const frame = document.getElementById('toolFrame');
+
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      
+      // Limpiar iframe para liberar memoria
+      setTimeout(() => { frame.src = 'about:blank'; }, 300); 
+      
+      document.body.style.overflow = '';
+
+      // Devolver el foco al botón que originó la acción
+      if (triggerButton) {
+        triggerButton.setAttribute('aria-expanded', 'false');
+        triggerButton.focus();
+        triggerButton = null;
+      }
+    }
+
+    // Cerrar modal al presionar la tecla ESC
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && document.getElementById('toolModal').classList.contains('active')) {
+        closeTool();
+      }
+    });
+
+    // Cerrar modal al hacer clic fuera del contenido
+    document.getElementById('toolModal').addEventListener('click', function(event) {
+      if (event.target === this) {
+        closeTool();
+      }
+    });
+  </script>
+</body>
+</html>

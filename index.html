@@ -90,6 +90,31 @@
       border-radius: 8px;
     }
 
+    .lang-switch {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+    .lang-switch a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      transition: color 0.2s ease, background-color 0.2s ease;
+    }
+    .lang-switch a[aria-current="page"] {
+      color: var(--ink);
+      background-color: var(--acc);
+    }
+    @media (hover: hover) {
+      .lang-switch a:not([aria-current]):hover {
+        color: #ffffff;
+        background-color: var(--ink-light);
+      }
+    }
     .brand-title {
       font-weight: 600;
       font-size: 1.1rem;
@@ -471,10 +496,14 @@
 
   <!-- Header -->
   <header>
-    <a href="/" class="brand" aria-label="Mateo Meléndez - Inicio">
+    <a href="./" class="brand" aria-label="Mateo Meléndez - Inicio">
       <div class="logo-badge" aria-hidden="true">MM</div>
       <div class="brand-title">Mateo Meléndez</div>
     </a>
+    <nav class="lang-switch" aria-label="Idioma">
+      <a href="./" aria-current="page">ES</a>
+      <a href="index-en.html">EN</a>
+    </nav>
   </header>
 
   <!-- Hero -->
