@@ -573,6 +573,14 @@
         grid-template-columns: 1fr;
         gap: 1.75rem;
       }
+      /* Apiladas, las tarjetas se estrechan a la medida de lectura:
+         a todo el ancho el texto llegaba a 90 caracteres por linea. */
+      .about,
+      .section-header {
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
       .creds {
         border-left: 0;
         border-top: 1px solid var(--border);
