@@ -530,16 +530,54 @@
     }
     /* ---- Ajustes finales: van al final para vencer en la cascada ---- */
     /* Medida de lectura: sin tope, estos parrafos corrian a 130 caracteres por linea */
-    /* Las tarjetas de texto se estrechan hasta la medida de lectura.
-       Toparlas solo por dentro dejaba media tarjeta vacia a la derecha. */
-    .about,
-    .section-header {
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    /* Dos columnas: la medida de lectura se respeta por columna y el ancho
+       de pantalla se aprovecha con contenido, no con lineas mas largas. */
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
+    }
+    .about-grid,
+    .sec-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: 2.5rem;
+      align-items: start;
+    }
+    .creds {
+      border-left: 1px solid var(--border);
+      padding-left: 2rem;
+    }
+    .creds h3 {
+      font-size: 0.72rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--acc-text);
+      margin-bottom: 0.55rem;
+    }
+    .creds ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+    }
+    .creds ul:last-child { margin-bottom: 0; }
+    .creds li b { color: var(--text); font-weight: 600; }
+    .sec-grid .demo-note { margin-top: 0; }
+    @media (max-width: 880px) {
+      .about-grid,
+      .sec-grid {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+      }
+      .creds {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+        padding-left: 0;
+        padding-top: 1.5rem;
+      }
     }
     /* Contraste AA para texto pequeno sobre blanco */
     .tool-category {
@@ -590,14 +628,40 @@
   <main class="container" id="contenido">
     <!-- Presentación -->
     <section class="about">
-      <p>I am an enterprise risk consultant at Marsh. Before that I spent five years at Deloitte as a senior internal auditor, where I ran more than ten internal audits and led control testing under the Sarbanes-Oxley Act. Today I design risk methodologies, policies and key risk indicators for companies across sectors and sizes, and I facilitate the workshops where those risks are discussed with executive committees.</p>
+      <div class="about-grid">
+        <div>
+          <p>I am an enterprise risk consultant at Marsh. Before that I spent five years at Deloitte as a senior internal auditor, where I ran more than ten internal audits and led control testing under the Sarbanes-Oxley Act. Today I design risk methodologies, policies and key risk indicators for companies across sectors and sizes, and I facilitate the workshops where those risks are discussed with executive committees.</p>
       <p class="about-punch">The tools on this page came out of that work: I built them because I needed them.</p>
+        </div>
+        <aside class="creds">
+          <h3>Track record</h3>
+          <ul>
+            <li><b>Marsh</b> &middot; Enterprise Risk Consultant &mdash; 2024 to date</li>
+            <li><b>Deloitte</b> &middot; Senior Internal Auditor, Risk Advisory &mdash; 2019 to 2024</li>
+          </ul>
+          <h3>Education</h3>
+          <ul>
+            <li><b>SARLAFT 4.0</b> certificate &mdash; Javeriana Cali, 2024</li>
+            <li><b>Scrum Master</b> Professional &mdash; CertiProf, 2021</li>
+            <li>Data and business intelligence &mdash; EAN, 2019</li>
+            <li>Business Administration &mdash; EAN and Universit&eacute; du Qu&eacute;bec &agrave; Chicoutimi</li>
+          </ul>
+          <h3>Tooling</h3>
+          <ul>
+            <li>Power BI &middot; SQL &middot; R &middot; Visio &middot; JIRA</li>
+          </ul>
+        </aside>
+      </div>
     </section>
 
     <div class="section-header">
-      <h2>The instruments I work with</h2>
-      <p>Each one solves a problem I have run into in the field: valuing and prioritising, mapping causes and barriers, reconciling mismatched matrices, setting appetite thresholds and deciding how much to test. They are live — open them and use them. The interfaces are in Spanish; the frameworks behind them are COSO and ISO 31000.</p>
-      <p class="demo-note"><strong>These are demonstration versions.</strong> They are deliberately simplified and carry sample data: they exist to show the approach in five minutes, not to run a risk function on. The full versions are configured for each organisation’s methodology, rating scales and reporting. If one of them is genuinely useful to you, write to me and I will show you the working version.</p>
+      <div class="sec-grid">
+        <div>
+          <h2>The instruments I work with</h2>
+          <p>Each one solves a problem I have run into in the field: valuing and prioritising, mapping causes and barriers, reconciling mismatched matrices, setting appetite thresholds and deciding how much to test. They are live — open them and use them. The interfaces are in Spanish; the frameworks behind them are COSO and ISO 31000.</p>
+        </div>
+        <p class="demo-note"><strong>These are demonstration versions.</strong> They are deliberately simplified and carry sample data: they exist to show the approach in five minutes, not to run a risk function on. The full versions are configured for each organisation’s methodology, rating scales and reporting. If one of them is genuinely useful to you, write to me and I will show you the working version.</p>
+      </div>
     </div>
 
     <div class="tools-grid">

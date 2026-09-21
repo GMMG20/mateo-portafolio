@@ -530,16 +530,54 @@
     }
     /* ---- Ajustes finales: van al final para vencer en la cascada ---- */
     /* Medida de lectura: sin tope, estos parrafos corrian a 130 caracteres por linea */
-    /* Las tarjetas de texto se estrechan hasta la medida de lectura.
-       Toparlas solo por dentro dejaba media tarjeta vacia a la derecha. */
-    .about,
-    .section-header {
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    /* Dos columnas: la medida de lectura se respeta por columna y el ancho
+       de pantalla se aprovecha con contenido, no con lineas mas largas. */
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
+    }
+    .about-grid,
+    .sec-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: 2.5rem;
+      align-items: start;
+    }
+    .creds {
+      border-left: 1px solid var(--border);
+      padding-left: 2rem;
+    }
+    .creds h3 {
+      font-size: 0.72rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--acc-text);
+      margin-bottom: 0.55rem;
+    }
+    .creds ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+    }
+    .creds ul:last-child { margin-bottom: 0; }
+    .creds li b { color: var(--text); font-weight: 600; }
+    .sec-grid .demo-note { margin-top: 0; }
+    @media (max-width: 880px) {
+      .about-grid,
+      .sec-grid {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+      }
+      .creds {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+        padding-left: 0;
+        padding-top: 1.5rem;
+      }
     }
     /* Contraste AA para texto pequeno sobre blanco */
     .tool-category {
@@ -590,14 +628,40 @@
   <main class="container" id="contenido">
     <!-- Presentación -->
     <section class="about">
-      <p>Soy consultor de riesgos empresariales en Marsh. Antes pas&eacute; cinco a&ntilde;os en Deloitte como auditor interno senior, donde ejecut&eacute; m&aacute;s de diez auditor&iacute;as y lider&eacute; el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy dise&ntilde;o metodolog&iacute;as, pol&iacute;ticas e indicadores clave de riesgo para empresas de varios sectores y tama&ntilde;os, y facilito los talleres donde esos riesgos se discuten con los comit&eacute;s directivos.</p>
+      <div class="about-grid">
+        <div>
+          <p>Soy consultor de riesgos empresariales en Marsh. Antes pas&eacute; cinco a&ntilde;os en Deloitte como auditor interno senior, donde ejecut&eacute; m&aacute;s de diez auditor&iacute;as y lider&eacute; el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy dise&ntilde;o metodolog&iacute;as, pol&iacute;ticas e indicadores clave de riesgo para empresas de varios sectores y tama&ntilde;os, y facilito los talleres donde esos riesgos se discuten con los comit&eacute;s directivos.</p>
       <p class="about-punch">Las herramientas de esta p&aacute;gina salieron de ese trabajo: las constru&iacute; porque las necesitaba.</p>
+        </div>
+        <aside class="creds">
+          <h3>Trayectoria</h3>
+          <ul>
+            <li><b>Marsh</b> &middot; Consultor de Riesgos Empresariales &mdash; 2024 a hoy</li>
+            <li><b>Deloitte</b> &middot; Auditor Interno Senior, Risk Advisory &mdash; 2019 a 2024</li>
+          </ul>
+          <h3>Formaci&oacute;n</h3>
+          <ul>
+            <li>Diplomado <b>SARLAFT 4.0</b> &mdash; Javeriana Cali, 2024</li>
+            <li><b>Scrum Master</b> Professional &mdash; CertiProf, 2021</li>
+            <li>Datos e inteligencia de negocios &mdash; EAN, 2019</li>
+            <li>Administraci&oacute;n de Empresas &mdash; EAN y Universit&eacute; du Qu&eacute;bec &agrave; Chicoutimi</li>
+          </ul>
+          <h3>Herramientas</h3>
+          <ul>
+            <li>Power BI &middot; SQL &middot; R &middot; Visio &middot; JIRA</li>
+          </ul>
+        </aside>
+      </div>
     </section>
 
     <div class="section-header">
-      <h2>Instrumentos de trabajo</h2>
-      <p>Cada uno resuelve un problema que me he encontrado en campo: valorar y priorizar, mapear causas y barreras, homologar matrices dispares, fijar umbrales de apetito y decidir cuánto probar. Están en vivo: ábralos y úselos.</p>
-      <p class="demo-note"><strong>Son versiones demostrativas.</strong> Están simplificadas a propósito y traen datos de ejemplo: sirven para mostrar el enfoque en cinco minutos, no para operar. Las versiones completas se parametrizan con la metodología, las escalas de valoración y los reportes de cada organización. Si le interesa alguna en serio, escríbame y se la muestro funcionando de verdad.</p>
+      <div class="sec-grid">
+        <div>
+          <h2>Instrumentos de trabajo</h2>
+          <p>Cada uno resuelve un problema que me he encontrado en campo: valorar y priorizar, mapear causas y barreras, homologar matrices dispares, fijar umbrales de apetito y decidir cuánto probar. Están en vivo: ábralos y úselos.</p>
+        </div>
+        <p class="demo-note"><strong>Son versiones demostrativas.</strong> Están simplificadas a propósito y traen datos de ejemplo: sirven para mostrar el enfoque en cinco minutos, no para operar. Las versiones completas se parametrizan con la metodología, las escalas de valoración y los reportes de cada organización. Si le interesa alguna en serio, escríbame y se la muestro funcionando de verdad.</p>
+      </div>
     </div>
 
     <div class="tools-grid">
