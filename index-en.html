@@ -530,10 +530,16 @@
     }
     /* ---- Ajustes finales: van al final para vencer en la cascada ---- */
     /* Medida de lectura: sin tope, estos parrafos corrian a 130 caracteres por linea */
-    .about p,
-    .demo-note,
-    .section-header > p {
-      max-width: 68ch;
+    /* Las tarjetas de texto se estrechan hasta la medida de lectura.
+       Toparlas solo por dentro dejaba media tarjeta vacia a la derecha. */
+    .about,
+    .section-header {
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .container {
+      max-width: 1000px;
     }
     /* Contraste AA para texto pequeno sobre blanco */
     .tool-category {
