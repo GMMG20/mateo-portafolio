@@ -1,0 +1,244 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+<title>Diseño de un KRI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
+  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
+  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
+  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
+  --verde:#22C55E; --ambar:#FFBF00; --rojo:#DB0000;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
+  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
+.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
+  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
+.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
+.app-name{color:#fff;font-size:14px;font-weight:600;}
+.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
+.beta{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;background:var(--gold);color:var(--ink);font-size:10px;font-weight:800;letter-spacing:.06em;vertical-align:1px;}
+.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto;width:100%;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
+.card h3{font-size:15px;margin-bottom:4px;}
+.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
+.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
+.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
+.banner-ok{background:#DCFCE7;color:#14532D;border-left:3px solid var(--verde);}
+.banner-err{background:#FEE2E2;color:#991B1B;border-left:3px solid var(--rojo);}
+.mono{font-variant-numeric:tabular-nums;}
+.juego{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start;}
+@media(max-width:820px){.juego{grid-template-columns:1fr;}}
+/* Avance */
+.avance{display:flex;gap:6px;margin:10px 0 14px;}
+.avance i{flex:1;height:6px;border-radius:3px;background:var(--line);}
+.avance i.ok{background:var(--acc);} .avance i.ahora{background:var(--gold);}
+.paso-t{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--acc-dk);}
+.pregunta{font-size:15.5px;font-weight:700;line-height:1.45;margin:4px 0 12px;color:var(--ink);}
+.contexto{font-size:13px;color:var(--tx-2);line-height:1.55;margin-bottom:12px;}
+/* Opciones */
+.ops{display:flex;flex-direction:column;gap:8px;}
+.opcion{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;font:inherit;font-size:13.5px;line-height:1.45;color:var(--tx);
+  background:#fff;border:1px solid var(--line);border-radius:7px;padding:11px 13px;cursor:pointer;transition:border-color .15s ease,background .15s ease;}
+.opcion:hover:not([disabled]){border-color:var(--acc);background:#F3FBFA;}
+.opcion:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+.opcion .k{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--tx-2);}
+.opcion.mal{background:#FEF2F2;border-color:#FCA5A5;color:#7F1D1D;cursor:default;}
+.opcion.mal .k{background:#FCA5A5;color:#fff;border-color:#FCA5A5;}
+.opcion.bien{background:#ECFDF5;border-color:#86EFAC;}
+.opcion.bien .k{background:var(--verde);color:#fff;border-color:var(--verde);}
+.opcion[disabled]{cursor:default;}
+#retro{margin-top:12px;}
+.acciones{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.btn{font:inherit;font-weight:700;font-size:13px;border-radius:6px;padding:10px 16px;cursor:pointer;border:1px solid transparent;}
+.btn-p{background:var(--ink);color:#fff;} .btn-p:hover{background:var(--acc-dk);}
+.btn-s{background:#fff;color:var(--ink);border-color:var(--line);} .btn-s:hover{border-color:var(--acc);}
+.btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+/* Ficha del KRI */
+.ficha{border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.ficha-h{background:var(--ink);color:#fff;padding:10px 14px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;display:flex;justify-content:space-between;}
+.fila{display:grid;grid-template-columns:120px 1fr;border-top:1px solid var(--line);}
+.fila:first-of-type{border-top:0;}
+.fila .t{background:var(--bg);padding:10px 12px;font-size:11px;font-weight:800;color:var(--tx-2);text-transform:uppercase;letter-spacing:.04em;}
+.fila .v{padding:10px 12px;font-size:13px;line-height:1.45;}
+.fila .v.vacio{color:var(--tx-3);font-style:italic;}
+.fila.nueva .v{animation:resalta 1.2s ease;}
+@keyframes resalta{0%{background:#FFF3C4;}100%{background:transparent;}}
+.term{display:flex;height:26px;border-radius:5px;overflow:hidden;font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.3);}
+.term div{display:flex;align-items:center;justify-content:center;padding:0 4px;white-space:nowrap;}
+.lectura{position:relative;height:22px;}
+.lectura .m{position:absolute;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--ink);text-align:center;line-height:1.1;}
+.marcador{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.marcador .n{font-size:26px;font-weight:800;color:var(--ink);}
+.estrellas{color:var(--gold);font-size:22px;letter-spacing:2px;}
+@media(max-width:520px){.wrap{padding:14px;} .fila{grid-template-columns:96px 1fr;} .app-tag{display:none;}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
+footer .wrap2{max-width:1080px;margin:0 auto;}
+.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
+  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
+  transition:opacity .2s ease,border-color .2s ease;}
+.volver:hover{opacity:1;border-color:var(--acc);}
+.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+</style>
+
+<div class="app-header">
+  <span class="logo">MM</span>
+  <div class="sep"></div>
+  <div>
+    <div class="app-name">Diseño de un KRI <span class="beta">BETA</span></div>
+    <div class="app-tag">Minijuego · un indicador que avise antes, no después</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="banner banner-info">
+    <b>Cómo funciona.</b> Un indicador clave de riesgo (KRI) solo sirve si avisa <b>antes</b> de que el riesgo se materialice.
+    Diseñe uno para el riesgo de abajo, decisión por decisión: qué medir, con qué umbrales, cada cuánto, quién responde y qué hacer cuando cambia de color.
+    Si se equivoca, lea la explicación y vuelva a intentarlo. Atajo: teclas <b>1</b>, <b>2</b> y <b>3</b>.
+  </div>
+
+  <div class="juego">
+    <div class="card" aria-live="polite">
+      <div class="paso-t" id="pasoT"></div>
+      <div class="avance" id="avance" aria-hidden="true"></div>
+      <div id="zona"></div>
+    </div>
+    <div class="card">
+      <h3>Ficha del indicador</h3>
+      <p class="hint" style="margin-bottom:12px">Se completa con cada decisión acertada.</p>
+      <div class="ficha" id="ficha"></div>
+    </div>
+  </div>
+</div>
+
+<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+
+<script>
+/* Minijuego de una sola pantalla: cinco decisiones para diseñar un indicador clave de riesgo.
+   La puntuación cuenta los aciertos al primer intento; la ficha siempre termina completa. */
+var RIESGO = 'Acceso indebido a los datos de clientes';
+var PASOS = [
+  {campo:'Indicador', t:'Qué medir',
+   p:'¿Qué indicador elige para este riesgo?',
+   ops:['Número de filtraciones de datos en el año','Usuarios con privilegios de administrador sin revisión en el trimestre','Satisfacción de los usuarios con el área de tecnología'], ok:1,
+   bien:'Mide la condición que antecede al evento: cuantos más accesos privilegiados sin revisar, más probable es un acceso indebido.',
+   mal:['Contar filtraciones llega tarde: mide lo que ya pasó. Eso es un indicador de resultado, no de riesgo.',null,'No guarda relación con el riesgo: puede estar alto y los accesos seguir sin control.'],
+   valor:function(){ return 'Usuarios con privilegios de administrador sin revisión en el trimestre'; }},
+  {campo:'Umbrales', t:'Con qué umbrales',
+   p:'¿Qué umbrales le pone?',
+   ops:['Verde hasta 5 · amarillo de 6 a 10 · rojo más de 10','Verde hasta 50 · amarillo de 51 a 100 · rojo más de 100','Solo rojo, cuando ocurra una filtración'], ok:0,
+   bien:'Los umbrales reflejan el apetito y dejan tiempo para reaccionar: el amarillo alerta y el rojo escala, siempre antes del evento.',
+   mal:[null,'Con umbrales tan holgados el indicador nunca cambia de color: no avisaría de nada.','Un umbral que se activa con la filtración ya no previene: llega cuando el daño está hecho.'],
+   valor:function(){ return '<div class="term"><div style="background:var(--verde);width:38%">Verde ≤ 5</div><div style="background:var(--ambar);color:#5C4300;width:32%">Amarillo 6–10</div><div style="background:var(--rojo);flex:1">Rojo > 10</div></div>'; }},
+  {campo:'Frecuencia', t:'Cada cuánto',
+   p:'¿Cada cuánto lo mide?',
+   ops:['Una vez al año','Cada mes','Cada cinco años'], ok:1,
+   bien:'La medición debe ser más rápida que el riesgo: un acceso indebido puede escalar en semanas, así que se mide cada mes.',
+   mal:['En un año caben muchos accesos indebidos sin que nadie lo note.',null,'Con esa frecuencia el indicador sería solo un dato histórico.'],
+   valor:function(){ return 'Mensual'; }},
+  {campo:'Responsable', t:'Quién responde',
+   p:'¿Quién es el responsable del indicador?',
+   ops:['La jefa de tecnología, dueña del proceso de accesos','El área de riesgos','La aseguradora'], ok:0,
+   bien:'Responde quien gestiona el proceso y puede actuar sobre él. El área de riesgos acompaña, consolida y reporta.',
+   mal:[null,'El área de riesgos acompaña y consolida, pero no administra los accesos: no puede corregirlos por sí misma.','La aseguradora puede cubrir parte de la pérdida, pero no gestiona los accesos de la empresa.'],
+   valor:function(){ return 'Jefa de tecnología (dueña del proceso)'; }},
+  {campo:'Acción por color', t:'Qué hacer',
+   p:'Primer mes: el indicador marca 8 usuarios sin revisar. ¿Qué corresponde?',
+   contexto:'Recuerde los umbrales: verde hasta 5, amarillo de 6 a 10, rojo más de 10.',
+   ops:['Nada: todavía no ha ocurrido ninguna filtración','Alertar a la responsable y activar el plan: revisar y depurar esos accesos este mes','Escalar de inmediato al comité y suspender el sistema'], ok:1,
+   bien:'8 está en amarillo: se alerta y se actúa antes de llegar a rojo. El rojo es el que se escala al comité.',
+   mal:['Esperar a la filtración es justo lo que el indicador busca evitar: en amarillo ya hay que actuar.',null,'Es una reacción de rojo. En amarillo se alerta y se corrige; escalar y suspender sería desproporcionado.'],
+   valor:function(){ return '<b>Verde:</b> monitoreo normal · <b>Amarillo:</b> alerta a la responsable y plan de acción · <b>Rojo:</b> escalamiento al comité'; }}
+];
+var k, intentos, aciertos, fallosPaso, nuevo;
+
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function el(id){ return document.getElementById(id); }
+
+function iniciar(){ k = 0; aciertos = 0; fallosPaso = []; nuevo = -1; pintarFicha(); pintarPaso(); }
+
+function pintarFicha(){
+  var h = '<div class="ficha-h"><span>KRI · Riesgo tecnológico</span><span>' + Math.min(k, PASOS.length) + ' de ' + PASOS.length + '</span></div>';
+  h += '<div class="fila"><div class="t">Riesgo</div><div class="v">' + escH(RIESGO) + '</div></div>';
+  PASOS.forEach(function(P, i){
+    var lleno = i < k;
+    h += '<div class="fila' + (i===nuevo ? ' nueva' : '') + '"><div class="t">' + P.campo + '</div><div class="v' + (lleno ? '' : ' vacio') + '">' + (lleno ? P.valor() : 'Por definir') + '</div></div>';
+  });
+  el('ficha').innerHTML = h;
+}
+
+function pintarAvance(){
+  var h = ''; for(var i=0;i<PASOS.length;i++) h += '<i class="' + (i<k ? 'ok' : i===k ? 'ahora' : '') + '"></i>';
+  el('avance').innerHTML = h;
+}
+
+function pintarPaso(){
+  pintarAvance();
+  if(k >= PASOS.length){ final(); return; }
+  var P = PASOS[k]; intentos = 0; fallosPaso[k] = [];
+  el('pasoT').textContent = 'Decisión ' + (k+1) + ' de ' + PASOS.length + ' · ' + P.t;
+  el('zona').innerHTML = (k===0 ? '<p class="contexto">Riesgo: <b>' + escH(RIESGO) + '</b>.</p>' : '') +
+    '<p class="pregunta">' + escH(P.p) + '</p>' + (P.contexto ? '<p class="contexto">' + escH(P.contexto) + '</p>' : '') +
+    '<div class="ops" id="ops">' + P.ops.map(function(o, i){ return '<button class="opcion" type="button" data-i="' + i + '"><span class="k">' + (i+1) + '</span><span>' + escH(o) + '</span></button>'; }).join('') + '</div>' +
+    '<div id="retro"></div>';
+  Array.prototype.forEach.call(document.querySelectorAll('#ops .opcion'), function(b){ b.onclick = function(){ responder(+b.dataset.i); }; });
+}
+
+function responder(i){
+  var P = PASOS[k], b = document.querySelector('#ops .opcion[data-i="' + i + '"]');
+  if(!b || b.disabled) return;
+  intentos++;
+  if(i === P.ok){
+    if(intentos === 1) aciertos++;
+    Array.prototype.forEach.call(document.querySelectorAll('#ops .opcion'), function(x){ x.disabled = true; });
+    b.classList.add('bien');
+    el('retro').innerHTML = '<div class="banner banner-ok"><b>Correcto.</b> ' + escH(P.bien) + '</div>' +
+      '<div class="acciones"><button class="btn btn-p" type="button" id="seguir">' + (k === PASOS.length-1 ? 'Ver el resultado' : 'Siguiente decisión') + ' →</button></div>';
+    nuevo = k; k++; pintarFicha(); pintarAvance();
+    el('seguir').onclick = function(){ nuevo = -1; pintarPaso(); };
+    el('seguir').focus();
+  } else {
+    b.disabled = true; b.classList.add('mal');
+    el('retro').innerHTML = '<div class="banner banner-err"><b>No es la mejor opción.</b> ' + escH((P.mal && P.mal[i]) || 'Revise el enunciado y pruebe otra vez.') + '</div>';
+  }
+}
+
+function final(){
+  el('pasoT').textContent = 'Resultado';
+  var est = aciertos === PASOS.length ? 3 : aciertos >= PASOS.length-2 ? 2 : 1;
+  var msj = aciertos === PASOS.length ? 'Diseño impecable: el indicador anticipa el riesgo, tiene umbrales accionables, frecuencia adecuada y un responsable claro.'
+          : aciertos >= PASOS.length-2 ? 'Buen diseño. Repase las decisiones en las que dudó: son las que más se equivocan en la práctica.'
+          : 'El indicador quedó bien armado gracias a las correcciones. Vale la pena repetirlo para fijar el criterio.';
+  el('zona').innerHTML = '<div class="marcador"><span class="n mono">' + aciertos + ' de ' + PASOS.length + '</span><span class="estrellas" aria-label="' + est + ' de 3">' +
+    '★★★'.slice(0, est) + '☆☆☆'.slice(0, 3-est) + '</span></div><p class="hint" style="margin:4px 0 12px">Decisiones acertadas al primer intento.</p>' +
+    '<div class="banner banner-info">' + escH(msj) + '</div>' +
+    '<p class="contexto" style="margin-top:12px">Las tres preguntas que vale la pena hacerle a cualquier KRI: <b>¿avisa antes del evento?</b>, <b>¿cada color dispara una acción concreta?</b> y <b>¿hay una persona que responde por él?</b></p>' +
+    '<div class="acciones"><button class="btn btn-s" type="button" id="otraVez">Volver a empezar</button></div>';
+  el('otraVez').onclick = iniciar;
+}
+
+document.addEventListener('keydown', function(e){
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  var n = parseInt(e.key, 10);
+  if(n >= 1 && n <= 3 && k < PASOS.length && document.querySelector('#ops')){ responder(n-1); e.preventDefault(); }
+});
+iniciar();
+</script>
+<script>
+/* Enlace de regreso al portafolio. Solo aparece si el minijuego se abrio
+   por su URL directa: dentro del visor modal del portafolio sobraria. */
+(function () {
+  if (window.self !== window.top) return;
+  var h = document.querySelector('.app-header');
+  if (!h) return;
+  var a = document.createElement('a');
+  a.className = 'volver';
+  a.href = '../index.html';
+  a.textContent = '← Portafolio';
+  h.appendChild(a);
+})();
+</script>

@@ -1,0 +1,231 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+<title>Bow-tie: incendio en la bodega</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
+  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
+  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
+  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
+  --verde:#22C55E; --ambar:#FFBF00; --rojo:#DB0000;
+  --c-causa:#7C2D12; --c-prev:#0C6B64; --c-mit:#1D4ED8; --c-cons:#991B1B;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
+  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
+.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
+  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
+.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
+.app-name{color:#fff;font-size:14px;font-weight:600;}
+.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
+.beta{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;background:var(--gold);color:var(--ink);font-size:10px;font-weight:800;letter-spacing:.06em;vertical-align:1px;}
+.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1180px;margin:0 auto;width:100%;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
+.card h3{font-size:15px;margin-bottom:4px;}
+.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
+.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
+.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
+.banner-ok{background:#DCFCE7;color:#14532D;border-left:3px solid var(--verde);}
+.banner-err{background:#FEE2E2;color:#991B1B;border-left:3px solid var(--rojo);}
+.mono{font-variant-numeric:tabular-nums;}
+/* Pieza actual */
+.turno{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:18px;align-items:start;}
+@media(max-width:820px){.turno{grid-template-columns:1fr;}}
+.avance{display:flex;gap:5px;margin:10px 0 14px;}
+.avance i{flex:1;height:6px;border-radius:3px;background:var(--line);}
+.avance i.ok{background:var(--acc);} .avance i.ahora{background:var(--gold);}
+.paso-t{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--acc-dk);}
+.pieza{border:2px dashed #9FD9D1;background:#F3FBFA;border-radius:9px;padding:18px 16px;font-size:16px;font-weight:700;color:var(--ink);line-height:1.4;text-align:center;}
+.botones{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.cat{display:flex;gap:9px;align-items:center;text-align:left;font:inherit;font-size:13.5px;font-weight:700;color:var(--tx);
+  background:#fff;border:1px solid var(--line);border-left:4px solid var(--c);border-radius:7px;padding:11px 12px;cursor:pointer;transition:background .15s ease,border-color .15s ease;}
+.cat small{display:block;font-weight:500;font-size:11.5px;color:var(--tx-2);}
+.cat:hover:not([disabled]){background:#F6FAFA;}
+.cat:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+.cat .k{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--tx-2);}
+.cat.mal{background:#FEF2F2;border-color:#FCA5A5;border-left-color:#FCA5A5;color:#7F1D1D;cursor:default;}
+.cat[disabled]{cursor:default;}
+#retro{margin-top:12px;}
+.acciones{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.btn{font:inherit;font-weight:700;font-size:13px;border-radius:6px;padding:10px 16px;cursor:pointer;border:1px solid transparent;}
+.btn-p{background:var(--ink);color:#fff;} .btn-p:hover{background:var(--acc-dk);}
+.btn-s{background:#fff;color:var(--ink);border-color:var(--line);} .btn-s:hover{border-color:var(--acc);}
+.btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+/* Diagrama bow-tie */
+.bowtie{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) minmax(120px,.8fr) repeat(2,minmax(0,1fr));gap:10px;align-items:stretch;padding:6px 0;}
+.bowtie svg.silueta{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.col{position:relative;z-index:1;display:flex;flex-direction:column;gap:7px;min-height:190px;}
+.col-h{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--c);padding-bottom:5px;border-bottom:2px solid var(--c);}
+.col-h small{display:block;font-weight:600;text-transform:none;letter-spacing:0;color:var(--tx-3);font-size:10.5px;}
+.chip{background:#fff;border:1px solid var(--line);border-left:3px solid var(--c);border-radius:6px;padding:7px 9px;font-size:12px;line-height:1.35;box-shadow:0 1px 2px rgba(0,0,0,.04);animation:entra .35s ease;}
+.chip.corr{border-style:dashed;}
+.chip.corr::after{content:"corregida";display:block;font-size:10px;font-weight:700;color:#9A6A10;margin-top:2px;}
+@keyframes entra{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+.hueco{border:1px dashed var(--line);border-radius:6px;height:34px;background:rgba(255,255,255,.6);}
+.evento{position:relative;z-index:1;align-self:center;background:var(--rojo);color:#fff;border-radius:12px;padding:16px 10px;text-align:center;font-weight:800;font-size:13px;line-height:1.35;box-shadow:0 6px 18px rgba(219,0,0,.25);}
+.evento small{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-bottom:3px;}
+.leyenda{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--tx-3);margin-top:8px;}
+@media(max-width:820px){
+  .bowtie{grid-template-columns:1fr;}
+  .bowtie svg.silueta{display:none;}
+  .col{min-height:0;}
+  .evento{margin:4px 0;}
+  .leyenda{display:none;}
+}
+.marcador{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.marcador .n{font-size:26px;font-weight:800;color:var(--ink);}
+.estrellas{color:var(--gold);font-size:22px;letter-spacing:2px;}
+@media(max-width:520px){.wrap{padding:14px;} .botones{grid-template-columns:1fr;} .app-tag{display:none;}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
+footer .wrap2{max-width:1180px;margin:0 auto;}
+.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
+  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
+  transition:opacity .2s ease,border-color .2s ease;}
+.volver:hover{opacity:1;border-color:var(--acc);}
+.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+</style>
+
+<div class="app-header">
+  <span class="logo">MM</span>
+  <div class="sep"></div>
+  <div>
+    <div class="app-name">Bow-tie: incendio en la bodega <span class="beta">BETA</span></div>
+    <div class="app-tag">Minijuego · causas, barreras y consecuencias de un mismo evento</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="banner banner-info">
+    <b>Cómo funciona.</b> El evento es un <b>incendio en la bodega de químicos</b>. Ubique cada pieza en el diagrama:
+    las <b>causas</b> y las <b>barreras preventivas</b> van antes del evento (las barreras bajan su probabilidad);
+    las <b>barreras de mitigación</b> y las <b>consecuencias</b> van después (las barreras bajan su impacto).
+    Si se equivoca, lea la explicación y pruebe otra vez. Atajo: teclas <b>1</b> a <b>4</b>.
+  </div>
+
+  <div class="card" aria-live="polite">
+    <div class="paso-t" id="pasoT"></div>
+    <div class="avance" id="avance" aria-hidden="true"></div>
+    <div id="zona"></div>
+  </div>
+
+  <div class="card">
+    <h3>Diagrama</h3>
+    <p class="hint" style="margin-bottom:12px">Se arma con cada pieza ubicada. Las piezas marcadas como «corregida» se ubicaron después de un error.</p>
+    <div class="bowtie" id="bowtie"></div>
+    <div class="leyenda"><span>← Antes del evento: se busca que no ocurra</span><span>Después del evento: se busca que duela menos →</span></div>
+  </div>
+</div>
+
+<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+
+<script>
+/* Minijuego de una sola pantalla: ocho piezas alrededor de un evento central.
+   La puntuación cuenta los aciertos al primer intento; el diagrama siempre termina completo. */
+var EVENTO = 'Incendio en la bodega de químicos';
+var COLS = [
+  {n:'Causa', pl:'Causas', d:'Lo que puede originar el evento', c:'var(--c-causa)'},
+  {n:'Barrera preventiva', pl:'Barreras preventivas', d:'Evitan que el evento ocurra', c:'var(--c-prev)'},
+  {n:'Barrera de mitigación', pl:'Barreras de mitigación', d:'Reducen el daño si ocurre', c:'var(--c-mit)'},
+  {n:'Consecuencia', pl:'Consecuencias', d:'Lo que pasaría después', c:'var(--c-cons)'}
+];
+var PIEZAS = [
+  {t:'Químicos inflamables almacenados junto a cartón', c:0, exp:'Es una condición que puede originar el fuego: está antes del evento, del lado de las causas.'},
+  {t:'Cortocircuito en una instalación eléctrica vieja', c:0, exp:'Puede desencadenar el incendio: es una causa.'},
+  {t:'Almacenamiento separado y ventilado', c:1, exp:'Actúa antes del evento: aleja el material combustible de las fuentes de calor. Es una barrera preventiva.'},
+  {t:'Inspección eléctrica anual', c:1, exp:'Encuentra y corrige fallas eléctricas antes de que provoquen el fuego: barrera preventiva.'},
+  {t:'Rociadores automáticos', c:2, exp:'Funcionan cuando el fuego ya empezó y limitan su avance: barrera de mitigación.'},
+  {t:'Plan de evacuación y brigada entrenada', c:2, exp:'No evitan el incendio, pero reducen el daño a las personas cuando ocurre: barrera de mitigación.'},
+  {t:'Pérdida de inventario por USD 3 millones', c:3, exp:'Es un efecto del incendio, no su origen: consecuencia.'},
+  {t:'Lesiones a trabajadores', c:3, exp:'Es un efecto sobre las personas una vez ocurre el evento: consecuencia.'}
+];
+var orden, k, aciertos, intentos, ubicadas;
+
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function el(id){ return document.getElementById(id); }
+function barajar(a){ var b = a.slice(); for(var i=b.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)), x = b[i]; b[i] = b[j]; b[j] = x; } return b; }
+
+function iniciar(){ orden = barajar(PIEZAS); k = 0; aciertos = 0; ubicadas = [[],[],[],[]]; pintarDiagrama(); pintarTurno(); }
+
+function columna(i){
+  var C = COLS[i], fichas = ubicadas[i].map(function(p){ return '<div class="chip' + (p.corr ? ' corr' : '') + '">' + escH(p.t) + '</div>'; }).join('');
+  var huecos = ''; for(var h=ubicadas[i].length; h<2; h++) huecos += '<div class="hueco" aria-hidden="true"></div>';
+  return '<div class="col" style="--c:' + C.c + '"><div class="col-h">' + C.pl + '<small>' + C.d + '</small></div>' + fichas + huecos + '</div>';
+}
+function pintarDiagrama(){
+  el('bowtie').innerHTML =
+    '<svg class="silueta" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+      '<polygon points="0,4 44,40 44,60 0,96" fill="#EEF6F5"/><polygon points="100,4 56,40 56,60 100,96" fill="#EEF2FB"/></svg>' +
+    columna(0) + columna(1) + '<div class="evento"><small>Evento</small>' + escH(EVENTO) + '</div>' + columna(2) + columna(3);
+}
+function pintarAvance(){
+  var h = ''; for(var i=0;i<orden.length;i++) h += '<i class="' + (i<k ? 'ok' : i===k ? 'ahora' : '') + '"></i>';
+  el('avance').innerHTML = h;
+}
+function pintarTurno(){
+  pintarAvance();
+  if(k >= orden.length){ final(); return; }
+  var P = orden[k]; intentos = 0;
+  el('pasoT').textContent = 'Pieza ' + (k+1) + ' de ' + orden.length;
+  el('zona').innerHTML = '<div class="turno"><div><p class="hint" style="margin-bottom:8px">¿Dónde va esta pieza?</p><div class="pieza">' + escH(P.t) + '</div></div>' +
+    '<div><div class="botones" id="ops">' + COLS.map(function(C, i){ return '<button class="cat" type="button" data-i="' + i + '" style="--c:' + C.c + '"><span class="k">' + (i+1) + '</span><span>' + C.n + '<small>' + C.d + '</small></span></button>'; }).join('') + '</div>' +
+    '<div id="retro"></div></div></div>';
+  Array.prototype.forEach.call(document.querySelectorAll('#ops .cat'), function(b){ b.onclick = function(){ responder(+b.dataset.i); }; });
+}
+function responder(i){
+  var P = orden[k], b = document.querySelector('#ops .cat[data-i="' + i + '"]');
+  if(!b || b.disabled) return;
+  intentos++;
+  if(i === P.c){
+    if(intentos === 1) aciertos++;
+    Array.prototype.forEach.call(document.querySelectorAll('#ops .cat'), function(x){ x.disabled = true; });
+    ubicadas[i].push({t:P.t, corr:intentos > 1}); pintarDiagrama();
+    el('retro').innerHTML = '<div class="banner banner-ok"><b>Correcto.</b> ' + escH(P.exp) + '</div>' +
+      '<div class="acciones"><button class="btn btn-p" type="button" id="seguir">' + (k === orden.length-1 ? 'Ver el resultado' : 'Siguiente pieza') + ' →</button></div>';
+    k++; pintarAvance();
+    el('seguir').onclick = pintarTurno; el('seguir').focus();
+  } else {
+    b.disabled = true; b.classList.add('mal');
+    var porque = (i <= 1) !== (P.c <= 1) ? 'Revise si actúa antes del evento (causas y barreras preventivas) o después (barreras de mitigación y consecuencias).'
+      : P.c <= 1 ? 'Está del lado correcto, antes del evento. Ahora distinga: una causa lo puede provocar; una barrera preventiva lo frena. ¿Esta pieza provoca o frena?'
+      : 'Está del lado correcto, después del evento. Ahora distinga: una barrera de mitigación reduce el daño; una consecuencia es el daño. ¿Esta pieza protege o es una pérdida?';
+    el('retro').innerHTML = '<div class="banner banner-err"><b>No va ahí.</b> ' + escH(porque) + '</div>';
+  }
+}
+function final(){
+  el('pasoT').textContent = 'Resultado';
+  var n = orden.length, est = aciertos === n ? 3 : aciertos >= n-2 ? 2 : 1;
+  var msj = aciertos === n ? 'Diagrama impecable: distingue con claridad lo que origina el evento, lo que lo evita, lo que reduce el daño y lo que se pierde.'
+          : aciertos >= n-2 ? 'Buen diagrama. La confusión más común es entre barreras preventivas y de mitigación: pregúntese si la barrera actúa antes o después del evento.'
+          : 'El diagrama quedó completo gracias a las correcciones. Repítalo para fijar la diferencia entre causas, barreras y consecuencias.';
+  el('zona').innerHTML = '<div class="marcador"><span class="n mono">' + aciertos + ' de ' + n + '</span><span class="estrellas" aria-label="' + est + ' de 3">' +
+    '★★★'.slice(0, est) + '☆☆☆'.slice(0, 3-est) + '</span></div><p class="hint" style="margin:4px 0 12px">Piezas ubicadas al primer intento.</p>' +
+    '<div class="banner banner-info">' + escH(msj) + '</div>' +
+    '<p class="hint" style="margin-top:12px">Un bow-tie muestra en una sola imagen <b>por dónde puede entrar</b> un evento y <b>qué tan preparado está</b> para cuando ocurra. Si una causa no tiene barrera preventiva, o una consecuencia no tiene barrera de mitigación, ahí está el hueco.</p>' +
+    '<div class="acciones"><button class="btn btn-s" type="button" id="otraVez">Volver a empezar</button></div>';
+  el('otraVez').onclick = iniciar;
+}
+document.addEventListener('keydown', function(e){
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  var n = parseInt(e.key, 10);
+  if(n >= 1 && n <= 4 && k < orden.length && document.querySelector('#ops')){ responder(n-1); e.preventDefault(); }
+});
+iniciar();
+</script>
+<script>
+/* Enlace de regreso al portafolio. Solo aparece si el minijuego se abrio
+   por su URL directa: dentro del visor modal del portafolio sobraria. */
+(function () {
+  if (window.self !== window.top) return;
+  var h = document.querySelector('.app-header');
+  if (!h) return;
+  var a = document.createElement('a');
+  a.className = 'volver';
+  a.href = '../index.html';
+  a.textContent = '← Portafolio';
+  h.appendChild(a);
+})();
+</script>

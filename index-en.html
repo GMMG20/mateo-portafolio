@@ -6,7 +6,7 @@
 
   <!-- SEO Básico y Metadatos -->
   <title>Mateo Meléndez — Enterprise Risk Consultant</title>
-  <meta name="description" content="Mateo Meléndez, enterprise risk consultant. Risk that gets managed, not documented: risk matrix, Bow Tie, risk appetite, audit sampling and training games, in working order.">
+  <meta name="description" content="Mateo Meléndez, enterprise risk consultant. Risk that gets managed, not documented: risk matrix, Bow Tie, risk appetite, audit sampling and training mini-games, in working order.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="author" content="Mateo Meléndez">
 
@@ -243,7 +243,7 @@
       background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
       overflow: hidden; display: flex; flex-direction: column; transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-    .game-thumb { position: relative; display: block; width: 100%; border: 0; padding: 0; cursor: pointer; background: #0a0e1f; aspect-ratio: 2 / 1; overflow: hidden; }
+    .game-thumb { position: relative; display: block; width: 100%; border: 0; padding: 0; cursor: pointer; background: var(--mist); aspect-ratio: 2 / 1; overflow: hidden; border-bottom: 1px solid var(--border); }
     .game-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
     .game-thumb .play {
       position: absolute; left: 1rem; bottom: 1rem; display: inline-flex; align-items: center; gap: 0.45rem;
@@ -436,7 +436,7 @@
       <li class="stat"><b>5 years</b><span>in internal audit at Deloitte</span></li>
       <li class="stat"><b>10+</b><span>internal audits carried out</span></li>
       <li class="stat"><b>SOX</b><span>led control testing</span></li>
-      <li class="stat"><b>7</b><span>live tools and games</span></li>
+      <li class="stat"><b>7</b><span>live tools and mini-games</span></li>
     </ul>
 
     <!-- Presentación -->
@@ -569,48 +569,48 @@
         <div class="sec-grid">
           <div>
             <p class="eyebrow">Training and risk culture</p>
-            <h2 id="titulo-formacion">Games for learning risk management</h2>
-            <p>Risk culture is not built with slides. For courses and workshops I designed two role-playing games that run in the browser with nothing to install: participants face the risks of a fictional company and decide how to manage them, guided by a mentor. Both include a facilitator mode for group play on a projector, and a pre- and post-test to measure what was learned.</p>
+            <h2 id="titulo-formacion">Mini-games for courses and workshops</h2>
+            <p>Risk culture is not built with slides. For courses and workshops I designed short exercises in the form of a game: participants make decisions, get the explanation straight away and see the result of their judgement take shape. Each takes about five minutes, alone or as a group with the exercise on a projector.</p>
           </div>
-          <p class="demo-note"><strong>These are beta versions.</strong> They are complete, but still being tested with groups and may change. They are in Spanish only and are best played on a computer with sound on; they also work on touch screens.</p>
+          <p class="demo-note"><strong>These are beta versions.</strong> They are complete, but still being tested with groups and may change. They are in Spanish. If you would like to use them in a course or workshop at your organisation, write to me and we will adapt them to your risks.</p>
         </div>
       </div>
 
       <div class="games-grid">
       <article class="game-card">
-        <div class="game-thumb" onclick="openTool('riskquestgo', this.closest('.game-card').querySelector('.btn-open'))">
-          <img src="juegos/riskquest-go.jpg" alt="Screenshot of RiskQuest Go: the production plant of a fictional company, with the floor’s risks marked to be faced" width="800" height="400" loading="lazy">
+        <div class="game-thumb" onclick="openTool('minikri', this.closest('.game-card').querySelector('.btn-open'))">
+          <img src="minijuegos/minijuego-kri.jpg" alt="Screenshot of the Designing a KRI mini-game: a decision with its explanation and the indicator sheet half filled in" width="800" height="400" loading="lazy">
           <span class="play" aria-hidden="true">▶ Play</span>
         </div>
         <div class="game-body">
-          <div class="tool-category">Risk culture · Any audience <span class="badge-beta">Beta</span></div>
-          <h3 class="tool-title">RiskQuest Go</h3>
-          <p class="tool-description">For complete beginners. Across six floors of a fictional company, players learn one idea at a time: what a risk is, its causes and consequences, the likelihood-and-impact traffic light, the four responses, controls and indicators. Nobody loses: after a mistake, the mentor explains and the player tries again.</p>
-          <ul class="game-meta"><li>20 to 30 minutes</li><li>No prior knowledge</li><li>Read-aloud option</li></ul>
+          <div class="tool-category">Key risk indicators <span class="badge-beta">Beta</span></div>
+          <h3 class="tool-title">Designing a KRI</h3>
+          <p class="tool-description">A risk of unauthorised access to customer data and five decisions: what to measure, with which thresholds, how often, who is accountable and what to do when the indicator turns amber. You end up with the complete indicator sheet.</p>
+          <ul class="game-meta"><li>5 minutes</li><li>5 decisions</li><li>In Spanish</li></ul>
           <div class="game-actions">
-            <button class="btn-open" onclick="openTool('riskquestgo', this)" aria-haspopup="dialog" aria-expanded="false">
+            <button class="btn-open" onclick="openTool('minikri', this)" aria-haspopup="dialog" aria-expanded="false">
               Play the beta <span aria-hidden="true">→</span>
             </button>
-            <a class="btn-link" href="juegos/RiskQuest_Go.html" target="_blank" rel="noopener">Open in a new tab <span aria-hidden="true">↗</span></a>
+            <a class="btn-link" href="minijuegos/Minijuego_KRI.html" target="_blank" rel="noopener">Open in a new tab <span aria-hidden="true">↗</span></a>
           </div>
         </div>
       </article>
 
       <article class="game-card">
-        <div class="game-thumb" onclick="openTool('riskquest', this.closest('.game-card').querySelector('.btn-open'))">
-          <img src="juegos/riskquest.jpg" alt="Screenshot of RiskQuest: a turn-based encounter with a cyber risk, showing its inherent and residual level" width="800" height="400" loading="lazy">
+        <div class="game-thumb" onclick="openTool('minibowtie', this.closest('.game-card').querySelector('.btn-open'))">
+          <img src="minijuegos/minijuego-bowtie.jpg" alt="Screenshot of the Bow-tie mini-game: the fire at the centre, with causes and preventive barriers on the left and mitigating barriers and consequences on the right" width="800" height="400" loading="lazy">
           <span class="play" aria-hidden="true">▶ Play</span>
         </div>
         <div class="game-body">
-          <div class="tool-category">Applied risk management <span class="badge-beta">Beta</span></div>
-          <h3 class="tool-title">RiskQuest</h3>
-          <p class="tool-description">For teams that already know the basics. Eight floors and twenty-five risks: assessing on a 5×5 matrix, telling inherent from residual risk, deciding on a limited budget, transferring through insurance, reading key risk indicators and reporting to the board.</p>
-          <ul class="game-meta"><li>45 to 60 minutes</li><li>Analysts and process owners</li><li>Facilitator mode</li></ul>
+          <div class="tool-category">Cause and effect <span class="badge-beta">Beta</span></div>
+          <h3 class="tool-title">Bow-tie: warehouse fire</h3>
+          <p class="tool-description">Eight pieces around a fire in the chemicals warehouse. Place each one as a cause, preventive barrier, mitigating barrier or consequence and watch the diagram take shape: some barriers lower likelihood, others lower impact.</p>
+          <ul class="game-meta"><li>5 minutes</li><li>8 pieces</li><li>In Spanish</li></ul>
           <div class="game-actions">
-            <button class="btn-open" onclick="openTool('riskquest', this)" aria-haspopup="dialog" aria-expanded="false">
+            <button class="btn-open" onclick="openTool('minibowtie', this)" aria-haspopup="dialog" aria-expanded="false">
               Play the beta <span aria-hidden="true">→</span>
             </button>
-            <a class="btn-link" href="juegos/RiskQuest.html" target="_blank" rel="noopener">Open in a new tab <span aria-hidden="true">↗</span></a>
+            <a class="btn-link" href="minijuegos/Minijuego_BowTie.html" target="_blank" rel="noopener">Open in a new tab <span aria-hidden="true">↗</span></a>
           </div>
         </div>
       </article>
@@ -693,8 +693,8 @@
       consolidador: { title: "Matrix Consolidator", src: "herramientas/Consolidador_Demo.html" },
       apetito: { title: "Risk Appetite and Tolerance", src: "herramientas/Apetito_Demo.html" },
       muestreo: { title: "Audit Sampling", src: "herramientas/Papeles_Demo.html" },
-      riskquestgo: { title: "RiskQuest Go (beta)", src: "juegos/RiskQuest_Go.html", game: true },
-      riskquest: { title: "RiskQuest (beta)", src: "juegos/RiskQuest.html", game: true }
+      minikri: { title: "Designing a KRI (beta)", src: "minijuegos/Minijuego_KRI.html", game: true },
+      minibowtie: { title: "Bow-tie: warehouse fire (beta)", src: "minijuegos/Minijuego_BowTie.html", game: true }
     };
 
     const modal = document.getElementById('toolModal');

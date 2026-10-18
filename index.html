@@ -6,7 +6,7 @@
 
   <!-- SEO Básico y Metadatos -->
   <title>Mateo Meléndez — Consultor de Riesgos Empresariales</title>
-  <meta name="description" content="Mateo Meléndez, consultor de riesgos empresariales. Riesgos que se gestionan, no que se documentan: matriz de riesgos, Bow Tie, apetito y tolerancia, muestreo de auditoría y juegos de formación, en funcionamiento.">
+  <meta name="description" content="Mateo Meléndez, consultor de riesgos empresariales. Riesgos que se gestionan, no que se documentan: matriz de riesgos, Bow Tie, apetito y tolerancia, muestreo de auditoría y minijuegos de formación, en funcionamiento.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="author" content="Mateo Meléndez">
 
@@ -243,7 +243,7 @@
       background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
       overflow: hidden; display: flex; flex-direction: column; transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-    .game-thumb { position: relative; display: block; width: 100%; border: 0; padding: 0; cursor: pointer; background: #0a0e1f; aspect-ratio: 2 / 1; overflow: hidden; }
+    .game-thumb { position: relative; display: block; width: 100%; border: 0; padding: 0; cursor: pointer; background: var(--mist); aspect-ratio: 2 / 1; overflow: hidden; border-bottom: 1px solid var(--border); }
     .game-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
     .game-thumb .play {
       position: absolute; left: 1rem; bottom: 1rem; display: inline-flex; align-items: center; gap: 0.45rem;
@@ -436,7 +436,7 @@
       <li class="stat"><b>5 años</b><span>de auditoría interna en Deloitte</span></li>
       <li class="stat"><b>10+</b><span>auditorías internas ejecutadas</span></li>
       <li class="stat"><b>SOX</b><span>lideré el testeo de controles</span></li>
-      <li class="stat"><b>7</b><span>instrumentos y juegos en vivo</span></li>
+      <li class="stat"><b>7</b><span>instrumentos y minijuegos en vivo</span></li>
     </ul>
 
     <!-- Presentación -->
@@ -569,48 +569,48 @@
         <div class="sec-grid">
           <div>
             <p class="eyebrow">Formación y cultura de riesgos</p>
-            <h2 id="titulo-formacion">Juegos para aprender a gestionar riesgos</h2>
-            <p>La cultura de riesgos no se instala con diapositivas. Para cursos y talleres diseñé dos juegos de rol que se juegan en el navegador, sin instalar nada: el participante enfrenta los riesgos de una empresa ficticia y decide cómo gestionarlos, guiado por un mentor. Ambos traen modo facilitador para jugar en grupo con el juego proyectado, y una prueba de entrada y salida para medir lo aprendido.</p>
+            <h2 id="titulo-formacion">Minijuegos para cursos y talleres</h2>
+            <p>La cultura de riesgos no se instala con diapositivas. Para cursos y talleres diseñé ejercicios cortos en forma de juego: el participante toma decisiones, recibe la explicación al instante y ve cómo queda armado el resultado de su criterio. Se resuelven en unos cinco minutos, de manera individual o en grupo con el ejercicio proyectado.</p>
           </div>
-          <p class="demo-note"><strong>Son versiones beta.</strong> Funcionan completas, pero siguen en prueba con grupos y pueden cambiar. Están en español y se disfrutan más en computador y con sonido; también responden a pantallas táctiles.</p>
+          <p class="demo-note"><strong>Son versiones beta.</strong> Funcionan completas, pero siguen en prueba con grupos y pueden cambiar. Si quiere usarlas en un curso o taller de su organización, escríbame y las adaptamos a sus riesgos.</p>
         </div>
       </div>
 
       <div class="games-grid">
       <article class="game-card">
-        <div class="game-thumb" onclick="openTool('riskquestgo', this.closest('.game-card').querySelector('.btn-open'))">
-          <img src="juegos/riskquest-go.jpg" alt="Captura de RiskQuest Go: la planta de producción de una empresa ficticia, con los riesgos del piso señalados para enfrentarlos" width="800" height="400" loading="lazy">
+        <div class="game-thumb" onclick="openTool('minikri', this.closest('.game-card').querySelector('.btn-open'))">
+          <img src="minijuegos/minijuego-kri.jpg" alt="Captura del minijuego Diseño de un KRI: una decisión con su explicación y la ficha del indicador a medio completar" width="800" height="400" loading="lazy">
           <span class="play" aria-hidden="true">▶ Jugar</span>
         </div>
         <div class="game-body">
-          <div class="tool-category">Cultura de riesgos · Todo público <span class="badge-beta">Beta</span></div>
-          <h3 class="tool-title">RiskQuest Go</h3>
-          <p class="tool-description">Para quien parte de cero. En seis pisos de una empresa ficticia aprende, una idea a la vez, qué es un riesgo, sus causas y consecuencias, el semáforo de probabilidad e impacto, las cuatro respuestas, los controles y los indicadores. Nadie pierde: si se equivoca, el mentor le explica y vuelve a intentarlo.</p>
-          <ul class="game-meta"><li>20 a 30 minutos</li><li>Desde cero</li><li>Lectura en voz alta</li></ul>
+          <div class="tool-category">Indicadores clave de riesgo <span class="badge-beta">Beta</span></div>
+          <h3 class="tool-title">Diseño de un KRI</h3>
+          <p class="tool-description">Un riesgo de acceso indebido a datos de clientes y cinco decisiones: qué medir, con qué umbrales, cada cuánto, quién responde y qué hacer cuando el indicador se pone amarillo. Al final queda la ficha completa del indicador.</p>
+          <ul class="game-meta"><li>5 minutos</li><li>5 decisiones</li><li>Indicador, umbrales y responsable</li></ul>
           <div class="game-actions">
-            <button class="btn-open" onclick="openTool('riskquestgo', this)" aria-haspopup="dialog" aria-expanded="false">
+            <button class="btn-open" onclick="openTool('minikri', this)" aria-haspopup="dialog" aria-expanded="false">
               Jugar la versión beta <span aria-hidden="true">→</span>
             </button>
-            <a class="btn-link" href="juegos/RiskQuest_Go.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
+            <a class="btn-link" href="minijuegos/Minijuego_KRI.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
           </div>
         </div>
       </article>
 
       <article class="game-card">
-        <div class="game-thumb" onclick="openTool('riskquest', this.closest('.game-card').querySelector('.btn-open'))">
-          <img src="juegos/riskquest.jpg" alt="Captura de RiskQuest: enfrentamiento por turnos contra un riesgo de ciberseguridad, con su nivel inherente y residual" width="800" height="400" loading="lazy">
+        <div class="game-thumb" onclick="openTool('minibowtie', this.closest('.game-card').querySelector('.btn-open'))">
+          <img src="minijuegos/minijuego-bowtie.jpg" alt="Captura del minijuego Bow-tie: el incendio al centro, con causas y barreras preventivas a la izquierda y barreras de mitigación y consecuencias a la derecha" width="800" height="400" loading="lazy">
           <span class="play" aria-hidden="true">▶ Jugar</span>
         </div>
         <div class="game-body">
-          <div class="tool-category">Gestión de riesgos aplicada <span class="badge-beta">Beta</span></div>
-          <h3 class="tool-title">RiskQuest</h3>
-          <p class="tool-description">Para equipos que ya manejan lo básico. Ocho pisos y veinticinco riesgos: evaluar en una matriz de 5×5, distinguir el riesgo inherente del residual, decidir con presupuesto limitado, transferir con pólizas, leer indicadores clave de riesgo y rendir cuentas ante el directorio.</p>
-          <ul class="game-meta"><li>45 a 60 minutos</li><li>Analistas y líderes de proceso</li><li>Modo facilitador</li></ul>
+          <div class="tool-category">Análisis causa-efecto <span class="badge-beta">Beta</span></div>
+          <h3 class="tool-title">Bow-tie: incendio en la bodega</h3>
+          <p class="tool-description">Ocho piezas alrededor de un incendio en la bodega de químicos. Ubique cada una como causa, barrera preventiva, barrera de mitigación o consecuencia y vea armarse el diagrama: unas barreras bajan la probabilidad y otras el impacto.</p>
+          <ul class="game-meta"><li>5 minutos</li><li>8 piezas</li><li>Causas, barreras y consecuencias</li></ul>
           <div class="game-actions">
-            <button class="btn-open" onclick="openTool('riskquest', this)" aria-haspopup="dialog" aria-expanded="false">
+            <button class="btn-open" onclick="openTool('minibowtie', this)" aria-haspopup="dialog" aria-expanded="false">
               Jugar la versión beta <span aria-hidden="true">→</span>
             </button>
-            <a class="btn-link" href="juegos/RiskQuest.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
+            <a class="btn-link" href="minijuegos/Minijuego_BowTie.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
           </div>
         </div>
       </article>
@@ -693,8 +693,8 @@
       consolidador: { title: "Consolidador de Matrices", src: "herramientas/Consolidador_Demo.html" },
       apetito: { title: "Apetito y Tolerancia al Riesgo", src: "herramientas/Apetito_Demo.html" },
       muestreo: { title: "Muestreo de Auditoría", src: "herramientas/Papeles_Demo.html" },
-      riskquestgo: { title: "RiskQuest Go (beta)", src: "juegos/RiskQuest_Go.html", game: true },
-      riskquest: { title: "RiskQuest (beta)", src: "juegos/RiskQuest.html", game: true }
+      minikri: { title: "Diseño de un KRI (beta)", src: "minijuegos/Minijuego_KRI.html", game: true },
+      minibowtie: { title: "Bow-tie: incendio en la bodega (beta)", src: "minijuegos/Minijuego_BowTie.html", game: true }
     };
 
     const modal = document.getElementById('toolModal');
