@@ -1,244 +1,528 @@
+<!doctype html>
+<html lang="es">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, nofollow">
 <title>Diseño de un KRI</title>
 <style>
+/* Minijuego en 8 bits: el escenario y los personajes se dibujan con código, píxel por píxel */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
-  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
-  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
-  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
-  --verde:#22C55E; --ambar:#FFBF00; --rojo:#DB0000;
+  --fondo:#0a0e1f; --azul:#1c2f7a; --azul2:#0d1747; --borde:#e9eeff; --oro:#ffd166; --txt:#ffffff; --sombra:#060b24;
+  --verde:#3fa34d; --amarillo:#d39b00; --rojo:#d0342c; --suave:#cfe0ff;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
-  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
-.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
-  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
-.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
-  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
-.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
-.app-name{color:#fff;font-size:14px;font-weight:600;}
-.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
-.beta{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;background:var(--gold);color:var(--ink);font-size:10px;font-weight:800;letter-spacing:.06em;vertical-align:1px;}
-.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto;width:100%;}
-.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
-.card h3{font-size:15px;margin-bottom:4px;}
-.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
-.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
-.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
-.banner-ok{background:#DCFCE7;color:#14532D;border-left:3px solid var(--verde);}
-.banner-err{background:#FEE2E2;color:#991B1B;border-left:3px solid var(--rojo);}
-.mono{font-variant-numeric:tabular-nums;}
-.juego{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start;}
-@media(max-width:820px){.juego{grid-template-columns:1fr;}}
-/* Avance */
-.avance{display:flex;gap:6px;margin:10px 0 14px;}
-.avance i{flex:1;height:6px;border-radius:3px;background:var(--line);}
-.avance i.ok{background:var(--acc);} .avance i.ahora{background:var(--gold);}
-.paso-t{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--acc-dk);}
-.pregunta{font-size:15.5px;font-weight:700;line-height:1.45;margin:4px 0 12px;color:var(--ink);}
-.contexto{font-size:13px;color:var(--tx-2);line-height:1.55;margin-bottom:12px;}
-/* Opciones */
-.ops{display:flex;flex-direction:column;gap:8px;}
-.opcion{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;font:inherit;font-size:13.5px;line-height:1.45;color:var(--tx);
-  background:#fff;border:1px solid var(--line);border-radius:7px;padding:11px 13px;cursor:pointer;transition:border-color .15s ease,background .15s ease;}
-.opcion:hover:not([disabled]){border-color:var(--acc);background:#F3FBFA;}
-.opcion:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
-.opcion .k{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--tx-2);}
-.opcion.mal{background:#FEF2F2;border-color:#FCA5A5;color:#7F1D1D;cursor:default;}
-.opcion.mal .k{background:#FCA5A5;color:#fff;border-color:#FCA5A5;}
-.opcion.bien{background:#ECFDF5;border-color:#86EFAC;}
-.opcion.bien .k{background:var(--verde);color:#fff;border-color:var(--verde);}
-.opcion[disabled]{cursor:default;}
-#retro{margin-top:12px;}
-.acciones{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
-.btn{font:inherit;font-weight:700;font-size:13px;border-radius:6px;padding:10px 16px;cursor:pointer;border:1px solid transparent;}
-.btn-p{background:var(--ink);color:#fff;} .btn-p:hover{background:var(--acc-dk);}
-.btn-s{background:#fff;color:var(--ink);border-color:var(--line);} .btn-s:hover{border-color:var(--acc);}
-.btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
-/* Ficha del KRI */
-.ficha{border:1px solid var(--line);border-radius:8px;overflow:hidden;}
-.ficha-h{background:var(--ink);color:#fff;padding:10px 14px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;display:flex;justify-content:space-between;}
-.fila{display:grid;grid-template-columns:120px 1fr;border-top:1px solid var(--line);}
-.fila:first-of-type{border-top:0;}
-.fila .t{background:var(--bg);padding:10px 12px;font-size:11px;font-weight:800;color:var(--tx-2);text-transform:uppercase;letter-spacing:.04em;}
-.fila .v{padding:10px 12px;font-size:13px;line-height:1.45;}
-.fila .v.vacio{color:var(--tx-3);font-style:italic;}
-.fila.nueva .v{animation:resalta 1.2s ease;}
-@keyframes resalta{0%{background:#FFF3C4;}100%{background:transparent;}}
-.term{display:flex;height:26px;border-radius:5px;overflow:hidden;font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.3);}
-.term div{display:flex;align-items:center;justify-content:center;padding:0 4px;white-space:nowrap;}
-.lectura{position:relative;height:22px;}
-.lectura .m{position:absolute;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--ink);text-align:center;line-height:1.1;}
-.marcador{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.marcador .n{font-size:26px;font-weight:800;color:var(--ink);}
-.estrellas{color:var(--gold);font-size:22px;letter-spacing:2px;}
-@media(max-width:520px){.wrap{padding:14px;} .fila{grid-template-columns:96px 1fr;} .app-tag{display:none;}}
+html,body{background:var(--fondo);}
+body{font-family:Consolas,"Lucida Console","Courier New",monospace;color:var(--txt);min-height:100vh;display:flex;flex-direction:column;
+  background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:6px 6px;}
+/* Barra superior */
+.top{display:flex;align-items:center;gap:12px;padding:10px 18px;background:#0d1433;border-bottom:3px solid var(--oro);position:sticky;top:0;z-index:20;}
+.mm{display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 9px;background:var(--oro);color:var(--azul2);font-weight:900;letter-spacing:.06em;
+  box-shadow:3px 3px 0 #b5402f;}
+.tit b{display:block;color:var(--oro);font-size:15px;letter-spacing:.05em;text-shadow:2px 2px 0 #000;}
+.tit small{display:block;color:var(--suave);font-size:12px;margin-top:2px;}
+.beta{display:inline-block;margin-left:8px;padding:0 6px;background:#2fae6b;color:#fff;font-size:11px;letter-spacing:.08em;vertical-align:2px;box-shadow:2px 2px 0 #000;text-shadow:none;}
+.tbtn{margin-left:auto;font:inherit;font-size:12.5px;font-weight:700;color:#fff;background:#24306b;border:2px solid #6f86d6;padding:5px 10px;cursor:pointer;white-space:nowrap;}
+.tbtn:hover{border-color:var(--oro);}
+.volver{color:#fff;text-decoration:none;font-size:12.5px;font-weight:700;border:2px solid #6f86d6;padding:5px 10px;white-space:nowrap;}
+.volver:hover{border-color:var(--oro);}
+.tbtn:focus-visible,.volver:focus-visible,.op:focus-visible{outline:3px solid var(--oro);outline-offset:2px;}
+/* Cajas estilo JRPG */
+.caja{background:linear-gradient(180deg,var(--azul),var(--azul2));border:3px solid var(--borde);border-radius:8px;
+  box-shadow:0 0 0 3px var(--sombra),inset 0 0 0 2px #5d74c9;text-shadow:1px 1px 0 #000;}
+.wrap{flex:1;width:100%;max-width:1140px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:16px;}
+/* Escenario en pixel art */
+.escena{position:relative;overflow:hidden;padding:0;line-height:0;}
+.escena canvas{width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;display:block;}
+.escena.temblor{animation:temblor .35s steps(4);}
+@keyframes temblor{25%{transform:translateX(-6px);}50%{transform:translateX(5px);}75%{transform:translateX(-3px);}}
+/* Diálogo del mentor */
+.dlg{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;}
+.dlg canvas{width:72px;height:72px;flex:none;image-rendering:pixelated;background:#0b1440;border:2px solid #8fa3e6;}
+.dlg .nom{color:var(--oro);font-weight:700;font-size:13px;margin-bottom:5px;}
+.dlg .txt{font-size:15.5px;line-height:1.55;}
+.dlg .txt b{color:var(--oro);}
+/* Rejilla principal */
+.juego{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;align-items:start;}
+.panel{padding:16px 18px;}
+.panel h2{color:var(--oro);font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.paso{color:var(--suave);font-size:12.5px;letter-spacing:.06em;margin-bottom:8px;}
+.bloques{display:flex;gap:4px;margin:0 0 12px;}
+.bloques i{flex:1;height:10px;background:#2a3670;box-shadow:inset 0 0 0 2px #0d1747;}
+.bloques i.ok{background:var(--verde);} .bloques i.ahora{background:var(--oro);animation:parpadeo 1s steps(2) infinite;}
+@keyframes parpadeo{50%{opacity:.35;}}
+.pregunta{font-size:16px;font-weight:700;line-height:1.5;margin-bottom:12px;}
+.ficha-pieza{border:3px dashed var(--oro);padding:14px;text-align:center;font-size:16.5px;font-weight:700;line-height:1.45;margin-bottom:12px;background:rgba(255,209,102,.08);}
+/* Opciones con cursor ▶ */
+.ops{display:flex;flex-direction:column;gap:7px;}
+.op{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;font:inherit;font-size:14.5px;line-height:1.45;color:#fff;cursor:pointer;
+  background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.22);padding:9px 10px 9px 28px;position:relative;text-shadow:1px 1px 0 #000;}
+.op .n{flex:none;display:inline-grid;place-items:center;min-width:22px;height:22px;background:#24306b;border:2px solid #6f86d6;font-size:12px;font-weight:900;}
+.op small{display:block;font-size:12.5px;color:var(--suave);}
+.op.sel{background:rgba(255,209,102,.16);border-color:var(--oro);}
+.op.sel::before{content:"▶";position:absolute;left:8px;top:10px;color:var(--oro);}
+.op.mal{background:rgba(208,52,44,.25);border-color:#ff8a80;text-decoration:line-through;cursor:default;}
+.op.bien{background:rgba(63,163,77,.3);border-color:#9ff0b0;}
+.op[disabled]{cursor:default;}
+.op .c{width:6px;align-self:stretch;flex:none;}
+/* Resultado */
+.marcador{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px;}
+.marcador .n{font-size:30px;font-weight:900;color:var(--oro);text-shadow:3px 3px 0 #000;}
+.estrellas{font-size:26px;letter-spacing:4px;color:var(--oro);}
+.nota{font-size:13.5px;line-height:1.55;color:var(--suave);margin-top:10px;}
+.nota b{color:#fff;}
+footer{padding:16px;text-align:center;color:#8fa3e6;font-size:12.5px;border-top:3px solid #1d2550;}
+@media(max-width:860px){ .juego{grid-template-columns:1fr;} }
+@media(max-width:520px){
+  .top{padding:8px 10px;gap:8px;} .tit small{display:none;} .tit b{font-size:12px;letter-spacing:.02em;} .beta{margin-left:5px;}
+  .tbtn,.volver{font-size:12px;padding:4px 7px;} .lbl{display:none;}
+  .wrap{padding:10px;gap:12px;} .dlg canvas{width:52px;height:52px;} .dlg .txt{font-size:14.5px;}
+  .panel{padding:12px;} .op{font-size:14px;}
+}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
-footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
-footer .wrap2{max-width:1080px;margin:0 auto;}
-.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
-  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
-  transition:opacity .2s ease,border-color .2s ease;}
-.volver:hover{opacity:1;border-color:var(--acc);}
-.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+
+.ficha{border:2px solid #8fa3e6;}
+.fila{display:grid;grid-template-columns:118px 1fr;border-top:2px solid rgba(143,163,230,.35);}
+.fila:first-child{border-top:0;}
+.fila .t{background:rgba(0,0,0,.25);padding:9px 10px;font-size:11.5px;font-weight:900;color:var(--oro);text-transform:uppercase;letter-spacing:.03em;line-height:1.3;}
+.fila .v{padding:9px 10px;font-size:13.5px;line-height:1.45;}
+.fila .v.vacio{color:#8fa3e6;}
+.fila .v b{color:var(--oro);}
+.fila.nueva .v{animation:resalta 1.2s steps(6);}
+@keyframes resalta{0%{background:rgba(255,209,102,.35);}100%{background:transparent;}}
+.regla{display:flex;height:24px;border:2px solid #000;box-shadow:2px 2px 0 #000;}
+.regla span{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:900;color:#fff;text-shadow:1px 1px 0 #000;white-space:nowrap;}
+@media(max-width:520px){.fila{grid-template-columns:92px 1fr;}}
 </style>
-
-<div class="app-header">
-  <span class="logo">MM</span>
-  <div class="sep"></div>
-  <div>
-    <div class="app-name">Diseño de un KRI <span class="beta">BETA</span></div>
-    <div class="app-tag">Minijuego · un indicador que avise antes, no después</div>
-  </div>
+</head>
+<body>
+<div class="top">
+  <span class="mm">MM</span>
+  <div class="tit"><b>DISEÑO DE UN KRI<span class="beta">BETA</span></b><small>Minijuego · un indicador que avise antes, no después</small></div>
+  <button class="tbtn" id="sonido" type="button" aria-pressed="true">♪ Sonido: sí</button>
 </div>
-
-<div class="wrap">
-  <div class="banner banner-info">
-    <b>Cómo funciona.</b> Un indicador clave de riesgo (KRI) solo sirve si avisa <b>antes</b> de que el riesgo se materialice.
-    Diseñe uno para el riesgo de abajo, decisión por decisión: qué medir, con qué umbrales, cada cuánto, quién responde y qué hacer cuando cambia de color.
-    Si se equivoca, lea la explicación y vuelva a intentarlo. Atajo: teclas <b>1</b>, <b>2</b> y <b>3</b>.
-  </div>
-
+<main class="wrap">
+  <section class="caja escena" role="img" aria-label="Un cuarto de servidores con el riesgo de acceso indebido al centro y el semáforo del indicador"><canvas id="escena" width="384" height="80"></canvas></section>
+  <section class="caja dlg" aria-live="polite">
+    <canvas id="retrato" width="48" height="48" aria-hidden="true"></canvas>
+    <div><div class="nom">Mateo · Consultor de riesgos</div><div class="txt" id="texto"></div></div>
+  </section>
   <div class="juego">
-    <div class="card" aria-live="polite">
-      <div class="paso-t" id="pasoT"></div>
-      <div class="avance" id="avance" aria-hidden="true"></div>
-      <div id="zona"></div>
-    </div>
-    <div class="card">
-      <h3>Ficha del indicador</h3>
-      <p class="hint" style="margin-bottom:12px">Se completa con cada decisión acertada.</p>
-      <div class="ficha" id="ficha"></div>
-    </div>
+    <section class="caja panel" id="turno"></section>
+    <section class="caja panel" id="tablero"></section>
   </div>
-</div>
-
-<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
-
+</main>
+<footer>Mateo Meléndez · Consultor de Riesgos Empresariales · Flechas y Enter, números o el ratón</footer>
 <script>
-/* Minijuego de una sola pantalla: cinco decisiones para diseñar un indicador clave de riesgo.
-   La puntuación cuenta los aciertos al primer intento; la ficha siempre termina completa. */
-var RIESGO = 'Acceso indebido a los datos de clientes';
-var PASOS = [
-  {campo:'Indicador', t:'Qué medir',
-   p:'¿Qué indicador elige para este riesgo?',
+/* =====================================================================
+   4. GRÁFICOS — todo se dibuja con código: personas (plantillas de píxeles), casillas y criaturas (igual que la versión completa)
+   ===================================================================== */
+const hex2rgb = h => { const n = parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; };
+const rgb2hex = (r,g,b) => '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');
+const tono = (h, f) => { const [r,g,b] = hex2rgb(h); return f<=1 ? rgb2hex(r*f,g*f,b*f) : rgb2hex(r+(255-r)*(f-1), g+(255-g)*(f-1), b+(255-b)*(f-1)); };
+const lienzo = (w,h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d'); x.imageSmoothingEnabled = false; return [c,x]; };
+const CONTORNO = '#141626';
+
+// ---------- Personas: cabeza (18 filas) + cuerpo (filas 15 a 23), 16 de ancho ----------
+const CAB = {
+  corto:['','','','....HHHHHHHH....','...HHHHHHHHHH...','..HHHHHHHHHHHH..','..HHSSSSSSSSHH..','..HSSSSSSSSSSH..','..SSSESSSSESSS..','..SSSESSSSESSS..','..SSSSSSSSSSSS..','..SSSSSMMSSSSS..','...SSSSSSSSSS...','....SSSSSSSS....','......SSSS......'],
+  afro:['....HHhHHHHH....','..HHHHHHHhHHHH..','.HHhHHHHHHHHhHH.','HHHHHHhHHHHHHHHH','HhHHHHHHHHHhHHHH','HHHHHHHHHHHHHHhH','HHHSSSSSSSSSSHHH','HHSSSSSSSSSSSSHH','HHSSSESSSSESSSHH','.HSSSESSSSESSSH.','..SSSSSSSSSSSS..','..SSSSSMMSSSSS..','...SSSSSSSSSS...','....SSSSSSSS....','......SSSS......'],
+  largo:['','','','....HHHHHHHH....','...HHHHHHHHHH...','..HHHHHHHHHHHH..','..HHHHHHHHHHHH..','.HHSSSSSSSSSSHH.','.HHSSESSSSESSHH.','.HHSSESSSSESSHH.','.HHSSSSSSSSSSHH.','.HHSSSSMMSSSSHH.','.HHHSSSSSSSSHHH.','.HHHHSSSSSSHHHH.','.HHHH.SSSS.HHHH.','.HHH........HHH.','..HH........HH..'],
+  coleta:['','','','....HHHHHHHH....','...HHHHHHHHHHHH.','..HHHHHHHHHHHHHH','..HHSSSSSSSSHHHH','..HSSSSSSSSSSHHH','..SSSESSSSESSSHH','..SSSESSSSESSS.H','..SSSSSSSSSSSS.H','..SSSSSMMSSSSS..','...SSSSSSSSSS...','....SSSSSSSS....','......SSSS......'],
+  rapado:['','','','....hhhhhhhh....','...hSSSSSSSSh...','..hSSSSSSSSSSh..','..SSSSSSSSSSSS..','..SSSSSSSSSSSS..','..SSSESSSSESSS..','..SSSESSSSESSS..','..SSSSSSSSSSSS..','..SSSSSMMSSSSS..','...SSSSSSSSSS...','....SSSSSSSS....','......SSSS......'],
+  copete:['.......HHH......','......HHHHH.....','.....HHHHHHH....','....HHHHHHHH....','...HHHHHHHHHH...','..HHHHHHHHHHHH..','..HHSSSSSSSSHH..','..HSSSSSSSSSSH..','..SSSESSSSESSS..','..SSSESSSSESSS..','..SSSSSSSSSSSS..','..SSSSSMMSSSSS..','...SSSSSSSSSS...','....SSSSSSSS....','......SSSS......']
+};
+const CUERPO = {
+  frente:['....JJJCCJJJ....','...JJJJCCJJJJ...','..JJJJJCCJJJJJ..','..JJ.JJCCJJ.JJ..','..SS.JJJJJJ.SS..','.....PPPPPP.....'],
+  lado:['.....CJJJJJ.....','.....CJJJJJJ....','.....JJJJJJJ....','.....JJJJJJ.....','.....SJJJJJ.....','......PPPP......']
+};
+const PIERNAS = {
+  frente:[['.....PP..PP.....','.....PP..PP.....','....ZZZ..ZZZ....'],['.....PP..PP.....','.....ZZZ.PP.....','.........ZZZ....'],['.....PP..PP.....','.....PP.ZZZ.....','....ZZZ.........']],
+  lado:[['......PPPP......','......PPPP......','.....ZZZZZ......'],['.....PP.PP......','....PP...PP.....','...ZZ.....ZZ....']]
+};
+function rejilla(ap, dir, f){
+  const g = Array.from({length:24}, ()=>Array(16).fill('.'));
+  const lado = dir==='izquierda' || dir==='derecha', esp = dir==='arriba';
+  const cuerpo = CUERPO[lado ? 'lado' : 'frente'], piernas = PIERNAS[lado ? 'lado' : 'frente'];
+  const pf = lado ? piernas[f%2] : piernas[f%3];
+  cuerpo.concat(pf).forEach((fila,k)=>{ for(let x=0;x<16;x++) if(fila[x]!=='.') g[15+k][x] = (esp && fila[x]==='C') ? 'J' : fila[x]; });
+  const cab = CAB[ap.estilo] || CAB.corto;
+  cab.forEach((fila,y)=>{ for(let x=0;x<16;x++){ const ch = fila[x]; if(!ch || ch==='.') continue;
+    let c = ch;
+    if(esp && y<=13 && 'SEM'.includes(ch)) c = ap.estilo==='rapado' ? 'S' : 'H';
+    g[y][x] = c; } });
+  if(lado){ // perfil: un ojo, boca adelante y pelo en la nuca
+    for(let y=0;y<18;y++){ if(g[y][10]==='E') g[y][10]='S'; if(g[y][5]==='E'){ g[y][5]='S'; g[y][4]='E'; } if(g[y][7]==='M'){ g[y][7]='S'; g[y][8]='S'; g[y][5]='M'; } }
+    if(ap.estilo!=='rapado') for(let y=6;y<=10;y++) for(let x=11;x<=13;x++) if(g[y][x]==='S') g[y][x]='H';
+  }
+  // accesorios
+  if(ap.acc==='casco') for(let y=3;y<=5;y++) for(let x=0;x<16;x++) if(g[y][x]!=='.') g[y][x]='Y';
+  if(ap.acc==='casco') { for(let x=2;x<=13;x++) g[5][x]='Y'; }
+  if(ap.acc==='corbata' && dir==='abajo') for(let y=16;y<=18;y++){ g[y][7]='K'; g[y][8]='K'; }
+  if(ap.acc==='gafas' && dir==='abajo'){ [4,6,9,11,7,8].forEach(x=>{ if(g[8][x]!=='E') g[8][x]='G'; }); }
+  if(ap.acc==='gafas' && lado){ g[8][3]='G'; g[8][5]='G'; }
+  if(ap.acc==='tableta' && dir==='abajo') [[12,16],[13,16],[14,16],[12,17],[14,17],[12,18],[13,18],[14,18]].forEach(([x,y])=>g[y][x]='T'), g[17][13]='U';
+  if(ap.acc==='tableta' && lado) [[9,16],[10,16],[9,17],[10,17],[9,18],[10,18]].forEach(([x,y])=>g[y][x]= (x===10&&y===17)?'U':'T');
+  if(dir==='derecha') g.forEach(f=>f.reverse());
+  return g;
+}
+function paletaPersona(ap){
+  const oscuro = hex2rgb(ap.pelo).reduce((a,b)=>a+b,0) < 120;
+  return {H:ap.pelo, h:ap.estilo==='rapado' ? ap.pelo : oscuro ? tono(ap.pelo,1.35) : tono(ap.pelo,.78), S:ap.piel, E:'#1b1b2b', M:tono(ap.piel,.7), J:ap.saco, C:ap.camisa,
+    P:ap.pant, Z:ap.zap, T:'#c9ced6', U:'#4a7bd0', Y:'#f2c230', K:'#c0392b', G:'#222222'};
+}
+const cacheSpr = new Map();
+function spritePersona(clave, ap, dir, f){
+  const k = clave+'|'+dir+'|'+f; if(cacheSpr.has(k)) return cacheSpr.get(k);
+  const g = rejilla(ap, dir, f), pal = paletaPersona(ap), [c,x] = lienzo(18,26);
+  const lleno = (X,Y)=> Y>=0 && Y<24 && X>=0 && X<16 && g[Y][X]!=='.';
+  for(let y=-1;y<=24;y++) for(let X=-1;X<=16;X++){
+    if(lleno(X,y)){ x.fillStyle = pal[g[y][X]] || '#f0f'; x.fillRect(X+1,y+1,1,1); }
+    else if(lleno(X-1,y)||lleno(X+1,y)||lleno(X,y-1)||lleno(X,y+1)){ x.fillStyle = CONTORNO; x.fillRect(X+1,y+1,1,1); } }
+  // sombra suave en el saco para dar volumen
+  x.globalAlpha = .18; x.fillStyle = '#000';
+  for(let y=15;y<=19;y++) for(let X=8;X<16;X++) if(g[y][X]==='J') x.fillRect(X+1,y+1,1,1);
+  x.globalAlpha = 1;
+  cacheSpr.set(k, c); return c;
+}
+function retrato(ctx, ap, clave, expr){
+  ctx.clearRect(0,0,48,48); ctx.fillStyle = '#16226a'; ctx.fillRect(0,0,48,48);
+  ctx.fillStyle = '#22328a'; for(let i=0;i<48;i+=6) ctx.fillRect(0,i,48,3);
+  const s = spritePersona(clave, ap, 'abajo', 0); ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(s, 0, 0, 18, 18, -3, 1, 54, 54);
+  if(!expr) return;
+  const px = (x,y,c)=>{ ctx.fillStyle = c; ctx.fillRect(-3+x*3, 1+y*3, 3, 3); }, boca = tono(ap.piel,.55), piel = ap.piel, ceja = '#1b1b2b';
+  if(expr==='feliz'){ px(8,12,piel); px(9,12,piel); px(7,12,boca); px(10,12,boca); px(8,13,boca); px(9,13,boca); }
+  else if(expr==='preocupado'){ px(5,8,ceja); px(6,8,ceja); px(11,8,ceja); px(12,8,ceja); px(7,13,boca); px(10,13,boca); px(8,12,boca); px(9,12,boca); }
+  else if(expr==='pensativo'){ px(6,10,piel); px(11,10,piel); px(8,12,piel); px(9,12,boca); px(10,12,boca); px(11,8,ceja); px(12,8,ceja); }
+}
+
+// ---------- Casillas ----------
+const cacheTile = new Map();
+function piso0(p){ return PISOS[p].suelo || '.'; }
+function tile(ch, p){
+  const k = ch+'|'+p; if(cacheTile.has(k)) return cacheTile.get(k);
+  const [c,x] = lienzo(TS,TS), r = (X,Y,W,H,col)=>{ x.fillStyle = col; x.fillRect(X,Y,W,H); };
+  const fondo = PISOS[p].fondo;
+  const suelo = (s)=>{
+    if(s==='.'){ const b = tono(fondo,1.12); r(0,0,16,16,b); for(let y=0;y<16;y+=4) for(let X=(y%8?2:0);X<16;X+=4) r(X,y,1,1,tono(b,1.18)); r(0,15,16,1,tono(b,.93)); }
+    else if(s===':'){ r(0,0,16,16,'#8e98a6'); r(15,0,1,16,'#7a8492'); r(0,15,16,1,'#7a8492'); r(4,5,1,1,'#a2abb8'); r(10,11,1,1,'#a2abb8'); }
+    else if(s==='_'){ r(0,0,16,16,'#8b5a2b'); for(let y=3;y<16;y+=4) r(0,y,16,1,'#74491f'); r(5,0,1,3,'#74491f'); r(11,4,1,3,'#74491f'); r(3,8,1,3,'#74491f'); r(13,12,1,3,'#74491f'); }
+    else if(s==='R'){ r(0,0,16,16,'#9e2a2b'); r(1,0,1,16,'#d4a017'); r(14,0,1,16,'#d4a017'); r(4,0,8,16,'#a83334'); }
+  };
+  const muroCara = ()=>{ r(0,0,16,16,'#7f95cf'); x.fillStyle = '#6f86c4'; for(let y=0;y<16;y+=4) for(let X=(y%8?0:2);X<16;X+=4) x.fillRect(X,y,2,2); r(0,14,16,2,'#2c3560'); };
+  if(CAMINABLE.has(ch)) suelo(ch);
+  else if(ch==='#'){ r(0,0,16,16,'#1b2350'); r(0,0,16,1,'#2b3670'); r(0,8,16,1,'#222b5c'); r(7,0,1,8,'#222b5c'); r(3,8,1,8,'#222b5c'); r(11,8,1,8,'#222b5c'); }
+  else if(ch==='W'){ muroCara(); r(1,1,14,11,'#5d6782'); for(let y=2;y<11;y+=2){ r(2,y,12,1,'#dfe3ea'); r(2,y+1,12,1,'#b8bfcc'); } }
+  else if(ch==='P'){ muroCara(); r(1,2,14,10,'#8a94a3'); r(2,3,12,8,'#f4f6f8'); r(3,5,6,1,'#e74c3c'); r(3,7,8,1,'#3a7bd5'); r(10,4,3,3,'#2ecc71'); r(3,9,4,1,'#3a7bd5'); }
+  else if(ch==='E'){ muroCara(); r(1,0,14,14,'#5c6577'); r(2,3,12,11,'#aab4c3'); r(7,3,2,11,'#6b7685'); r(3,4,3,9,'#bcc5d2'); r(10,4,3,9,'#bcc5d2');
+    r(6,0,4,3,'#1d2a1d'); r(7,1,2,1,'#2ecc71'); r(6,2,4,1,'#2ecc71'); }
+  else if(ch==='k'){ muroCara(); r(1,8,14,6,'#6c4f3a'); r(1,8,14,1,'#8a6a50'); r(3,1,9,8,'#b33939'); r(4,2,7,3,'#d0d5dd'); r(6,6,3,2,'#2b2b2b'); r(12,6,2,2,'#ffffff'); }
+  else if(ch==='w'){ muroCara(); r(5,1,6,5,'#8fd3ff'); r(6,2,2,3,'#c9ecff'); r(4,6,8,8,'#eef2f6'); r(6,9,4,1,'#3a7bd5'); }
+  else if(ch==='v'){ r(0,0,16,16,'#5c6577'); r(1,1,14,12,'#9fd3e6'); r(1,1,14,4,'#cfefff'); r(2,7,3,6,'#6a7c96'); r(6,5,3,8,'#7d8fa9'); r(10,8,4,5,'#6a7c96'); r(7,6,1,1,'#ffe08a'); r(11,9,1,1,'#ffe08a'); r(0,14,16,2,'#2c3560'); }
+  else if(ch==='D'){ r(0,0,16,16,'#5c6577'); r(2,2,12,14,'#9fd3e6'); r(7,2,2,14,'#5c6577'); r(3,3,3,6,'#c9ecff'); }
+  else if(ch==='s'){ suelo(piso0(p)); r(1,0,14,15,'#1e2430'); for(let y=2;y<14;y+=3){ r(2,y,12,2,'#2d3748'); r(11,y,1,1,'#2ecc71'); r(13,y,1,1,'#3ab0ff'); } }
+  else if(ch==='V'){ suelo(piso0(p)); r(1,1,14,14,'#4a5568'); r(2,2,12,12,'#5a6578'); x.fillStyle='#c9ced6'; x.beginPath(); x.arc(8,8,3,0,7); x.fill(); r(8,7,3,1,'#2d3748'); r(12,5,1,6,'#2d3748'); }
+  else {
+    suelo(piso0(p));
+    if(ch==='d'){ r(0,6,16,9,'#7a4d2a'); r(0,6,16,3,'#a0683a'); r(4,1,8,6,'#2d3748'); r(5,2,6,3,'#6cc3ff'); r(7,7,2,1,'#2d3748'); r(1,14,2,2,'#5a381f'); r(13,14,2,2,'#5a381f'); }
+    else if(ch==='c'){ r(3,1,10,6,'#a93226'); r(3,7,10,5,'#c0392b'); r(4,12,2,3,'#3b3b3b'); r(10,12,2,3,'#3b3b3b'); r(4,2,8,1,'#c94f43'); }
+    else if(ch==='p'){ r(4,10,8,6,'#b5651d'); r(4,10,8,1,'#cf7d32'); r(3,3,10,8,'#2e8b57'); r(5,1,6,4,'#3cb371'); r(2,6,3,3,'#3cb371'); r(11,5,3,3,'#3cb371'); r(7,4,2,2,'#5fd38d'); }
+    else if(ch==='b'){ r(2,1,12,14,'#8a94a3'); r(2,1,12,1,'#a5aebb'); for(let y=3;y<14;y+=4){ r(3,y,10,3,'#9aa3b0'); r(7,y+1,2,1,'#5c6577'); } }
+    else if(ch==='r'){ r(0,3,16,12,'#6c4f3a'); r(0,3,16,3,'#d8c3a5'); r(0,6,16,1,'#5a4130'); }
+    else if(ch==='g'){ r(0,4,16,10,'#3d6b8e'); r(0,4,16,3,'#4f82a8'); r(0,4,2,10,'#335c7a'); r(14,4,2,10,'#335c7a'); r(7,7,1,6,'#335c7a'); }
+    else if(ch==='t'){ const m = PISOS[p].mesa || '#8b5a2b'; r(0,2,16,12,m); r(0,2,16,2,tono(m,1.25)); r(0,13,16,1,tono(m,.75)); if(!PISOS[p].mesa){ r(5,6,4,3,'#f4f6f8'); } else { r(3,6,3,2,'#f4f6f8'); r(10,8,3,2,'#f4f6f8'); } }
+    else if(ch==='m'){ r(1,1,14,14,'#6b7785'); r(1,1,14,2,'#8a96a6'); for(let X=1;X<15;X+=4){ r(X,10,2,3,'#f2c94c'); r(X+2,10,2,3,'#222'); } r(11,4,2,2,'#e74c3c'); x.fillStyle='#d0d5dd'; x.beginPath(); x.arc(6,6,3,0,7); x.fill(); r(6,5,2,1,'#222'); }
+    else if(ch==='x'){ r(1,4,14,11,'#c99a5b'); r(1,4,14,1,'#ddb378'); r(7,4,2,11,'#e3c38a'); r(1,9,14,1,'#a97f45'); }
+    else { r(0,0,16,16,'#f0f'); }
+  }
+  cacheTile.set(k, c); return c;
+}
+
+// ---------- Criaturas (riesgos) en un búfer de 24×24 con contorno y sombreado automáticos ----------
+function criatura(def){
+  const N = 24, B = Array.from({length:N}, ()=>Array(N).fill(null));
+  const pon = (x,y,col)=>{ x=Math.round(x); y=Math.round(y); if(x>=0&&y>=0&&x<N&&y<N) B[y][x] = col; };
+  const circ = (cx,cy,rad,col)=>{ for(let y=0;y<N;y++) for(let x=0;x<N;x++) if((x-cx)**2+(y-cy)**2 <= rad*rad+rad*0.6) B[y][x] = col; };
+  const elip = (cx,cy,rx,ry,col)=>{ for(let y=0;y<N;y++) for(let x=0;x<N;x++) if(((x-cx)/rx)**2+((y-cy)/ry)**2 <= 1.05) B[y][x] = col; };
+  const rect = (x0,y0,w,h,col)=>{ for(let y=y0;y<y0+h;y++) for(let x=x0;x<x0+w;x++) pon(x,y,col); };
+  const linea = (x0,y0,x1,y1,col,g=0)=>{ const n = Math.max(Math.abs(x1-x0),Math.abs(y1-y0))*2+1; for(let k=0;k<=n;k++){ const t = k/n, x = x0+(x1-x0)*t, y = y0+(y1-y0)*t; g ? circ(x,y,g,col) : pon(x,y,col); } };
+  const ojos = (x1,y,x2,enojo)=>{ rect(x1,y,2,2,'#ffffff'); rect(x2,y,2,2,'#ffffff'); pon(x1+1,y+1,'#111'); pon(x2,y+1,'#111');
+    if(enojo){ pon(x1-1,y-2,'#111'); pon(x1,y-2,'#111'); pon(x1+1,y-1,'#111'); pon(x2+2,y-2,'#111'); pon(x2+1,y-2,'#111'); pon(x2,y-1,'#111'); } };
+  const a = def.pal.a, a2 = tono(a,.72), a3 = tono(a,1.3), roj = def.pal.r || '#e85d4a';
+  switch(def.forma){
+    case 'cable': for(let t=0;t<=1;t+=.02) circ(3+t*13, 20-t*11+Math.sin(t*9)*2.2, 1.4, a); rect(14,2,8,8,'#d0d5dd'); rect(16,0,1,2,'#8a8f99'); rect(19,0,1,2,'#8a8f99'); ojos(15,4,19,true); rect(16,8,4,1,'#555'); break;
+    case 'engranaje': for(let k=0;k<8;k++){ const g = k*Math.PI/4; rect(Math.round(11+Math.cos(g)*9), Math.round(11+Math.sin(g)*9), 3, 3, a2); }
+      circ(12,12,8,a); circ(12,12,3,a2); ojos(8,8,14,true); rect(9,15,7,1,roj); pon(9,14,roj); pon(15,14,roj); break;
+    case 'chispa': circ(12,16,7,a); circ(12,11,5,a); circ(12,7,3,a); circ(13,4,2,a); circ(9,8,2,a); circ(12,16,4,'#ffd166'); circ(12,13,3,'#ffd166'); circ(12,17,2,'#fff3b0'); ojos(9,13,14,true); break;
+    case 'moneda': elip(3,9,3,2,'#ffffff'); elip(20,9,3,2,'#ffffff'); circ(12,12,8,a); circ(12,12,6,a3); ojos(8,10,14,false); rect(10,15,4,1,a2); rect(11,5,2,3,a2); break;
+    case 'diamante': for(let y=4;y<=20;y++){ const w = y<=8 ? 3+(y-4)*2 : Math.max(0, 11-(y-8)*0.95); for(let x=Math.round(12-w);x<=Math.round(12+w);x++) pon(x,y,a); }
+      linea(12,4,6,8,a3); linea(12,4,18,8,a3); rect(3,8,19,1,a3); linea(12,9,12,19,a2); ojos(8,11,14,false); pon(19,3,'#ffffff'); pon(20,2,'#ffffff'); pon(4,5,'#ffffff'); break;
+    case 'pulpo': for(let k=0;k<5;k++) for(let t=0;t<=1;t+=.05) circ(4.5+k*3.6+Math.sin(t*6+k)*1.3, 13+t*9, 1.2, a2);
+      elip(12,8,8,7,a); circ(8,4,1.3,a3); circ(15,5,1,a3); ojos(8,8,14,true); rect(12,0,1,2,'#9aa5b1'); pon(12,0,'#ff3b30'); rect(10,12,4,1,'#111'); break;
+    case 'servidor': circ(18,2,2,'#c8cdd5'); circ(20,0,1.5,'#dfe3ea'); rect(5,3,14,19,a); [6,10].forEach(y=>{ rect(7,y,10,2,a2); pon(15,y,'#2ecc71'); pon(13,y,'#f1c40f'); });
+      rect(7,14,10,6,'#9be7ff'); ojos(8,15,14,false); rect(10,18,4,1,'#2d3748'); pon(9,17,'#2d3748'); pon(14,17,'#2d3748'); break;
+    case 'hidra': linea(8,17,5,9,a,1.3); linea(12,16,12,6,a,1.3); linea(16,17,19,9,a,1.3); elip(12,19,8,4,a); circ(5,7,3,a); circ(12,4,3.2,a); circ(19,7,3,a);
+      [[4,6],[11,3],[13,3],[18,6],[6,6],[20,6]].forEach(([x,y])=>pon(x,y,'#ff3b30')); rect(9,20,6,1,a2); break;
+    case 'nube': circ(8,11,5,a); circ(13,8,6,a); circ(18,11,5,a); rect(6,11,14,5,a); linea(13,16,10,19,'#ffd166'); linea(10,19,13,19,'#ffd166'); linea(13,19,10,23,'#ffd166');
+      [[6,19],[17,20],[19,17],[4,22]].forEach(([x,y])=>pon(x,y,'#ffffff')); ojos(10,10,15,true); break;
+    case 'documento': elip(3,10,3,2,'#ffffff'); elip(20,10,3,2,'#ffffff'); rect(6,3,12,18,a); for(let y=3;y<6;y++) for(let x=15+(y-3);x<18;x++) pon(x,y,null);
+      linea(15,3,17,5,a2); [7,9,11].forEach(y=>rect(8,y,7,1,'#9aa0aa')); ojos(9,14,13,true); rect(10,18,4,1,'#c0392b'); break;
+    case 'reloj': circ(6,4,2.5,a2); circ(18,4,2.5,a2); rect(7,19,2,4,'#555'); rect(15,19,2,4,'#555'); circ(12,12,8,a); circ(12,12,6,'#f4f6f8');
+      ojos(8,8,14,true); linea(12,13,12,16,'#111'); linea(12,13,15,13,'#111'); [[12,6],[18,12],[12,18],[6,12]].forEach(([x,y])=>pon(x,y,a2)); break;
+    case 'globo': linea(12,19,12,23,'#666'); elip(12,10,8,9,a); rect(11,19,3,2,a2); circ(9,6,1.5,a3); ojos(8,9,14,false); rect(10,14,4,1,a2); break;
+    case 'fantasma': circ(12,10,8,a); rect(4,10,17,9,a); for(let x=4;x<=20;x+=4) circ(x+1,19,2,a); const gorro = def.casco ? '#f2c230' : '#2b2b38'; rect(6,2,13,3,gorro); rect(4,4,17,1,gorro);
+      rect(8,9,2,3,'#111'); rect(14,9,2,3,'#111'); rect(10,15,4,2,'#111'); break;
+    case 'charco': elip(12,18,10,4,a); elip(8,17,3,1,a3); circ(15,9,1.5,a); circ(15,12,1,a); ojos(8,14,14,false); break;
+    case 'robot': linea(12,1,12,4,'#555'); pon(12,0,'#ff3b30'); rect(3,9,3,7,a2); rect(18,9,3,7,a2); rect(8,17,3,6,a2); rect(13,17,3,6,a2); rect(6,5,12,12,a);
+      rect(7,7,10,3,'#1d2a3a'); pon(9,8,'#ff3b30'); pon(14,8,'#ff3b30'); rect(9,12,6,1,a2); rect(9,14,6,1,a2); break;
+    case 'ola': elip(12,18,10,5,a); circ(14,10,7,a); circ(12,13,3,null); circ(18,5,2,'#ffffff'); circ(20,8,1.5,'#ffffff'); circ(9,4,1.5,'#ffffff'); ojos(14,9,18,true); break;
+  }
+  // sombreado y contorno automáticos
+  const S = B.map(f=>f.slice()), lleno = (x,y)=> x>=0&&y>=0&&x<N&&y<N && B[y][x];
+  for(let y=0;y<N;y++) for(let x=0;x<N;x++){ const c = B[y][x]; if(!c || c==='#ffffff' || c==='#111') continue;
+    if(!lleno(x+1,y+1)) S[y][x] = tono(c,.78); else if(!lleno(x-1,y-1)) S[y][x] = tono(c,1.18); }
+  const [cv,cx] = lienzo(N+2,N+2);
+  for(let y=-1;y<=N;y++) for(let x=-1;x<=N;x++){
+    if(lleno(x,y)){ cx.fillStyle = S[y][x]; cx.fillRect(x+1,y+1,1,1); }
+    else if(lleno(x-1,y)||lleno(x+1,y)||lleno(x,y-1)||lleno(x,y+1)){ cx.fillStyle = CONTORNO; cx.fillRect(x+1,y+1,1,1); } }
+  return cv;
+}
+const cacheCri = new Map();
+const spriteRiesgo = id => { if(!cacheCri.has(id)) cacheCri.set(id, criatura(RIESGOS[id])); return cacheCri.get(id); };
+
+/* =====================================================================
+   Kit común de los minijuegos en 8 bits: sonido, mentor, menú con cursor y escenario animado.
+   Los gráficos (personas, casillas y criaturas) se dibujan con código, píxel por píxel.
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const escH = s => String(s==null?'':s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const barajar = a => { const b = a.slice(); for(let i=b.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]] = [b[j],b[i]]; } return b; };
+const TS = 16, CAMINABLE = new Set(['.',':','_','R']);
+// Apariencias: piel, pelo, estilo de pelo, saco, camisa, pantalón, zapatos y accesorio
+const AP = {
+  mentor:{piel:'#5c3a22', pelo:'#1a1210', estilo:'afro', saco:'#1f2a4a', camisa:'#e6edf5', pant:'#2b2b38', zap:'#141414', acc:'tableta'},
+  operario:{piel:'#b97a4d', pelo:'#2b1d14', estilo:'corto', saco:'#3e7cb1', camisa:'#dfe9f5', pant:'#2b3a55', zap:'#1b1b1b', acc:'casco'},
+  tecnologa:{piel:'#8d5a3b', pelo:'#111111', estilo:'largo', saco:'#222831', camisa:'#9be7ff', pant:'#1d2330', zap:'#141414', acc:'gafas'}
+};
+
+// ---------- Sonido de consola: solo efectos breves, siempre como respuesta a una acción ----------
+const Sonido = {
+  ctx:null, on:true,
+  cargar(){ try{ this.on = localStorage.getItem('mm_minijuegos_sonido') !== 'no'; }catch(e){} },
+  tono(t, f1, f2, dur, tipo, vol){ const o = this.ctx.createOscillator(), g = this.ctx.createGain(); o.type = tipo;
+    o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t+dur); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0005, t+dur);
+    o.connect(g); g.connect(this.ctx.destination); o.start(t); o.stop(t+dur+.02); },
+  sfx(tipo){
+    if(!this.on) return;
+    try{
+      if(!this.ctx){ const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return; this.ctx = new AC(); }
+      if(this.ctx.state==='suspended') this.ctx.resume();
+      const t = this.ctx.currentTime + .01;
+      if(tipo==='blip') this.tono(t, 880, 880, .03, 'square', .025);
+      else if(tipo==='ok') this.tono(t, 660, 990, .08, 'square', .04);
+      else if(tipo==='acierto'){ this.tono(t, 523, 523, .08, 'square', .04); this.tono(t+.08, 784, 784, .08, 'square', .04); this.tono(t+.16, 1046, 1046, .16, 'square', .04); }
+      else if(tipo==='fallo') this.tono(t, 260, 110, .28, 'triangle', .09);
+      else if(tipo==='fin') [523,659,784,1046,1318].forEach((f,i)=>this.tono(t+i*.1, f, f, i===4 ? .35 : .09, 'square', .04));
+    }catch(e){}
+  },
+  alternar(){ this.on = !this.on; try{ localStorage.setItem('mm_minijuegos_sonido', this.on ? 'si' : 'no'); }catch(e){} pintarBotonSonido(); this.sfx('ok'); }
+};
+function pintarBotonSonido(){ $('sonido').innerHTML = '♪ <span class="lbl">Sonido: </span>' + (Sonido.on ? 'sí' : 'no'); $('sonido').setAttribute('aria-pressed', Sonido.on ? 'true' : 'false'); }
+
+// ---------- Mentor: retrato con expresión y texto ----------
+function mentor(html, expr){ $('texto').innerHTML = html; retrato($('retrato').getContext('2d'), AP.mentor, 'mentor', expr || 'feliz'); }
+
+// ---------- Menú de opciones con cursor ▶ (flechas, Enter, números, ratón o dedo) ----------
+let MENU = null;
+function menu(cont, items){
+  cont.innerHTML = '';
+  const caja = document.createElement('div'); caja.className = 'ops';
+  let sel = Math.max(0, items.findIndex(it=>!it.dis));
+  const botones = items.map((it, k)=>{
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'op' + (it.cls ? ' ' + it.cls : '');
+    b.innerHTML = (it.n ? `<span class="n">${it.n}</span>` : '') + `<span>${escH(it.t)}${it.sub ? `<small>${escH(it.sub)}</small>` : ''}</span>`;
+    if(it.color) b.style.borderLeft = `8px solid ${it.color}`;
+    if(it.dis) b.disabled = true;
+    b.onmouseenter = ()=>{ if(!it.dis && sel!==k){ sel = k; pintar(); } };
+    b.onfocus = ()=>{ if(!it.dis && sel!==k){ sel = k; pintar(); } };
+    b.onclick = ()=>{ if(!it.dis){ sel = k; elegir(); } };
+    caja.appendChild(b); return b;
+  });
+  const pintar = ()=>botones.forEach((b,k)=>b.classList.toggle('sel', k===sel));
+  const mover = d=>{ let n = sel; for(let i=0;i<items.length;i++){ n = (n+d+items.length)%items.length; if(!items[n].dis) break; }
+    if(n!==sel){ sel = n; pintar(); Sonido.sfx('blip'); } botones[sel].focus(); };
+  const elegir = ()=>{ const it = items[sel]; if(!it || it.dis) return; it.f(it, sel); };
+  cont.appendChild(caja); pintar();
+  MENU = {mover, elegir, porNumero(n){ const k = items.findIndex(it=>it.n===n); if(k>=0 && !items[k].dis){ sel = k; pintar(); elegir(); } }, foco(){ if(botones[sel]) botones[sel].focus({preventScroll:true}); }};
+  return MENU;
+}
+document.addEventListener('keydown', e=>{
+  if(!MENU || e.ctrlKey || e.metaKey || e.altKey) return;
+  const enBoton = document.activeElement && /^(BUTTON|A)$/.test(document.activeElement.tagName);
+  if(e.key==='ArrowDown' || e.key==='ArrowRight'){ MENU.mover(1); e.preventDefault(); }
+  else if(e.key==='ArrowUp' || e.key==='ArrowLeft'){ MENU.mover(-1); e.preventDefault(); }
+  else if((e.key==='Enter' || e.key===' ') && !enBoton){ MENU.elegir(); e.preventDefault(); }   // con un botón enfocado, el navegador ya hace el clic
+  else if(/^[1-9]$/.test(e.key)){ MENU.porNumero(+e.key); e.preventDefault(); }
+});
+
+// ---------- Escenario animado: casillas, personas, criatura, destellos y temblor ----------
+const Escena = {
+  cv:null, ctx:null, t:0, flash:0, chispas:[], pintar:null,
+  iniciar(pintar){
+    this.cv = $('escena'); this.ctx = this.cv.getContext('2d'); this.pintar = pintar;
+    let ult = performance.now();
+    const bucle = ahora=>{ const dt = Math.max(0, Math.min(50, ahora-ult)); ult = ahora; this.t += dt; try{ this.cuadro(dt); }catch(e){ console.error(e); } requestAnimationFrame(bucle); };
+    requestAnimationFrame(bucle);
+  },
+  cuadro(dt){
+    const x = this.ctx; x.setTransform(1,0,0,1,0,0); x.imageSmoothingEnabled = false;
+    this.pintar(x, this.t, dt);
+    this.chispas = this.chispas.filter(c=>(c.v -= dt) > 0);
+    this.chispas.forEach(c=>{ const k = 1 - c.v/c.d; x.fillStyle = c.col; x.fillRect(Math.round(c.x + c.dx*k*34), Math.round(c.y + c.dy*k*34), 2, 2); });
+    if(this.flash > 0){ x.fillStyle = `rgba(255,60,60,${this.flash*.35})`; x.fillRect(0, 0, this.cv.width, this.cv.height); this.flash = Math.max(0, this.flash - dt/350); }
+  },
+  acierto(cx, cy){ for(let i=0;i<16;i++){ const a = i/16*Math.PI*2; this.chispas.push({x:cx, y:cy, dx:Math.cos(a), dy:Math.sin(a)*.7, v:650, d:650, col: i%2 ? '#ffd166' : '#ffffff'}); } },
+  error(){ this.flash = 1; const e = this.cv.parentElement; e.classList.remove('temblor'); void e.offsetWidth; e.classList.add('temblor'); }
+};
+function pintarCasillas(x, filas, piso){ for(let y=0;y<filas.length;y++) for(let i=0;i<filas[y].length;i++) x.drawImage(tile(filas[y][i], piso), i*TS, y*TS); }
+function sombra(x, cx, cy, w){ x.fillStyle = 'rgba(0,0,0,.28)'; x.beginPath(); x.ellipse(cx, cy, w, w*.35, 0, 0, Math.PI*2); x.fill(); }
+function persona(x, clave, ap, px, py, dir, t){ sombra(x, px+9, py+25, 6); x.drawImage(spritePersona(clave, ap, dir, 0), Math.round(px), Math.round(py + Math.sin(t/400)*0.6)); }
+// La criatura del riesgo: más pequeña a medida que se controla; al final se calma y desaparece entre destellos
+function criaturaEscena(x, id, cx, base, escala, aura, calma, t){
+  const s = spriteRiesgo(id), w = Math.round(26*escala*(1 - calma*.5)), h = w, y = base - h + Math.round(Math.sin(t/300)*2);
+  if(aura){ x.fillStyle = aura.replace('A', String(.22 + .1*Math.sin(t/220))); x.beginPath(); x.arc(cx, base - h/2, w*.62, 0, 7); x.fill(); }
+  sombra(x, cx, base+2, w*.38);
+  x.globalAlpha = 1 - calma*.9; x.drawImage(s, Math.round(cx - w/2), y, w, h); x.globalAlpha = 1;
+}
+function estrellasTxt(n){ return '★★★'.slice(0, n) + '☆☆☆'.slice(0, 3-n); }
+
+// ---------- Botón de sonido y enlace de regreso (solo si se abre fuera del visor del portafolio) ----------
+(function(){
+  Sonido.cargar(); pintarBotonSonido(); $('sonido').onclick = ()=>Sonido.alternar();
+  if(window.self !== window.top) return;
+  const a = document.createElement('a'); a.className = 'volver'; a.href = '../index.html'; a.innerHTML = '← <span class="lbl">Portafolio</span>'; a.setAttribute('aria-label', 'Volver al portafolio');
+  document.querySelector('.top').appendChild(a);
+})();
+
+/* =====================================================================
+   Diseño de un KRI — cinco decisiones para un indicador que avise antes, no después.
+   La puntuación cuenta los aciertos al primer intento; la ficha siempre termina completa.
+   En la escena, el semáforo del indicador se enciende a medida que se diseña y el riesgo se achica.
+   ===================================================================== */
+const PISOS = {1:{fondo:'#1d2a3a', suelo:':'}};
+const RIESGOS = {pulpo:{forma:'pulpo', pal:{a:'#8e44ad'}}};
+const RIESGO = 'Acceso indebido a los datos de clientes';
+const PASOS = [
+  {campo:'Indicador', t:'Qué medir', p:'¿Qué indicador elige para este riesgo?',
    ops:['Número de filtraciones de datos en el año','Usuarios con privilegios de administrador sin revisión en el trimestre','Satisfacción de los usuarios con el área de tecnología'], ok:1,
    bien:'Mide la condición que antecede al evento: cuantos más accesos privilegiados sin revisar, más probable es un acceso indebido.',
    mal:['Contar filtraciones llega tarde: mide lo que ya pasó. Eso es un indicador de resultado, no de riesgo.',null,'No guarda relación con el riesgo: puede estar alto y los accesos seguir sin control.'],
-   valor:function(){ return 'Usuarios con privilegios de administrador sin revisión en el trimestre'; }},
-  {campo:'Umbrales', t:'Con qué umbrales',
-   p:'¿Qué umbrales le pone?',
+   valor:()=>'Usuarios con privilegios de administrador sin revisión en el trimestre'},
+  {campo:'Umbrales', t:'Con qué umbrales', p:'¿Qué umbrales le pone?',
    ops:['Verde hasta 5 · amarillo de 6 a 10 · rojo más de 10','Verde hasta 50 · amarillo de 51 a 100 · rojo más de 100','Solo rojo, cuando ocurra una filtración'], ok:0,
    bien:'Los umbrales reflejan el apetito y dejan tiempo para reaccionar: el amarillo alerta y el rojo escala, siempre antes del evento.',
    mal:[null,'Con umbrales tan holgados el indicador nunca cambia de color: no avisaría de nada.','Un umbral que se activa con la filtración ya no previene: llega cuando el daño está hecho.'],
-   valor:function(){ return '<div class="term"><div style="background:var(--verde);width:38%">Verde ≤ 5</div><div style="background:var(--ambar);color:#5C4300;width:32%">Amarillo 6–10</div><div style="background:var(--rojo);flex:1">Rojo > 10</div></div>'; }},
-  {campo:'Frecuencia', t:'Cada cuánto',
-   p:'¿Cada cuánto lo mide?',
+   valor:()=>'<div class="regla"><span style="background:#3fa34d;flex:5">V ≤ 5</span><span style="background:#d39b00;flex:5">A 6–10</span><span style="background:#d0342c;flex:4">R > 10</span></div>'},
+  {campo:'Frecuencia', t:'Cada cuánto', p:'¿Cada cuánto lo mide?',
    ops:['Una vez al año','Cada mes','Cada cinco años'], ok:1,
    bien:'La medición debe ser más rápida que el riesgo: un acceso indebido puede escalar en semanas, así que se mide cada mes.',
    mal:['En un año caben muchos accesos indebidos sin que nadie lo note.',null,'Con esa frecuencia el indicador sería solo un dato histórico.'],
-   valor:function(){ return 'Mensual'; }},
-  {campo:'Responsable', t:'Quién responde',
-   p:'¿Quién es el responsable del indicador?',
+   valor:()=>'Mensual'},
+  {campo:'Responsable', t:'Quién responde', p:'¿Quién es el responsable del indicador?',
    ops:['La jefa de tecnología, dueña del proceso de accesos','El área de riesgos','La aseguradora'], ok:0,
    bien:'Responde quien gestiona el proceso y puede actuar sobre él. El área de riesgos acompaña, consolida y reporta.',
    mal:[null,'El área de riesgos acompaña y consolida, pero no administra los accesos: no puede corregirlos por sí misma.','La aseguradora puede cubrir parte de la pérdida, pero no gestiona los accesos de la empresa.'],
-   valor:function(){ return 'Jefa de tecnología (dueña del proceso)'; }},
-  {campo:'Acción por color', t:'Qué hacer',
-   p:'Primer mes: el indicador marca 8 usuarios sin revisar. ¿Qué corresponde?',
+   valor:()=>'Jefa de tecnología (dueña del proceso)'},
+  {campo:'Acción por color', t:'Qué hacer', p:'Primer mes: el indicador marca 8 usuarios sin revisar. ¿Qué corresponde?',
    contexto:'Recuerde los umbrales: verde hasta 5, amarillo de 6 a 10, rojo más de 10.',
    ops:['Nada: todavía no ha ocurrido ninguna filtración','Alertar a la responsable y activar el plan: revisar y depurar esos accesos este mes','Escalar de inmediato al comité y suspender el sistema'], ok:1,
    bien:'8 está en amarillo: se alerta y se actúa antes de llegar a rojo. El rojo es el que se escala al comité.',
    mal:['Esperar a la filtración es justo lo que el indicador busca evitar: en amarillo ya hay que actuar.',null,'Es una reacción de rojo. En amarillo se alerta y se corrige; escalar y suspender sería desproporcionado.'],
-   valor:function(){ return '<b>Verde:</b> monitoreo normal · <b>Amarillo:</b> alerta a la responsable y plan de acción · <b>Rojo:</b> escalamiento al comité'; }}
+   valor:()=>'<b>Verde:</b> monitoreo normal · <b>Amarillo:</b> alerta a la responsable y plan de acción · <b>Rojo:</b> escalamiento al comité'}
 ];
-var k, intentos, aciertos, fallosPaso, nuevo;
+const FILAS = [
+  'WWWWWWWWWWWWWWWWWWWWWWWW',
+  ':ss:ss::::::::::::::dd::',
+  ':ss:ss::::::::::::::::::',
+  '::::::::::::::::::::dd::',
+  '::::::::::::::::::::::::'];
+let k, aciertos, intentos, descartadas, calma, nuevo;
 
-function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
-function el(id){ return document.getElementById(id); }
-
-function iniciar(){ k = 0; aciertos = 0; fallosPaso = []; nuevo = -1; pintarFicha(); pintarPaso(); }
-
-function pintarFicha(){
-  var h = '<div class="ficha-h"><span>KRI · Riesgo tecnológico</span><span>' + Math.min(k, PASOS.length) + ' de ' + PASOS.length + '</span></div>';
-  h += '<div class="fila"><div class="t">Riesgo</div><div class="v">' + escH(RIESGO) + '</div></div>';
-  PASOS.forEach(function(P, i){
-    var lleno = i < k;
-    h += '<div class="fila' + (i===nuevo ? ' nueva' : '') + '"><div class="t">' + P.campo + '</div><div class="v' + (lleno ? '' : ' vacio') + '">' + (lleno ? P.valor() : 'Por definir') + '</div></div>';
+// ---------- Escena: cuarto de tecnología, el riesgo cibernético y el semáforo del indicador ----------
+function semaforo(x, cx, t){
+  x.fillStyle = '#2d3748'; x.fillRect(cx-1, 30, 3, 44);                     // poste
+  x.fillStyle = '#141626'; x.fillRect(cx-8, 6, 17, 30); x.fillStyle = '#3a4560'; x.fillRect(cx-7, 7, 15, 28);
+  const encendido = k >= 2, lectura = k >= 4, parpadeo = Math.floor(t/400) % 2 === 0;
+  [['#3fa34d',10],['#e0b33a',19],['#d0342c',28]].forEach(([col, y], i)=>{
+    let on = encendido && (i===0 || (lectura && i===1 && (calma>0 || parpadeo)));
+    x.fillStyle = on ? col : '#1b2232'; x.beginPath(); x.arc(cx, y, 3.5, 0, 7); x.fill();
   });
-  el('ficha').innerHTML = h;
+  if(lectura){ x.fillStyle = '#0b1440'; x.fillRect(cx+12, 12, 22, 14); x.fillStyle = '#e0b33a'; x.font = 'bold 11px monospace'; x.fillText('8', cx+19, 23); }
+}
+function pintarEscena(x, t, dt){
+  pintarCasillas(x, FILAS, 1);
+  persona(x, 'mentor', AP.mentor, 7*TS, 1.5*TS, 'derecha', t);
+  persona(x, 'tecnologa', AP.tecnologa, 18*TS+4, 1.6*TS, 'izquierda', t);
+  if(calma>0 && calma<1) calma = Math.min(1, calma + dt/1200);
+  criaturaEscena(x, 'pulpo', 12*TS, 74, 2.1 - .18*Math.min(k, PASOS.length), k >= 4 ? 'rgba(224,179,58,A)' : 'rgba(208,52,44,A)', calma, t);
+  semaforo(x, 15*TS+8, t);
 }
 
-function pintarAvance(){
-  var h = ''; for(var i=0;i<PASOS.length;i++) h += '<i class="' + (i<k ? 'ok' : i===k ? 'ahora' : '') + '"></i>';
-  el('avance').innerHTML = h;
+function iniciar(){
+  k = 0; aciertos = 0; calma = 0; nuevo = -1;
+  mentor('Un <b>indicador clave de riesgo (KRI)</b> solo sirve si avisa <b>antes</b> de que el riesgo ocurra. Diseñemos uno para este riesgo, decisión por decisión: qué medir, umbrales, frecuencia, responsable y qué hacer cuando cambia de color.', 'feliz');
+  pintarFicha(); turno();
 }
+function pintarFicha(){
+  let h = `<h2>Ficha del indicador · ${Math.min(k, PASOS.length)}/${PASOS.length}</h2><div class="ficha"><div class="fila"><div class="t">Riesgo</div><div class="v">${escH(RIESGO)}</div></div>`;
+  PASOS.forEach((P, i)=>{ const lleno = i < k;
+    h += `<div class="fila${i===nuevo ? ' nueva' : ''}"><div class="t">${P.campo}</div><div class="v${lleno ? '' : ' vacio'}">${lleno ? P.valor() : '— por definir —'}</div></div>`; });
+  $('tablero').innerHTML = h + '</div>';
+}
+function bloques(){ let h = ''; for(let i=0;i<PASOS.length;i++) h += `<i class="${i<k ? 'ok' : i===k ? 'ahora' : ''}"></i>`; return `<div class="bloques" aria-hidden="true">${h}</div>`; }
 
-function pintarPaso(){
-  pintarAvance();
+function turno(){
   if(k >= PASOS.length){ final(); return; }
-  var P = PASOS[k]; intentos = 0; fallosPaso[k] = [];
-  el('pasoT').textContent = 'Decisión ' + (k+1) + ' de ' + PASOS.length + ' · ' + P.t;
-  el('zona').innerHTML = (k===0 ? '<p class="contexto">Riesgo: <b>' + escH(RIESGO) + '</b>.</p>' : '') +
-    '<p class="pregunta">' + escH(P.p) + '</p>' + (P.contexto ? '<p class="contexto">' + escH(P.contexto) + '</p>' : '') +
-    '<div class="ops" id="ops">' + P.ops.map(function(o, i){ return '<button class="opcion" type="button" data-i="' + i + '"><span class="k">' + (i+1) + '</span><span>' + escH(o) + '</span></button>'; }).join('') + '</div>' +
-    '<div id="retro"></div>';
-  Array.prototype.forEach.call(document.querySelectorAll('#ops .opcion'), function(b){ b.onclick = function(){ responder(+b.dataset.i); }; });
+  const P = PASOS[k]; intentos = 0; descartadas = new Set();
+  $('turno').innerHTML = `<h2>Decisión ${k+1} de ${PASOS.length} · ${P.t}</h2>${bloques()}${k===0 ? `<p class="paso">Riesgo: ${escH(RIESGO)}</p>` : ''}
+    <p class="pregunta">${escH(P.p)}</p>${P.contexto ? `<p class="paso">${escH(P.contexto)}</p>` : ''}<div id="ops"></div>`;
+  opciones(); if(k>0) MENU.foco();
 }
-
+function opciones(){
+  const P = PASOS[k];
+  menu($('ops'), P.ops.map((o, i)=>({n:i+1, t:o, dis:descartadas.has(i), cls:descartadas.has(i) ? 'mal' : '', f:()=>responder(i)})));
+}
 function responder(i){
-  var P = PASOS[k], b = document.querySelector('#ops .opcion[data-i="' + i + '"]');
-  if(!b || b.disabled) return;
-  intentos++;
+  const P = PASOS[k]; intentos++;
   if(i === P.ok){
     if(intentos === 1) aciertos++;
-    Array.prototype.forEach.call(document.querySelectorAll('#ops .opcion'), function(x){ x.disabled = true; });
-    b.classList.add('bien');
-    el('retro').innerHTML = '<div class="banner banner-ok"><b>Correcto.</b> ' + escH(P.bien) + '</div>' +
-      '<div class="acciones"><button class="btn btn-p" type="button" id="seguir">' + (k === PASOS.length-1 ? 'Ver el resultado' : 'Siguiente decisión') + ' →</button></div>';
-    nuevo = k; k++; pintarFicha(); pintarAvance();
-    el('seguir').onclick = function(){ nuevo = -1; pintarPaso(); };
-    el('seguir').focus();
+    Sonido.sfx('acierto'); Escena.acierto(12*TS, 48);
+    mentor('<b>¡Correcto!</b> ' + escH(P.bien), 'feliz');
+    nuevo = k; k++; pintarFicha();
+    $('turno').querySelector('.bloques').outerHTML = bloques();
+    menu($('ops'), [{t: k===PASOS.length ? 'Ver el resultado ▶' : 'Siguiente decisión ▶', f:()=>{ nuevo = -1; turno(); }}]).foco();
   } else {
-    b.disabled = true; b.classList.add('mal');
-    el('retro').innerHTML = '<div class="banner banner-err"><b>No es la mejor opción.</b> ' + escH((P.mal && P.mal[i]) || 'Revise el enunciado y pruebe otra vez.') + '</div>';
+    descartadas.add(i); Sonido.sfx('fallo'); Escena.error();
+    mentor('<b>No es la mejor opción.</b> ' + escH((P.mal && P.mal[i]) || 'Revise el enunciado y pruebe otra vez.'), 'pensativo');
+    opciones(); MENU.foco();
   }
 }
-
 function final(){
-  el('pasoT').textContent = 'Resultado';
-  var est = aciertos === PASOS.length ? 3 : aciertos >= PASOS.length-2 ? 2 : 1;
-  var msj = aciertos === PASOS.length ? 'Diseño impecable: el indicador anticipa el riesgo, tiene umbrales accionables, frecuencia adecuada y un responsable claro.'
-          : aciertos >= PASOS.length-2 ? 'Buen diseño. Repase las decisiones en las que dudó: son las que más se equivocan en la práctica.'
-          : 'El indicador quedó bien armado gracias a las correcciones. Vale la pena repetirlo para fijar el criterio.';
-  el('zona').innerHTML = '<div class="marcador"><span class="n mono">' + aciertos + ' de ' + PASOS.length + '</span><span class="estrellas" aria-label="' + est + ' de 3">' +
-    '★★★'.slice(0, est) + '☆☆☆'.slice(0, 3-est) + '</span></div><p class="hint" style="margin:4px 0 12px">Decisiones acertadas al primer intento.</p>' +
-    '<div class="banner banner-info">' + escH(msj) + '</div>' +
-    '<p class="contexto" style="margin-top:12px">Las tres preguntas que vale la pena hacerle a cualquier KRI: <b>¿avisa antes del evento?</b>, <b>¿cada color dispara una acción concreta?</b> y <b>¿hay una persona que responde por él?</b></p>' +
-    '<div class="acciones"><button class="btn btn-s" type="button" id="otraVez">Volver a empezar</button></div>';
-  el('otraVez').onclick = iniciar;
+  const n = PASOS.length, est = aciertos === n ? 3 : aciertos >= n-2 ? 2 : 1;
+  calma = .01; Sonido.sfx('fin'); Escena.acierto(12*TS, 44); pintarFicha();
+  mentor(aciertos === n ? '<b>¡Diseño impecable!</b> El indicador anticipa el riesgo, tiene umbrales accionables, frecuencia adecuada y un responsable claro.'
+    : aciertos >= n-2 ? '<b>¡Buen diseño!</b> Repase las decisiones en las que dudó: son las que más se equivocan en la práctica.'
+    : '<b>El indicador quedó bien armado</b> gracias a las correcciones. Vale la pena repetirlo para fijar el criterio.', aciertos >= n-2 ? 'feliz' : 'pensativo');
+  $('turno').innerHTML = `<h2>Resultado</h2><div class="marcador"><span class="n">${aciertos} / ${n}</span><span class="estrellas" aria-label="${est} de 3 estrellas">${estrellasTxt(est)}</span></div>
+    <p class="paso">Decisiones acertadas al primer intento.</p>
+    <p class="nota">Tres preguntas para cualquier KRI: <b>¿avisa antes del evento?</b>, <b>¿cada color dispara una acción concreta?</b> y <b>¿hay una persona que responde por él?</b></p>
+    <div id="ops" style="margin-top:14px"></div>`;
+  menu($('ops'), [{t:'Volver a empezar ▶', f:iniciar}]).foco();
 }
-
-document.addEventListener('keydown', function(e){
-  if(e.ctrlKey || e.metaKey || e.altKey) return;
-  var n = parseInt(e.key, 10);
-  if(n >= 1 && n <= 3 && k < PASOS.length && document.querySelector('#ops')){ responder(n-1); e.preventDefault(); }
-});
+Escena.iniciar(pintarEscena);
 iniciar();
+
 </script>
-<script>
-/* Enlace de regreso al portafolio. Solo aparece si el minijuego se abrio
-   por su URL directa: dentro del visor modal del portafolio sobraria. */
-(function () {
-  if (window.self !== window.top) return;
-  var h = document.querySelector('.app-header');
-  if (!h) return;
-  var a = document.createElement('a');
-  a.className = 'volver';
-  a.href = '../index.html';
-  a.textContent = '← Portafolio';
-  h.appendChild(a);
-})();
-</script>
+</body>
+</html>
