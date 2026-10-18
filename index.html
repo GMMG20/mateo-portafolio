@@ -4,62 +4,76 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- SEO Básico y Metadatos -->
+  <!-- SEO básico y metadatos -->
   <title>Mateo Meléndez — Consultor de Riesgos Empresariales</title>
-  <meta name="description" content="Mateo Meléndez, consultor de riesgos empresariales. Riesgos que se gestionan, no que se documentan: matriz de riesgos, Bow Tie, apetito y tolerancia, muestreo de auditoría y minijuegos de formación, en funcionamiento.">
+  <meta name="description" content="Mateo Meléndez, consultor de riesgos empresariales. Sistemas de gestión de riesgos, indicadores clave (KRI), talleres y formación, con instrumentos que se pueden probar en vivo.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="author" content="Mateo Meléndez">
+  <link rel="canonical" href="https://gmmg20.github.io/mateo-portafolio/">
+  <link rel="alternate" hreflang="es" href="https://gmmg20.github.io/mateo-portafolio/">
+  <link rel="alternate" hreflang="en" href="https://gmmg20.github.io/mateo-portafolio/index-en.html">
+  <link rel="alternate" hreflang="x-default" href="https://gmmg20.github.io/mateo-portafolio/">
 
-  <!-- Open Graph / Compartibilidad (LinkedIn, WhatsApp) -->
+  <!-- Open Graph: la tarjeta que muestran LinkedIn y WhatsApp al compartir el enlace -->
+  <meta property="og:site_name" content="Mateo Meléndez">
+  <meta property="og:locale" content="es_CO">
   <meta property="og:title" content="Mateo Meléndez — Consultor de Riesgos">
-  <meta property="og:description" content="Los instrumentos con los que gestiono riesgos operativos y estratégicos. En funcionamiento, no en diapositivas.">
+  <meta property="og:description" content="Riesgos que se gestionan, no que se documentan. Instrumentos y minijuegos de gestión de riesgos que se pueden probar en vivo.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://gmmg20.github.io/mateo-portafolio/Imagen_G.jpg">
   <meta property="og:url" content="https://gmmg20.github.io/mateo-portafolio/">
+  <meta property="og:image" content="https://gmmg20.github.io/mateo-portafolio/og-es.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Mateo Meléndez, consultor de riesgos empresariales: «Riesgos que se gestionan, no que se documentan», junto a una matriz de calor.">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#14213d">
 
-  <!-- Favicon optimizado en línea (SVG) -->
+  <!-- Favicon en línea (SVG) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2314213d'/><text x='50%' y='50%' font-family='sans-serif' font-size='45' font-weight='bold' fill='%23e9a23b' text-anchor='middle' dominant-baseline='central'>MM</text></svg>" type="image/svg+xml">
+
+  <!-- Con JavaScript activo se habilitan las animaciones; sin él, todo se ve desde el principio -->
+  <script>document.documentElement.classList.add('js');</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
 
   <style>
     :root {
       /* Tinta y ámbar: el ámbar es el color de la alerta temprana; se usa como único acento */
       --ink: #14213d;
-      --ink-light: #1c2b4d;
+      --ink-2: #1c2b4d;
+      --ink-3: #0e1730;
       --acc: #e9a23b;
       --acc-light: #f2b84b;
       --acc-text: #9a6412;
-      --acc-soft: #fbf0dc;
-      --gold: #e9a23b;
       --gold-text: #7c4f0e;
       --gold-soft: #fdf3e1;
-      --mist: #faf8f3;
-      --card-bg: #ffffff;
+      --paper: #faf8f3;
+      --paper-2: #f3eee4;
+      --card: #ffffff;
       --text: #1b2436;
-      --text-muted: #4f5b70;
-      --border: #e8e2d6;
-      --shadow: 0 10px 25px -5px rgba(20, 33, 61, 0.08);
-      --shadow-hover: 0 18px 36px -10px rgba(20, 33, 61, 0.2);
-      --radius: 12px;
+      --muted: #4f5b70;
+      --line: #e8e2d6;
+      --shadow-sm: 0 1px 2px rgba(20, 33, 61, 0.05), 0 6px 16px -8px rgba(20, 33, 61, 0.12);
+      --shadow: 0 2px 4px rgba(20, 33, 61, 0.04), 0 18px 40px -16px rgba(20, 33, 61, 0.22);
+      --radius: 14px;
       --header-h: 68px;
+      --wrap: 1180px;
+      --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+      --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background-color: var(--mist);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      font-family: var(--sans); background-color: var(--paper); color: var(--text);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
     }
     img { display: block; max-width: 100%; }
     /* Las anclas no quedan tapadas por el encabezado fijo */
     [id] { scroll-margin-top: calc(var(--header-h) + 1rem); }
+    .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 2rem; }
 
     /* Accesibilidad: foco visible y enlace para saltar al contenido */
     *:focus-visible { outline: 3px solid var(--acc-text); outline-offset: 2px; }
@@ -75,67 +89,85 @@
     /* ---- Encabezado: marca, secciones e idioma ---- */
     header {
       position: sticky; top: 0; z-index: 100;
-      background-color: rgba(20, 33, 61, 0.97);
-      backdrop-filter: saturate(140%) blur(8px);
-      color: #ffffff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      background-color: rgba(20, 33, 61, 0.96);
+      backdrop-filter: saturate(140%) blur(10px);
+      color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
     .header-inner {
-      max-width: 1400px; margin: 0 auto; height: var(--header-h); padding: 0 2rem;
+      max-width: var(--wrap); margin: 0 auto; height: var(--header-h); padding: 0 2rem;
       display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;
     }
     .brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; }
-    .logo-badge {
-      background: var(--acc);
-      color: var(--ink); font-weight: 700; font-size: 1.1rem; padding: 0.4rem 0.75rem; border-radius: 8px;
-    }
-    .brand-title { font-weight: 600; font-size: 1.1rem; }
+    .logo-badge { background: var(--acc); color: var(--ink); font-weight: 700; font-size: 1.05rem; padding: 0.38rem 0.7rem; border-radius: 8px; }
+    .brand-title { font-weight: 600; font-size: 1.08rem; white-space: nowrap; }
     .header-right { display: flex; align-items: center; gap: 1rem; }
-    .nav-links { display: flex; gap: 0.15rem; list-style: none; }
+    .nav-links { display: flex; gap: 0.1rem; list-style: none; }
     .nav-links a {
-      color: #cbd5e1; text-decoration: none; font-size: 0.92rem; font-weight: 500;
-      padding: 0.5rem 0.8rem; border-radius: 6px; transition: color 0.2s ease, background-color 0.2s ease;
+      position: relative; display: block; color: #cbd5e1; text-decoration: none; font-size: 0.9rem; font-weight: 500;
+      padding: 0.5rem 0.75rem; border-radius: 6px; transition: color 0.2s ease, background-color 0.2s ease;
+    }
+    /* Sección visible: subrayado ámbar */
+    .nav-links a.activo { color: #ffffff; }
+    .nav-links a.activo::after {
+      content: ""; position: absolute; left: 0.75rem; right: 0.75rem; bottom: 0.2rem; height: 2px; border-radius: 2px; background: var(--acc);
     }
     .lang-switch { display: flex; gap: 0.25rem; align-items: center; padding-left: 1rem; border-left: 1px solid rgba(255, 255, 255, 0.15); }
     .lang-switch a {
-      position: relative; color: #94a3b8; text-decoration: none; font-size: 0.82rem; font-weight: 700;
+      position: relative; color: #94a3b8; text-decoration: none; font-size: 0.8rem; font-weight: 700;
       letter-spacing: 0.5px; padding: 0.35rem 0.6rem; border-radius: 6px; transition: color 0.2s ease, background-color 0.2s ease;
     }
     /* Área táctil de 44 px sin alterar el aspecto del selector */
     .lang-switch a::after { content: ""; position: absolute; inset: -6px -2px; }
     .lang-switch a[aria-current="page"] { color: var(--ink); background-color: var(--acc); }
     @media (hover: hover) {
-      .nav-links a:hover { color: #ffffff; background-color: var(--ink-light); }
-      .lang-switch a:not([aria-current]):hover { color: #ffffff; background-color: var(--ink-light); }
+      .nav-links a:hover { color: #ffffff; background-color: var(--ink-2); }
+      .lang-switch a:not([aria-current]):hover { color: #ffffff; background-color: var(--ink-2); }
     }
+    /* Menú para pantallas angostas */
+    .menu-btn {
+      display: none; align-items: center; gap: 0.5rem; min-height: 44px; padding: 0 0.75rem;
+      background: transparent; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px;
+      font: 600 0.88rem/1 var(--sans); cursor: pointer;
+    }
+    .menu-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; fill: none; }
+    .menu-btn[aria-expanded="true"] { background: var(--ink-2); border-color: var(--acc-light); }
+    .menu-movil { border-top: 1px solid rgba(255, 255, 255, 0.08); background: var(--ink); }
+    .menu-movil ul { list-style: none; max-width: var(--wrap); margin: 0 auto; padding: 0.5rem 1rem 1rem; }
+    .menu-movil a {
+      display: flex; align-items: center; min-height: 48px; padding: 0 0.75rem; border-radius: 8px;
+      color: #e2e8f0; text-decoration: none; font-weight: 500; font-size: 1.02rem;
+    }
+    .menu-movil a.activo { color: var(--acc-light); }
+    .menu-movil a:active { background: var(--ink-2); }
 
     /* ---- Portada ---- */
     .hero {
+      position: relative; overflow: hidden; color: #ffffff; padding: 5.5rem 0 8.5rem;
       background:
-        radial-gradient(900px 420px at 88% 0%, rgba(233, 162, 59, 0.14), transparent 65%),
-        linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%);
-      color: #ffffff;
-      padding: 4.5rem 2rem 7rem;
-      overflow: hidden;
+        radial-gradient(1000px 480px at 88% -10%, rgba(233, 162, 59, 0.16), transparent 60%),
+        linear-gradient(160deg, var(--ink) 0%, #182748 100%);
     }
-    .hero-inner {
-      max-width: 1200px; margin: 0 auto;
-      display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: 3.5rem; align-items: center;
+    /* Trama de puntos muy tenue que se desvanece hacia abajo */
+    .hero::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px); background-size: 22px 22px;
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%); mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
     }
-    .hero-subtitle {
-      color: var(--acc-light); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem; margin-bottom: 0.9rem;
+    .hero-inner { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 4rem; align-items: center; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.4rem;
+      color: var(--acc-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.8rem;
     }
+    .hero-eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--acc); }
     .hero h1 {
-      font-size: clamp(2.1rem, 4.6vw, 3.2rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 1.5rem;
+      font-family: var(--serif); font-weight: 600; font-size: clamp(2.35rem, 5.3vw, 4.05rem);
+      line-height: 1.07; letter-spacing: -0.02em; margin-bottom: 1.6rem; text-wrap: balance;
     }
-    .quote-badge {
-      display: inline-block; max-width: 40rem;
-      background-color: rgba(255, 255, 255, 0.08); border-left: 4px solid var(--acc);
-      padding: 0.85rem 1.25rem; border-radius: 0 8px 8px 0; font-style: italic; color: #f8fafc; font-size: 1.05rem;
-    }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2rem; }
+    .hero h1 em { font-style: italic; font-weight: 500; color: var(--acc-light); }
+    .hero-lead { font-size: clamp(1.04rem, 1.35vw, 1.18rem); line-height: 1.7; color: #c9d2e3; max-width: 36em; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2.4rem; }
     .btn-hero {
-      display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.85rem 1.5rem; border-radius: 8px;
+      display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.9rem 1.55rem; border-radius: 8px;
       font-weight: 600; font-size: 0.98rem; text-decoration: none; border: 2px solid transparent;
       transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
     }
@@ -145,137 +177,175 @@
       .btn-hero.primary:hover { background-color: var(--acc-light); transform: translateY(-2px); }
       .btn-hero.secondary:hover { border-color: var(--acc-light); color: var(--acc-light); transform: translateY(-2px); }
     }
-    /* Matriz decorativa: probabilidad (filas) por impacto (columnas) */
-    .hero-visual { justify-self: end; }
-    .hm { position: relative; display: grid; grid-template-columns: repeat(5, 46px); grid-auto-rows: 46px; gap: 6px; padding: 0 0 30px 30px; }
-    .hm span { border-radius: 8px; opacity: 0.9; position: relative; }
-    .hm .g { background: #2f9e6e; } .hm .y { background: #d9b23a; } .hm .o { background: #df7c3a; } .hm .r { background: #cf4538; }
-    .hm .x::after {
-      content: ""; position: absolute; width: 12px; height: 12px; left: 50%; top: 50%; margin: -6px 0 0 -6px;
-      border-radius: 50%; background: #ffffff; box-shadow: 0 0 0 3px rgba(20, 33, 61, 0.35);
-    }
-    .hm .foco { box-shadow: 0 0 0 3px #ffffff; animation: latido 2.4s ease-in-out infinite; }
-    @keyframes latido { 50% { box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.15); } }
-    .hm-y, .hm-x { position: absolute; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #94a3b8; }
-    .hm-y { left: 0; top: 50%; transform: translate(-38%, -50%) rotate(-90deg); transform-origin: center; white-space: nowrap; margin-top: -15px; }
-    .hm-x { bottom: 0; left: 30px; right: 0; text-align: center; }
 
-    /* ---- Contenido ---- */
-    .container { max-width: 1400px; margin: -4rem auto 4rem; padding: 0 1.5rem; position: relative; z-index: 10; }
+    /* Matriz de la portada: cuatro riesgos pasan de su posición inherente a la residual */
+    .hm { justify-self: end; width: min(100%, 350px); }
+    .hm svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .hm rect { opacity: 0.93; }
+    .hm .g { fill: #2f9e6e; } .hm .y { fill: #d9b23a; } .hm .o { fill: #df7c3a; } .hm .r { fill: #cf4538; }
+    .hm .traza { stroke: rgba(255, 255, 255, 0.6); stroke-width: 1.6; stroke-dasharray: 3 4; stroke-linecap: round; }
+    .hm .inherente { fill: none; stroke: rgba(255, 255, 255, 0.75); stroke-width: 2; }
+    .hm .residual { fill: #ffffff; stroke: var(--ink); stroke-width: 3; }
+    .hm .eje { fill: #94a3b8; font: 600 9.5px var(--sans); letter-spacing: 0.14em; }
+    .hm figcaption { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem 1.1rem; margin-top: 1rem; font-size: 0.8rem; color: #aab5c8; }
+    .hm figcaption span { display: inline-flex; align-items: center; gap: 0.45rem; }
+    .hm figcaption i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; }
+    .hm .ley-i { border: 2px solid rgba(255, 255, 255, 0.75); }
+    .hm .ley-r { background: #ffffff; box-shadow: 0 0 0 2px var(--ink), 0 0 0 3px rgba(255, 255, 255, 0.5); }
+    .js .hm .residual { transform: translate(var(--dx), var(--dy)); }
+    .js .hm .traza { opacity: 0; }
+    .js .hm.visto .residual { animation: hm-mover 1.5s cubic-bezier(0.65, 0, 0.25, 1) calc(0.5s + var(--d)) forwards; }
+    .js .hm.visto .traza { animation: hm-aparecer 0.9s ease calc(0.9s + var(--d)) forwards; }
+    @keyframes hm-mover { to { transform: translate(0, 0); } }
+    @keyframes hm-aparecer { to { opacity: 1; } }
 
-    /* Cifras de trayectoria */
+    /* ---- Cifras de trayectoria ---- */
     .stats {
+      position: relative; z-index: 5; margin-top: -4.5rem; list-style: none;
       display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
-      margin-bottom: 2rem; list-style: none;
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
     }
-    .stat { padding: 1.4rem 1.75rem; border-left: 1px solid var(--border); }
+    .stat { padding: 1.6rem 1.8rem; border-left: 1px solid var(--line); }
     .stat:first-child { border-left: 0; }
-    .stat b { display: block; font-size: 1.7rem; font-weight: 700; color: var(--ink); line-height: 1.15; letter-spacing: -0.01em; }
-    .stat span { display: block; margin-top: 0.2rem; font-size: 0.88rem; line-height: 1.45; color: var(--text-muted); }
+    .stat b { display: block; font-family: var(--serif); font-weight: 600; font-size: 2.15rem; line-height: 1.1; color: var(--ink); letter-spacing: -0.01em; }
+    .stat span { display: block; margin-top: 0.35rem; font-size: 0.88rem; line-height: 1.45; color: var(--muted); }
 
-    .eyebrow { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acc-text); margin-bottom: 0.45rem; }
-    .about, .section-header {
-      background: var(--card-bg); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow);
-      border: 1px solid var(--border); margin-bottom: 2rem;
+    /* ---- Secciones ---- */
+    .seccion { padding-top: 6.5rem; }
+    .sec-head { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 3.5rem; align-items: end; margin-bottom: 2.75rem; }
+    .sec-head.solo { grid-template-columns: minmax(0, 48rem); }
+    .eyebrow {
+      display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.8rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--acc-text);
     }
-    .about p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.75; }
-    .about .about-punch { margin-top: 1.5rem; padding-left: 1.1rem; border-left: 4px solid var(--acc); color: var(--ink); font-weight: 600; }
-    .section-header h2 { color: var(--ink); font-size: 1.6rem; line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 0.6rem; }
-    .section-header p { color: var(--text-muted); }
-    /* Dos columnas: la medida de lectura se respeta por columna y el ancho se aprovecha con contenido */
-    .about-grid, .sec-grid {
-      display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 2.5rem; align-items: start;
+    .eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--acc); }
+    h2 {
+      font-family: var(--serif); font-weight: 600; font-size: clamp(1.9rem, 3.3vw, 2.65rem);
+      line-height: 1.12; letter-spacing: -0.015em; color: var(--ink); text-wrap: balance;
     }
-    .creds { border-left: 1px solid var(--border); padding-left: 2rem; }
-    .creds h3 { font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--acc-text); margin-bottom: 0.55rem; }
-    .creds ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.88rem; line-height: 1.5; color: var(--text-muted); margin-bottom: 1.4rem; }
-    .creds ul:last-child { margin-bottom: 0; }
-    .creds li { max-width: 62ch; }
-    .creds li b { color: var(--text); font-weight: 600; }
-    .demo-note {
-      padding: 0.9rem 1.1rem; background-color: var(--mist); border-left: 4px solid var(--acc);
-      border-radius: 0 8px 8px 0; font-size: 0.93rem; line-height: 1.65; color: var(--text-muted);
+    .intro { margin-top: 1rem; font-size: 1.08rem; line-height: 1.7; color: var(--muted); max-width: 40em; }
+    .nota { font-size: 0.92rem; line-height: 1.65; color: var(--muted); border-left: 3px solid var(--acc); padding: 0.15rem 0 0.15rem 1.1rem; }
+    .nota strong { color: var(--ink); }
+
+    /* ---- Qué hago: cuatro frentes ---- */
+    .frentes { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.25rem; }
+    .frente { display: flex; flex-direction: column; border-top: 2px solid var(--ink); padding-top: 1.4rem; }
+    .frente .num { font-family: var(--serif); font-weight: 600; font-size: 1.02rem; color: var(--acc-text); margin-bottom: 0.55rem; }
+    .frente h3 { font-family: var(--serif); font-weight: 600; font-size: 1.32rem; line-height: 1.25; color: var(--ink); margin-bottom: 0.7rem; }
+    .frente .desc { flex: 1; color: var(--muted); font-size: 0.96rem; line-height: 1.65; }
+    /* «Pruébelo»: los instrumentos de cada frente, que se abren en el visor */
+    .prueba { display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; margin-top: 1.25rem; padding-top: 0.9rem; border-top: 1px solid var(--line); }
+    .prueba-tit { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+    .enlace {
+      display: inline-flex; align-items: center; gap: 0.4rem; min-height: 32px; padding: 0.15rem 0;
+      background: none; border: 0; font: inherit; font-size: 0.92rem; font-weight: 600; color: var(--acc-text); cursor: pointer; text-align: left;
     }
-    .demo-note strong { color: var(--ink); }
+    .enlace span { transition: transform 0.2s ease; }
+    @media (hover: hover) {
+      .enlace:hover { text-decoration: underline; text-underline-offset: 3px; }
+      .enlace:hover span { transform: translateX(3px); }
+    }
 
     /* ---- Instrumentos ---- */
-    .tools-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;
+    .tools-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.75rem; }
+    .tool-card, .game-card {
+      display: flex; flex-direction: column; overflow: hidden;
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .tool-card {
-      background-color: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);
-      padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    /* Vista previa: la herramienta real, asomada como una ventana */
+    .vista {
+      position: relative; aspect-ratio: 16 / 10; overflow: hidden; cursor: pointer;
+      background: linear-gradient(155deg, #f6f2ea 0%, #ebe4d5 100%); border-bottom: 1px solid var(--line);
     }
-    .tool-icon {
-      width: 44px; height: 44px; border-radius: 10px; background: var(--acc-soft); color: var(--acc-text);
-      display: grid; place-items: center; margin-bottom: 1.1rem;
+    .vista img {
+      position: absolute; left: 7%; top: 9%; width: 100%; height: 100%;
+      object-fit: cover; object-position: left top; background: #ffffff; border-radius: 8px 0 0 0;
+      box-shadow: 0 0 0 1px rgba(20, 33, 61, 0.08), 0 18px 36px -14px rgba(20, 33, 61, 0.42);
+      transition: transform 0.45s ease;
     }
-    .tool-icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .tool-category { font-size: 0.75rem; font-weight: 700; color: var(--acc-text); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
-    .tool-title { color: var(--ink); font-size: 1.25rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.75rem; }
-    .tool-description { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1; }
+    .vista[data-encaje="contener"] img { object-fit: contain; object-position: left top; }
+    .tool-body { display: flex; flex-direction: column; flex: 1; padding: 1.45rem 1.6rem 1.6rem; }
+    .tool-category { font-size: 0.74rem; font-weight: 700; color: var(--acc-text); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.5rem; }
+    .tool-title { color: var(--ink); font-size: 1.2rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.6rem; }
+    .tool-description { flex: 1; color: var(--muted); font-size: 0.94rem; margin-bottom: 1.4rem; }
     .badge-demo, .badge-beta {
-      display: inline-block; margin-left: 0.5rem; padding: 0.1rem 0.45rem; border-radius: 4px;
-      font-size: 0.72rem; letter-spacing: 0.5px; vertical-align: middle;
+      display: inline-block; margin-left: 0.45rem; padding: 0.08rem 0.42rem; border-radius: 4px;
+      font-size: 0.7rem; letter-spacing: 0.5px; vertical-align: 1px;
     }
-    .badge-demo { background-color: var(--mist); border: 1px solid var(--border); color: var(--text-muted); }
+    .badge-demo { background-color: var(--paper); border: 1px solid var(--line); color: var(--muted); }
     .badge-beta { background-color: var(--gold-soft); border: 1px solid #ecd3a6; color: var(--gold-text); }
     .btn-open {
-      background-color: var(--ink); color: #ffffff; border: none; padding: 0.85rem 1.25rem; border-radius: 8px;
-      font-family: inherit; font-weight: 600; font-size: 0.95rem; cursor: pointer; text-decoration: none;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;
-      transition: background-color 0.2s ease;
+      background-color: transparent; color: var(--ink); border: 1.5px solid var(--ink); padding: 0.78rem 1.2rem; border-radius: 8px;
+      font-family: inherit; font-weight: 600; font-size: 0.94rem; cursor: pointer; text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
-    .btn-open:hover, .btn-open:active { background-color: var(--acc); color: var(--ink); }
-    /* La tarjeta final invita al contacto: se distingue de las demostraciones */
-    .tool-card.cta { background: linear-gradient(160deg, var(--ink) 0%, var(--ink-light) 100%); border-color: var(--ink); }
-    .tool-card.cta .tool-icon { background: rgba(255, 255, 255, 0.08); color: var(--acc-light); }
+    .btn-open:hover, .btn-open:active { background-color: var(--ink); color: #ffffff; }
+    @media (hover: hover) {
+      .tool-card:hover, .game-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+      .tool-card:hover .vista img { transform: translate(-6px, -6px); }
+    }
+    /* La tarjeta final invita al contacto: un marco vacío para «su» instrumento */
+    .tool-card.cta { background: linear-gradient(165deg, var(--ink) 0%, var(--ink-2) 100%); border-color: var(--ink); }
+    .vista-cta { cursor: default; display: grid; place-items: center; border-bottom-color: rgba(255, 255, 255, 0.08);
+      background: radial-gradient(420px 220px at 30% 10%, rgba(233, 162, 59, 0.22), transparent 70%), transparent; }
+    .vista-cta::before {
+      content: ""; position: absolute; left: 7%; top: 9%; right: -2px; bottom: -2px;
+      border: 2px dashed rgba(242, 184, 75, 0.5); border-right: 0; border-bottom: 0; border-radius: 8px 0 0 0;
+    }
+    .vista-cta svg { position: relative; width: 46px; height: 46px; margin: 9% 0 0 7%; fill: none; stroke: var(--acc-light); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
     .tool-card.cta .tool-category { color: var(--acc-light); }
     .tool-card.cta .tool-title { color: #ffffff; }
     .tool-card.cta .tool-description { color: #cbd5e1; }
-    .tool-card.cta .btn-open { background-color: var(--acc); color: var(--ink); }
-    .tool-card.cta .btn-open:hover { background-color: var(--acc-light); }
-    @media (hover: hover) {
-      .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
-    }
+    .tool-card.cta .btn-open { background-color: var(--acc); border-color: var(--acc); color: var(--ink); }
+    .tool-card.cta .btn-open:hover { background-color: var(--acc-light); border-color: var(--acc-light); }
 
-    /* ---- Formación: juegos ---- */
+    /* ---- Formación: minijuegos ---- */
     .games-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; }
-    .game-card {
-      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
-      overflow: hidden; display: flex; flex-direction: column; transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .game-thumb { position: relative; display: block; width: 100%; border: 0; padding: 0; cursor: pointer; background: var(--mist); aspect-ratio: 2 / 1; overflow: hidden; border-bottom: 1px solid var(--border); }
-    .game-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .game-thumb { position: relative; display: block; width: 100%; cursor: pointer; background: var(--paper-2); aspect-ratio: 2 / 1; overflow: hidden; border-bottom: 1px solid var(--line); }
+    .game-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.45s ease; }
     .game-thumb .play {
       position: absolute; left: 1rem; bottom: 1rem; display: inline-flex; align-items: center; gap: 0.45rem;
-      background: rgba(20, 33, 61, 0.88); color: #ffffff; font-family: inherit; font-weight: 600; font-size: 0.88rem;
+      background: rgba(20, 33, 61, 0.9); color: #ffffff; font-weight: 600; font-size: 0.86rem;
       padding: 0.45rem 0.95rem; border-radius: 999px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
     }
-    .game-body { padding: 1.6rem 1.75rem 1.75rem; display: flex; flex-direction: column; flex: 1; }
+    .game-body { display: flex; flex-direction: column; flex: 1; padding: 1.5rem 1.7rem 1.7rem; }
     .game-meta { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.5rem; }
     .game-meta li {
-      font-size: 0.8rem; font-weight: 500; color: var(--ink); background: var(--mist);
-      border: 1px solid var(--border); border-radius: 999px; padding: 0.22rem 0.7rem;
+      font-size: 0.8rem; font-weight: 500; color: var(--ink); background: var(--paper);
+      border: 1px solid var(--line); border-radius: 999px; padding: 0.22rem 0.7rem;
     }
     .game-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-top: auto; }
     .game-actions .btn-open { width: auto; flex: 1 1 12rem; }
     .btn-link { color: var(--acc-text); font-weight: 600; font-size: 0.92rem; text-decoration: none; padding: 0.75rem 0.25rem; }
     .btn-link:hover { text-decoration: underline; }
-    @media (hover: hover) {
-      .game-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
-      .game-card:hover .game-thumb img { transform: scale(1.03); }
+    @media (hover: hover) { .game-card:hover .game-thumb img { transform: scale(1.03); } }
+
+    /* ---- Perfil ---- */
+    .perfil { margin-top: 6.5rem; padding: 6rem 0; background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .perfil-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 4rem; align-items: start; }
+    .perfil-texto > p { margin-top: 1.25rem; color: var(--muted); font-size: 1.05rem; line-height: 1.75; max-width: 40em; }
+    .perfil-texto > p.remate {
+      margin-top: 1.9rem; padding-left: 1.2rem; border-left: 3px solid var(--acc);
+      font-family: var(--serif); font-style: italic; font-size: 1.3rem; line-height: 1.45; color: var(--ink);
     }
+    .creds { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem 2rem; }
+    .creds h3 { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acc-text); margin-bottom: 0.6rem; }
+    .creds ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem; line-height: 1.5; color: var(--muted); margin-bottom: 1.5rem; }
+    .creds ul:last-child { margin-bottom: 0; }
+    .creds li b { color: var(--text); font-weight: 600; }
 
     /* ---- Cierre: contacto ---- */
-    .contact { background-color: var(--ink); color: #cbd5e1; padding: 4rem 1.5rem; text-align: center; }
-    .contact-inner { max-width: 640px; margin: 0 auto; }
-    .contact .eyebrow { color: var(--acc-light); }
-    .contact h2 { color: #ffffff; font-size: 1.85rem; margin-bottom: 0.75rem; }
-    .contact-inner > p { font-size: 1.05rem; line-height: 1.7; }
-    .contact-actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem; }
+    .contact {
+      padding: 5.5rem 0; text-align: center; color: #cbd5e1;
+      background: radial-gradient(800px 360px at 50% 0%, rgba(233, 162, 59, 0.12), transparent 65%), var(--ink);
+    }
+    .contact-inner { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+    .contact .eyebrow { justify-content: center; color: var(--acc-light); }
+    .contact h2 { color: #ffffff; margin-bottom: 1rem; }
+    .contact-inner > p { font-size: 1.08rem; line-height: 1.7; }
+    .contact-actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2.2rem; }
     .btn-contact {
       display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.6rem; border-radius: 8px;
       font-weight: 600; font-size: 0.98rem; text-decoration: none; border: 2px solid transparent;
@@ -289,15 +359,22 @@
     }
 
     /* ---- Pie ---- */
-    footer { background-color: #0e1730; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid var(--ink-light); }
+    footer { background-color: var(--ink-3); color: #94a3b8; font-size: 0.9rem; border-top: 1px solid var(--ink-2); }
     .footer-inner {
-      max-width: 1400px; margin: 0 auto; padding: 1.6rem 2rem;
+      max-width: var(--wrap); margin: 0 auto; padding: 1.6rem 2rem;
       display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; justify-content: space-between; align-items: center;
     }
     footer span { color: #ffffff; }
     .footer-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; }
     .footer-links a { color: #cbd5e1; text-decoration: none; }
     .footer-links a:hover { color: var(--acc-light); text-decoration: underline; }
+
+    /* ---- Aparición suave al desplazarse (solo con JavaScript activo) ---- */
+    .js .reveal {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: calc(var(--i, 0) * 90ms);
+    }
+    .js .reveal.visto { opacity: 1; transform: none; }
 
     /* ---- Visor (ventana sobre la página) ---- */
     .modal-overlay {
@@ -327,67 +404,85 @@
     .modal-body { flex: 1; position: relative; background: #f8fafc; }
     .iframe-loader {
       position: absolute; inset: 0; display: flex; flex-direction: column; gap: 0.9rem; align-items: center; justify-content: center;
-      color: var(--text-muted); font-weight: 500;
+      color: var(--muted); font-weight: 500;
     }
     .iframe-loader::before {
       content: ""; width: 34px; height: 34px; border-radius: 50%;
-      border: 3px solid var(--border); border-top-color: var(--acc); animation: girar 0.9s linear infinite;
+      border: 3px solid var(--line); border-top-color: var(--acc); animation: girar 0.9s linear infinite;
     }
     @keyframes girar { to { transform: rotate(360deg); } }
     .modal-body iframe { position: relative; z-index: 2; width: 100%; height: 100%; border: none; background: transparent; }
 
     /* ---- Pantallas medianas y pequeñas ---- */
-    @media (min-width: 1001px) {
-      .stats { margin-top: 0; }
+    @media (max-width: 1100px) {
+      .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .frentes { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 2.75rem; }
+      .hero-inner { gap: 3rem; }
     }
     @media (max-width: 1000px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-visual { display: none; }
-      .about-grid, .sec-grid { grid-template-columns: 1fr; gap: 1.75rem; }
-      /* Apiladas, las tarjetas se estrechan a la medida de lectura */
-      .about, .section-header, .stats { max-width: 760px; margin-left: auto; margin-right: auto; }
-      .creds { border-left: 0; border-top: 1px solid var(--border); padding-left: 0; padding-top: 1.5rem; }
+      .hero-inner { grid-template-columns: 1fr; gap: 3.5rem; }
+      .hm { justify-self: center; width: min(100%, 320px); }
+      .sec-head, .perfil-grid { grid-template-columns: 1fr; gap: 1.75rem; }
       .games-grid { grid-template-columns: 1fr; max-width: 760px; margin: 0 auto; }
     }
     @media (max-width: 900px) {
       .nav-links { display: none; }
+      .menu-btn { display: inline-flex; }
       .lang-switch { border-left: 0; padding-left: 0; }
     }
+    @media (min-width: 901px) { .menu-movil { display: none !important; } }
     @media (max-width: 768px) {
-      .header-inner { padding: 0 1.25rem; }
-      .hero { padding: 3.25rem 1.5rem 6rem; }
-      .container { padding: 0 1rem; }
+      .wrap, .header-inner { padding: 0 1.25rem; }
+      .hero { padding: 3.5rem 0 7rem; }
+      .seccion { padding-top: 4.75rem; }
+      .perfil { margin-top: 4.75rem; padding: 4.5rem 0; }
+      .contact { padding: 4.5rem 0; }
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .stat:nth-child(3) { border-left: 0; }
-      .stat:nth-child(n+3) { border-top: 1px solid var(--border); }
-      .section-header, .about { padding: 1.5rem; }
-      .tool-card { padding: 1.5rem; }
-      .tools-grid { gap: 1.25rem; }
-      .game-body { padding: 1.35rem 1.4rem 1.5rem; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
       .modal-container { height: 92vh; }
+    }
+    @media (max-width: 640px) {
+      .tools-grid, .frentes { grid-template-columns: 1fr; }
+      .frentes { row-gap: 2.25rem; }
     }
     @media (max-width: 480px) {
       :root { --header-h: 60px; }
-      .header-inner { padding: 0 1rem; }
+      .wrap, .header-inner { padding: 0 1rem; }
+      .header-inner, .header-right { gap: 0.6rem; }
+      .brand { gap: 0.6rem; }
       .brand-title { font-size: 1rem; }
+      .menu-btn { padding: 0 0.7rem; }
+      .menu-btn span { display: none; }
+      .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.1em; gap: 0.6rem; }
+      .hero-eyebrow::before { width: 20px; }
       .hero-actions { flex-direction: column; }
       .btn-hero { justify-content: center; }
-      .stat { padding: 1.1rem 1.15rem; }
-      .stat b { font-size: 1.4rem; }
-      .section-header, .about, .tool-card { padding: 1.25rem; }
-      .about p { font-size: 0.98rem; }
-      .demo-note { padding: 0.8rem 0.85rem; }
-      .contact { padding: 3rem 1.25rem; }
-      .contact h2 { font-size: 1.5rem; }
+      .stat { padding: 1.15rem 1.2rem; }
+      .stat b { font-size: 1.7rem; }
+      .tool-body, .game-body { padding: 1.3rem 1.3rem 1.4rem; }
+      .creds { padding: 1.4rem 1.3rem; }
       .contact-actions { flex-direction: column; }
       .btn-contact { justify-content: center; }
       .modal-overlay { padding: 0.5rem; }
       .modal-title { font-size: 0.95rem; }
       .btn-newtab { display: none; }
     }
+    /* Teléfonos de 320 px: el encabezado se compacta para que marca, idioma y menú quepan en una línea */
+    @media (max-width: 360px) {
+      .wrap, .header-inner { padding: 0 0.75rem; }
+      .header-inner, .header-right { gap: 0.4rem; }
+      .logo-badge { font-size: 0.92rem; padding: 0.3rem 0.5rem; }
+      .brand-title { font-size: 0.94rem; }
+      .lang-switch a { padding: 0.35rem 0.45rem; }
+      .menu-btn { padding: 0 0.55rem; }
+    }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
+      .js .reveal { opacity: 1; transform: none; }
+      .js .hm .residual { transform: none; }
+      .js .hm .traza { opacity: 1; }
     }
   </style>
 </head>
@@ -404,54 +499,284 @@
       <div class="header-right">
         <nav aria-label="Secciones">
           <ul class="nav-links">
-            <li><a href="#perfil">Perfil</a></li>
+            <li><a href="#que-hago">Qué hago</a></li>
             <li><a href="#instrumentos">Instrumentos</a></li>
             <li><a href="#formacion">Formación</a></li>
+            <li><a href="#perfil">Perfil</a></li>
             <li><a href="#contacto">Contacto</a></li>
           </ul>
         </nav>
         <nav class="lang-switch" aria-label="Idioma">
           <a href="./" aria-current="page">ES</a>
-          <a href="index-en.html">EN</a>
+          <a href="index-en.html" lang="en">EN</a>
         </nav>
+        <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu-movil">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menú</span>
+        </button>
       </div>
     </div>
+    <nav class="menu-movil" id="menu-movil" aria-label="Secciones" hidden>
+      <ul>
+        <li><a href="#que-hago">Qué hago</a></li>
+            <li><a href="#instrumentos">Instrumentos</a></li>
+            <li><a href="#formacion">Formación</a></li>
+            <li><a href="#perfil">Perfil</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
   </header>
 
   <!-- Portada -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-inner">
+    <div class="wrap hero-inner">
       <div>
-        <p class="hero-subtitle">Consultor de Riesgos Empresariales</p>
-        <h1 id="hero-title">Gestión de riesgos, en funcionamiento</h1>
-        <div class="quote-badge">“Riesgos que se gestionan, no que se documentan. Estos son los instrumentos con los que lo hago.”</div>
+        <p class="hero-eyebrow">Consultor de riesgos empresariales</p>
+        <h1 id="hero-title">Riesgos que se gestionan, <em>no que se documentan</em></h1>
+        <p class="hero-lead">Diseño sistemas de gestión de riesgos, indicadores clave y talleres para comités directivos, y construyo los instrumentos que los ponen a funcionar. Aquí puede probarlos.</p>
         <div class="hero-actions">
           <a class="btn-hero primary" href="#instrumentos">Ver los instrumentos <span aria-hidden="true">→</span></a>
           <a class="btn-hero secondary" href="#contacto">Conversemos</a>
         </div>
       </div>
-      <div class="hero-visual"><div class="hm" aria-hidden="true"><span class="y"></span><span class="o"></span><span class="o x"></span><span class="r"></span><span class="r"></span><span class="y"></span><span class="y"></span><span class="o"></span><span class="o x"></span><span class="r x foco"></span><span class="g"></span><span class="y x"></span><span class="y"></span><span class="o"></span><span class="o"></span><span class="g"></span><span class="g"></span><span class="y"></span><span class="y x"></span><span class="o"></span><span class="g"></span><span class="g"></span><span class="g"></span><span class="y"></span><span class="y"></span><div class="hm-y">Probabilidad</div><div class="hm-x">Impacto</div></div></div>
+      <figure class="hm">
+        <svg viewBox="0 0 306 302" role="img" aria-label="Matriz de calor de probabilidad por impacto: cuatro riesgos pasan de la zona roja y naranja a la amarilla y verde cuando se aplican sus controles.">
+          <rect class="y" x="30" y="2" width="50" height="50" rx="8"/><rect class="o" x="86" y="2" width="50" height="50" rx="8"/><rect class="o" x="142" y="2" width="50" height="50" rx="8"/><rect class="r" x="198" y="2" width="50" height="50" rx="8"/><rect class="r" x="254" y="2" width="50" height="50" rx="8"/><rect class="y" x="30" y="58" width="50" height="50" rx="8"/><rect class="y" x="86" y="58" width="50" height="50" rx="8"/><rect class="o" x="142" y="58" width="50" height="50" rx="8"/><rect class="o" x="198" y="58" width="50" height="50" rx="8"/><rect class="r" x="254" y="58" width="50" height="50" rx="8"/><rect class="g" x="30" y="114" width="50" height="50" rx="8"/><rect class="y" x="86" y="114" width="50" height="50" rx="8"/><rect class="y" x="142" y="114" width="50" height="50" rx="8"/><rect class="o" x="198" y="114" width="50" height="50" rx="8"/><rect class="o" x="254" y="114" width="50" height="50" rx="8"/><rect class="g" x="30" y="170" width="50" height="50" rx="8"/><rect class="g" x="86" y="170" width="50" height="50" rx="8"/><rect class="y" x="142" y="170" width="50" height="50" rx="8"/><rect class="y" x="198" y="170" width="50" height="50" rx="8"/><rect class="o" x="254" y="170" width="50" height="50" rx="8"/><rect class="g" x="30" y="226" width="50" height="50" rx="8"/><rect class="g" x="86" y="226" width="50" height="50" rx="8"/><rect class="g" x="142" y="226" width="50" height="50" rx="8"/><rect class="y" x="198" y="226" width="50" height="50" rx="8"/><rect class="y" x="254" y="226" width="50" height="50" rx="8"/>
+          <line class="traza" x1="279" y1="27" x2="167" y2="139" style="--d:0.00s"/><line class="traza" x1="167" y1="27" x2="55" y2="139" style="--d:0.22s"/><line class="traza" x1="279" y1="83" x2="223" y2="195" style="--d:0.44s"/><line class="traza" x1="279" y1="139" x2="223" y2="251" style="--d:0.66s"/>
+          <circle class="inherente" cx="279" cy="27" r="9"/><circle class="residual" cx="167" cy="139" r="8" style="--dx:112px;--dy:-112px;--d:0.00s"/><circle class="inherente" cx="167" cy="27" r="9"/><circle class="residual" cx="55" cy="139" r="8" style="--dx:112px;--dy:-112px;--d:0.22s"/><circle class="inherente" cx="279" cy="83" r="9"/><circle class="residual" cx="223" cy="195" r="8" style="--dx:56px;--dy:-112px;--d:0.44s"/><circle class="inherente" cx="279" cy="139" r="9"/><circle class="residual" cx="223" cy="251" r="8" style="--dx:56px;--dy:-112px;--d:0.66s"/>
+          <text class="eje" x="167" y="298" text-anchor="middle">IMPACTO</text>
+          <text class="eje" transform="translate(11 139) rotate(-90)" text-anchor="middle">PROBABILIDAD</text>
+        </svg>
+        <figcaption><span><i class="ley-i"></i>Inherente</span><span><i class="ley-r"></i>Residual, tras los controles</span></figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- Contenido principal -->
-  <main class="container" id="contenido">
-    <ul class="stats" aria-label="Trayectoria en cifras">
-      <li class="stat"><b>5 años</b><span>de auditoría interna en Deloitte</span></li>
-      <li class="stat"><b>10+</b><span>auditorías internas ejecutadas</span></li>
-      <li class="stat"><b>SOX</b><span>lideré el testeo de controles</span></li>
-      <li class="stat"><b>7</b><span>instrumentos y minijuegos en vivo</span></li>
-    </ul>
+  <main id="contenido">
+    <div class="wrap">
+      <ul class="stats reveal" aria-label="Trayectoria en cifras">
+        <li class="stat"><b>5 años</b><span>de auditoría interna en Deloitte</span></li>
+        <li class="stat"><b>10+</b><span>auditorías internas ejecutadas</span></li>
+        <li class="stat"><b>SOX</b><span>lideré el testeo de controles</span></li>
+        <li class="stat"><b>7</b><span>instrumentos y minijuegos en vivo</span></li>
+      </ul>
+    </div>
 
-    <!-- Presentación -->
-    <section class="about" id="perfil" aria-labelledby="titulo-perfil">
-      <div class="about-grid">
-        <div>
-          <h2 class="eyebrow" id="titulo-perfil">Perfil</h2>
-          <p>Soy consultor de riesgos empresariales en una firma global de consultoría y corretaje de riesgos. Antes pasé cinco años en Deloitte como auditor interno senior, donde ejecuté más de diez auditorías y lideré el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy diseño metodologías, políticas e indicadores clave de riesgo para empresas de varios sectores y tamaños, y facilito los talleres donde esos riesgos se discuten con los comités directivos.</p>
-          <p class="about-punch">Las herramientas de esta página salieron de ese trabajo: las construí porque las necesitaba.</p>
+    <!-- Qué hago -->
+    <section class="seccion" id="que-hago" aria-labelledby="titulo-que">
+      <div class="wrap">
+        <div class="sec-head solo reveal">
+          <div>
+            <p class="eyebrow">Lo que hago</p>
+            <h2 id="titulo-que">En qué puedo ayudarle</h2>
+            <p class="intro">Cuatro frentes de trabajo que se refuerzan entre sí. En cada uno hay algo que puede probar ahora mismo.</p>
+          </div>
         </div>
-        <aside class="creds">
+        <ol class="frentes">
+          <li class="frente reveal" style="--i:0">
+            <span class="num" aria-hidden="true">01</span>
+            <h3>Sistema de gestión de riesgos</h3>
+            <p class="desc">Política, metodología y marco de trabajo: quién decide, con qué escalas y cada cuánto se revisa. Sobre ISO 31000 y COSO, ajustado a la realidad de cada organización.</p>
+            <div class="prueba">
+              <span class="prueba-tit">Pruébelo</span>
+              <button type="button" class="enlace" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">Matriz de riesgos <span aria-hidden="true">→</span></button>
+              <button type="button" class="enlace" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">Apetito y tolerancia <span aria-hidden="true">→</span></button>
+            </div>
+          </li>
+          <li class="frente reveal" style="--i:1">
+            <span class="num" aria-hidden="true">02</span>
+            <h3>Talleres de riesgos</h3>
+            <p class="desc">Estratégicos, operativos y de proyectos. Sesiones con quienes deciden para identificar, valorar y priorizar lo que de verdad puede afectar los objetivos.</p>
+            <div class="prueba">
+              <span class="prueba-tit">Pruébelo</span>
+              <button type="button" class="enlace" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">Bow Tie <span aria-hidden="true">→</span></button>
+              <button type="button" class="enlace" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">Consolidador de matrices <span aria-hidden="true">→</span></button>
+            </div>
+          </li>
+          <li class="frente reveal" style="--i:2">
+            <span class="num" aria-hidden="true">03</span>
+            <h3>Indicadores clave de riesgo</h3>
+            <p class="desc">KRI que avisan antes de que el riesgo se materialice, con umbrales, frecuencia de medición y una persona que responde por cada uno.</p>
+            <div class="prueba">
+              <span class="prueba-tit">Pruébelo</span>
+              <button type="button" class="enlace" onclick="openTool('minikri', this)" aria-haspopup="dialog" aria-expanded="false">Minijuego: diseño de un KRI <span aria-hidden="true">→</span></button>
+            </div>
+          </li>
+          <li class="frente reveal" style="--i:3">
+            <span class="num" aria-hidden="true">04</span>
+            <h3>Formación en riesgos</h3>
+            <p class="desc">Cursos y capacitaciones para equipos que empiezan de cero, con ejercicios prácticos en lugar de diapositivas.</p>
+            <div class="prueba">
+              <span class="prueba-tit">Pruébelo</span>
+              <button type="button" class="enlace" onclick="openTool('minibowtie', this)" aria-haspopup="dialog" aria-expanded="false">Minijuego: bow-tie <span aria-hidden="true">→</span></button>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Instrumentos -->
+    <section class="seccion" id="instrumentos" aria-labelledby="titulo-instrumentos">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <p class="eyebrow">Demostraciones interactivas</p>
+            <h2 id="titulo-instrumentos">Instrumentos de trabajo</h2>
+            <p class="intro">Cada uno resuelve un problema que me he encontrado en campo. Están en vivo: ábralos y úselos.</p>
+          </div>
+          <p class="nota"><strong>Son versiones de demostración</strong>, simplificadas y con datos de ejemplo. Las completas se ajustan a la metodología, las escalas y los reportes de cada organización; si le interesa alguna, escríbame y se la muestro funcionando de verdad.</p>
+        </div>
+
+        <div class="tools-grid">
+        <article class="tool-card reveal" style="--i:0">
+          <div class="vista" onclick="openTool('matriz', this.closest('.tool-card').querySelector('.btn-open'))">
+            <img src="herramientas/capturas/matriz.jpg" alt="Mapa de calor de la matriz de riesgos: cinco niveles de probabilidad por cinco de impacto, con los riesgos ubicados en sus celdas" width="880" height="550" loading="lazy" decoding="async">
+          </div>
+          <div class="tool-body">
+            <div class="tool-category">Matriz de Riesgos <span class="badge-demo">Demo</span></div>
+            <h3 class="tool-title">Matriz de Riesgos de Procesos</h3>
+            <p class="tool-description">Tiene cuarenta riesgos en la matriz y capacidad para atender cinco. Ordénelos por magnitud real y sustente ante el comité por qué esos cinco.</p>
+            <button type="button" class="btn-open" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">
+              Abrir herramienta <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="tool-card reveal" style="--i:1">
+          <div class="vista" data-encaje="contener" onclick="openTool('bowtie', this.closest('.tool-card').querySelector('.btn-open'))">
+            <img src="herramientas/capturas/bowtie.jpg" alt="Diagrama bow tie: tres causas a la izquierda, el evento al centro y tres consecuencias a la derecha" width="880" height="550" loading="lazy" decoding="async">
+          </div>
+          <div class="tool-body">
+            <div class="tool-category">Análisis Causa-Efecto <span class="badge-demo">Demo</span></div>
+            <h3 class="tool-title">RiskVantage — Bow Tie</h3>
+            <p class="tool-description">Un evento se materializó: la pregunta es por dónde entró y qué barrera falló. Separe causas de consecuencias y deje ver dónde está descubierto.</p>
+            <button type="button" class="btn-open" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">
+              Abrir herramienta <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="tool-card reveal" style="--i:2">
+          <div class="vista" onclick="openTool('consolidador', this.closest('.tool-card').querySelector('.btn-open'))">
+            <img src="herramientas/capturas/consolidador.jpg" alt="Dos matrices con formatos distintos y, debajo, la base consolidada con una escala común y los posibles duplicados resaltados" width="880" height="550" loading="lazy" decoding="async">
+          </div>
+          <div class="tool-body">
+            <div class="tool-category">Normalización de Datos <span class="badge-demo">Demo</span></div>
+            <h3 class="tool-title">Consolidador de Matrices</h3>
+            <p class="tool-description">Cada área entregó su matriz en un formato distinto. Homologue las estructuras, detecte el mismo riesgo escrito de tres maneras y deje una sola base.</p>
+            <button type="button" class="btn-open" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">
+              Abrir herramienta <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="tool-card reveal" style="--i:0">
+          <div class="vista" onclick="openTool('apetito', this.closest('.tool-card').querySelector('.btn-open'))">
+            <img src="herramientas/capturas/apetito.jpg" alt="Postura del comité frente al riesgo y umbrales resultantes: base, capacidad y apetito, con la barra verde, ámbar y roja" width="880" height="550" loading="lazy" decoding="async">
+          </div>
+          <div class="tool-body">
+            <div class="tool-category">Capacidad y Exposición <span class="badge-demo">Demo</span></div>
+            <h3 class="tool-title">Apetito y Tolerancia al Riesgo</h3>
+            <p class="tool-description">La junta pregunta cuánto riesgo puede asumir la compañía. Traduzca la capacidad financiera a umbrales de apetito y tolerancia que pueda defender.</p>
+            <button type="button" class="btn-open" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">
+              Abrir herramienta <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="tool-card reveal" style="--i:1">
+          <div class="vista" onclick="openTool('muestreo', this.closest('.tool-card').querySelector('.btn-open'))">
+            <img src="herramientas/capturas/muestreo.jpg" alt="Tamaño de muestra calculado, 56 ítems, y la selección aleatoria reproducible" width="880" height="550" loading="lazy" decoding="async">
+          </div>
+          <div class="tool-body">
+            <div class="tool-category">Control y Auditoría <span class="badge-demo">Demo</span></div>
+            <h3 class="tool-title">Muestreo de Auditoría</h3>
+            <p class="tool-description">Tiene que probar un control y no sabe cuántas partidas revisar. Calcule el tamaño de muestra y deje documentado el sustento estadístico.</p>
+            <button type="button" class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
+              Abrir herramienta <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Tarjeta final: un marco vacío para el instrumento que el visitante necesita -->
+        <article class="tool-card cta reveal" style="--i:2">
+          <div class="vista vista-cta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></div>
+          <div class="tool-body">
+            <div class="tool-category">A la medida</div>
+            <h3 class="tool-title">¿Su caso no está aquí?</h3>
+            <p class="tool-description">Estas cinco salieron de necesidades concretas. Si la suya es otra, probablemente se resuelve con el mismo método: escríbame y la miramos.</p>
+            <a class="btn-open" href="mailto:mmelendezgomez@gmail.com?subject=Contacto%20desde%20el%20portafolio">
+              Escribirme <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formación: minijuegos (beta) -->
+    <section class="seccion" id="formacion" aria-labelledby="titulo-formacion">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <p class="eyebrow">Formación y cultura de riesgos</p>
+            <h2 id="titulo-formacion">Minijuegos para cursos y talleres</h2>
+            <p class="intro">La cultura de riesgos no se instala con diapositivas. Para cursos y talleres diseñé ejercicios cortos con estética de videojuego de 8 bits: el participante decide, recibe la explicación al instante y ve cómo queda armado el resultado de su criterio. Toman unos cinco minutos, de manera individual o en grupo con el ejercicio proyectado.</p>
+          </div>
+          <p class="nota"><strong>Son versiones beta:</strong> funcionan completas, pero siguen en prueba con grupos. Si quiere usarlas en un curso o taller de su organización, escríbame y las adaptamos a sus riesgos.</p>
+        </div>
+
+        <div class="games-grid">
+        <article class="game-card reveal" style="--i:0">
+          <div class="game-thumb" onclick="openTool('minikri', this.closest('.game-card').querySelector('.btn-open'))">
+            <img src="minijuegos/minijuego-kri.jpg" alt="Captura del minijuego Diseño de un KRI, en pixel art: un cuarto de servidores con el mentor, el riesgo cibernético al centro y el semáforo del indicador en amarillo" width="800" height="400" loading="lazy" decoding="async">
+            <span class="play" aria-hidden="true">▶ Jugar</span>
+          </div>
+          <div class="game-body">
+            <div class="tool-category">Indicadores clave de riesgo <span class="badge-beta">Beta</span></div>
+            <h3 class="tool-title">Diseño de un KRI</h3>
+            <p class="tool-description">Un riesgo de acceso indebido a datos de clientes y cinco decisiones: qué medir, con qué umbrales, cada cuánto, quién responde y qué hacer cuando el indicador se pone amarillo. Al final queda la ficha completa del indicador.</p>
+            <ul class="game-meta"><li>5 minutos</li><li>5 decisiones</li><li>Indicador, umbrales y responsable</li></ul>
+            <div class="game-actions">
+              <button type="button" class="btn-open" onclick="openTool('minikri', this)" aria-haspopup="dialog" aria-expanded="false">
+                Jugar la versión beta <span aria-hidden="true">→</span>
+              </button>
+              <a class="btn-link" href="minijuegos/Minijuego_KRI.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card reveal" style="--i:1">
+          <div class="game-thumb" onclick="openTool('minibowtie', this.closest('.game-card').querySelector('.btn-open'))">
+            <img src="minijuegos/minijuego-bowtie.jpg" alt="Captura del minijuego Bow-tie, en pixel art: una bodega con un incendio al centro, el mentor a la izquierda y un operario a la derecha" width="800" height="400" loading="lazy" decoding="async">
+            <span class="play" aria-hidden="true">▶ Jugar</span>
+          </div>
+          <div class="game-body">
+            <div class="tool-category">Análisis causa-efecto <span class="badge-beta">Beta</span></div>
+            <h3 class="tool-title">Bow-tie: incendio en la bodega</h3>
+            <p class="tool-description">Ocho piezas alrededor de un incendio en la bodega de químicos. Ubique cada una como causa, barrera preventiva, barrera de mitigación o consecuencia y vea armarse el diagrama: unas barreras bajan la probabilidad y otras el impacto.</p>
+            <ul class="game-meta"><li>5 minutos</li><li>8 piezas</li><li>Causas, barreras y consecuencias</li></ul>
+            <div class="game-actions">
+              <button type="button" class="btn-open" onclick="openTool('minibowtie', this)" aria-haspopup="dialog" aria-expanded="false">
+                Jugar la versión beta <span aria-hidden="true">→</span>
+              </button>
+              <a class="btn-link" href="minijuegos/Minijuego_BowTie.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Perfil -->
+    <section class="perfil" id="perfil" aria-labelledby="titulo-perfil">
+      <div class="wrap perfil-grid">
+        <div class="perfil-texto reveal">
+          <p class="eyebrow">Perfil</p>
+          <h2 id="titulo-perfil">De la auditoría interna a la gestión de riesgos</h2>
+          <p>Soy consultor de riesgos empresariales en una firma global de consultoría y corretaje de riesgos. Antes pasé cinco años en Deloitte como auditor interno senior, donde ejecuté más de diez auditorías y lideré el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy diseño metodologías, políticas e indicadores clave de riesgo para empresas de varios sectores y tamaños, y facilito los talleres donde esos riesgos se discuten con los comités directivos.</p>
+          <p class="remate">Las herramientas de esta página salieron de ese trabajo: las construí porque las necesitaba.</p>
+        </div>
+        <aside class="creds reveal" style="--i:1">
           <h3>Trayectoria</h3>
           <ul>
             <li><b>Firma global de consultoría y corretaje de riesgos</b> &middot; Consultor de Riesgos Empresariales &mdash; 2024 a hoy</li>
@@ -472,159 +797,11 @@
         </aside>
       </div>
     </section>
-
-    <!-- Instrumentos -->
-    <section id="instrumentos" aria-labelledby="titulo-instrumentos">
-      <div class="section-header">
-        <div class="sec-grid">
-          <div>
-            <p class="eyebrow">Demostraciones interactivas</p>
-            <h2 id="titulo-instrumentos">Instrumentos de trabajo</h2>
-            <p>Cada uno resuelve un problema que me he encontrado en campo: valorar y priorizar, mapear causas y barreras, homologar matrices dispares, fijar umbrales de apetito y decidir cuánto probar. Están en vivo: ábralos y úselos.</p>
-          </div>
-          <p class="demo-note"><strong>Son versiones demostrativas.</strong> Están simplificadas a propósito y traen datos de ejemplo: sirven para mostrar el enfoque en cinco minutos, no para operar. Las versiones completas se parametrizan con la metodología, las escalas de valoración y los reportes de cada organización. Si le interesa alguna en serio, escríbame y se la muestro funcionando de verdad.</p>
-        </div>
-      </div>
-
-      <div class="tools-grid">
-      <!-- Tarjeta 1 -->
-      <article class="tool-card">
-        <div>
-          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
-          <div class="tool-category">Matriz de Riesgos <span class="badge-demo">Demo</span></div>
-          <h3 class="tool-title">Matriz de Riesgos de Procesos</h3>
-          <p class="tool-description">Tiene cuarenta riesgos en la matriz y capacidad para atender cinco. Ordénelos por magnitud real y sustente ante el comité por qué esos cinco.</p>
-        </div>
-        <button class="btn-open" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir herramienta <span aria-hidden="true">→</span>
-        </button>
-      </article>
-
-      <!-- Tarjeta 2 -->
-      <article class="tool-card">
-        <div>
-          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12 3 6v12zM12 12l9-6v12z"/><circle cx="12" cy="12" r="1.5"/></svg></div>
-          <div class="tool-category">Análisis Causa-Efecto <span class="badge-demo">Demo</span></div>
-          <h3 class="tool-title">RiskVantage — Bow Tie</h3>
-          <p class="tool-description">Un evento se materializó: la pregunta es por dónde entró y qué barrera falló. Separe causas de consecuencias y deje ver dónde está descubierto.</p>
-        </div>
-        <button class="btn-open" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir herramienta <span aria-hidden="true">→</span>
-        </button>
-      </article>
-
-      <!-- Tarjeta 3 -->
-      <article class="tool-card">
-        <div>
-          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg></div>
-          <div class="tool-category">Normalización de Datos <span class="badge-demo">Demo</span></div>
-          <h3 class="tool-title">Consolidador de Matrices</h3>
-          <p class="tool-description">Cada área entregó su matriz en un formato distinto. Homologue las estructuras, detecte el mismo riesgo escrito de tres maneras y deje una sola base.</p>
-        </div>
-        <button class="btn-open" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir herramienta <span aria-hidden="true">→</span>
-        </button>
-      </article>
-
-      <!-- Tarjeta 4 -->
-      <article class="tool-card">
-        <div>
-          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="m12 17 4.5-5"/><circle cx="12" cy="17" r="1.3"/></svg></div>
-          <div class="tool-category">Capacidad y Exposición <span class="badge-demo">Demo</span></div>
-          <h3 class="tool-title">Apetito y Tolerancia al Riesgo</h3>
-          <p class="tool-description">La junta pregunta cuánto riesgo puede asumir la compañía. Traduzca la capacidad financiera a umbrales de apetito y tolerancia que pueda defender.</p>
-        </div>
-        <button class="btn-open" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir herramienta <span aria-hidden="true">→</span>
-        </button>
-      </article>
-
-      <!-- Tarjeta 5 -->
-      <article class="tool-card">
-        <div>
-          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8M8 10.5h5"/></svg></div>
-          <div class="tool-category">Control y Auditoría <span class="badge-demo">Demo</span></div>
-          <h3 class="tool-title">Muestreo de Auditoría</h3>
-          <p class="tool-description">Tiene que probar un control y no sabe cuántas partidas revisar. Calcule el tamaño de muestra y deje documentado el sustento estadístico.</p>
-        </div>
-        <button class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
-          Abrir herramienta <span aria-hidden="true">→</span>
-        </button>
-      </article>
-
-      <!-- Tarjeta 6: cierra la rejilla y lleva al contacto -->
-      <article class="tool-card cta">
-        <div>
-          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></div>
-          <div class="tool-category">A la medida</div>
-          <h3 class="tool-title">¿Su caso no está aquí?</h3>
-          <p class="tool-description">Estas cinco salieron de necesidades concretas. Si la suya es otra, probablemente se resuelve con el mismo método: escríbame y la miramos.</p>
-        </div>
-        <a class="btn-open" href="mailto:mmelendezgomez@gmail.com?subject=Contacto%20desde%20el%20portafolio">
-          Escribirme <span aria-hidden="true">&rarr;</span>
-        </a>
-      </article>
-      </div>
-    </section>
-
-    <!-- Formación: juegos (beta) -->
-    <section id="formacion" aria-labelledby="titulo-formacion">
-      <div class="section-header">
-        <div class="sec-grid">
-          <div>
-            <p class="eyebrow">Formación y cultura de riesgos</p>
-            <h2 id="titulo-formacion">Minijuegos para cursos y talleres</h2>
-            <p>La cultura de riesgos no se instala con diapositivas. Para cursos y talleres diseñé ejercicios cortos con estética de videojuego de 8 bits: el participante toma decisiones, recibe la explicación al instante y ve cómo queda armado el resultado de su criterio. Se resuelven en unos cinco minutos, de manera individual o en grupo con el ejercicio proyectado.</p>
-          </div>
-          <p class="demo-note"><strong>Son versiones beta.</strong> Funcionan completas, pero siguen en prueba con grupos y pueden cambiar. Si quiere usarlas en un curso o taller de su organización, escríbame y las adaptamos a sus riesgos.</p>
-        </div>
-      </div>
-
-      <div class="games-grid">
-      <article class="game-card">
-        <div class="game-thumb" onclick="openTool('minikri', this.closest('.game-card').querySelector('.btn-open'))">
-          <img src="minijuegos/minijuego-kri.jpg" alt="Captura del minijuego Diseño de un KRI, en pixel art: un cuarto de servidores con el mentor, el riesgo cibernético al centro y el semáforo del indicador en amarillo" width="800" height="400" loading="lazy">
-          <span class="play" aria-hidden="true">▶ Jugar</span>
-        </div>
-        <div class="game-body">
-          <div class="tool-category">Indicadores clave de riesgo <span class="badge-beta">Beta</span></div>
-          <h3 class="tool-title">Diseño de un KRI</h3>
-          <p class="tool-description">Un riesgo de acceso indebido a datos de clientes y cinco decisiones: qué medir, con qué umbrales, cada cuánto, quién responde y qué hacer cuando el indicador se pone amarillo. Al final queda la ficha completa del indicador.</p>
-          <ul class="game-meta"><li>5 minutos</li><li>5 decisiones</li><li>Indicador, umbrales y responsable</li></ul>
-          <div class="game-actions">
-            <button class="btn-open" onclick="openTool('minikri', this)" aria-haspopup="dialog" aria-expanded="false">
-              Jugar la versión beta <span aria-hidden="true">→</span>
-            </button>
-            <a class="btn-link" href="minijuegos/Minijuego_KRI.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
-          </div>
-        </div>
-      </article>
-
-      <article class="game-card">
-        <div class="game-thumb" onclick="openTool('minibowtie', this.closest('.game-card').querySelector('.btn-open'))">
-          <img src="minijuegos/minijuego-bowtie.jpg" alt="Captura del minijuego Bow-tie, en pixel art: una bodega con un incendio al centro, el mentor a la izquierda y un operario a la derecha" width="800" height="400" loading="lazy">
-          <span class="play" aria-hidden="true">▶ Jugar</span>
-        </div>
-        <div class="game-body">
-          <div class="tool-category">Análisis causa-efecto <span class="badge-beta">Beta</span></div>
-          <h3 class="tool-title">Bow-tie: incendio en la bodega</h3>
-          <p class="tool-description">Ocho piezas alrededor de un incendio en la bodega de químicos. Ubique cada una como causa, barrera preventiva, barrera de mitigación o consecuencia y vea armarse el diagrama: unas barreras bajan la probabilidad y otras el impacto.</p>
-          <ul class="game-meta"><li>5 minutos</li><li>8 piezas</li><li>Causas, barreras y consecuencias</li></ul>
-          <div class="game-actions">
-            <button class="btn-open" onclick="openTool('minibowtie', this)" aria-haspopup="dialog" aria-expanded="false">
-              Jugar la versión beta <span aria-hidden="true">→</span>
-            </button>
-            <a class="btn-link" href="minijuegos/Minijuego_BowTie.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
-          </div>
-        </div>
-      </article>
-      </div>
-    </section>
   </main>
 
   <!-- Cierre: contacto -->
   <section class="contact" id="contacto" aria-labelledby="contact-title">
-    <div class="contact-inner">
+    <div class="contact-inner reveal">
       <p class="eyebrow">Contacto</p>
       <h2 id="contact-title">Conversemos</h2>
       <p>Si algo de esto le sirve a su organización, o si está montando un área de riesgos y no sabe por dónde empezar, escríbame. Respondo todo.</p>
@@ -646,7 +823,7 @@
         <h2 class="modal-title" id="modalTitle">Cargando herramienta...</h2>
         <div class="modal-tools">
           <a class="btn-newtab" id="newTabLink" href="#" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
-          <button class="btn-close" onclick="closeTool()" id="closeModalBtn" aria-label="Cerrar herramienta">✕ Cerrar</button>
+          <button type="button" class="btn-close" onclick="closeTool()" id="closeModalBtn" aria-label="Cerrar herramienta">✕ Cerrar</button>
         </div>
       </div>
       <div class="modal-body">
@@ -758,6 +935,47 @@
     document.addEventListener('focusin', function (event) {
       if (modal.classList.contains('active') && !modal.contains(event.target)) document.getElementById('closeModalBtn').focus();
     });
+
+    // Navegación: sección visible, menú en pantallas angostas y aparición suave al desplazarse
+    (function () {
+      const enlaces = Array.from(document.querySelectorAll('.nav-links a, .menu-movil a'));
+      const ids = Array.from(new Set(enlaces.map(a => a.getAttribute('href').slice(1))));
+      const marcarActivo = id => enlaces.forEach(a => {
+        const activo = a.getAttribute('href') === '#' + id;
+        a.classList.toggle('activo', activo);
+        if (activo) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+      });
+
+      const boton = document.querySelector('.menu-btn'), menu = document.getElementById('menu-movil');
+      const cerrarMenu = () => { menu.hidden = true; boton.setAttribute('aria-expanded', 'false'); };
+      boton.addEventListener('click', () => { const abrir = menu.hidden; menu.hidden = !abrir; boton.setAttribute('aria-expanded', String(abrir)); });
+      menu.addEventListener('click', e => { if (e.target.closest('a')) cerrarMenu(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) { cerrarMenu(); boton.focus(); } });
+
+      // Cada elemento aparece una sola vez; al terminar se le quita la clase para no interferir con el efecto al pasar el ratón
+      const mostrar = el => {
+        el.classList.add('visto');
+        if (!el.classList.contains('reveal')) return;
+        const fin = ev => { if (ev.target !== el) return; el.classList.remove('reveal', 'visto'); el.removeEventListener('transitionend', fin); };
+        el.addEventListener('transitionend', fin);
+      };
+      const animados = document.querySelectorAll('.reveal, .hm');
+      if (!('IntersectionObserver' in window)) { animados.forEach(mostrar); return; }
+      const observador = new IntersectionObserver(entradas => entradas.forEach(e => {
+        if (e.isIntersecting) { mostrar(e.target); observador.unobserve(e.target); }
+      }), { rootMargin: '0px 0px -6% 0px' });
+      animados.forEach(el => observador.observe(el));
+
+      const espia = new IntersectionObserver(entradas => entradas.forEach(e => { if (e.isIntersecting) marcarActivo(e.target.id); }),
+        { rootMargin: '-35% 0px -60% 0px' });
+      ids.forEach(id => { const s = document.getElementById(id); if (s) espia.observe(s); });
+      // Arriba, en la portada, ninguna sección queda marcada; al final de la página, la última sí, aunque sea corta
+      const primera = document.getElementById(ids[0]);
+      addEventListener('scroll', () => {
+        if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) marcarActivo(ids[ids.length - 1]);
+        else if (primera && primera.getBoundingClientRect().top > innerHeight * 0.4) marcarActivo(null);
+      }, { passive: true });
+    })();
   </script>
 </body>
 </html>
