@@ -16,10 +16,10 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://gmmg20.github.io/mateo-portafolio/Imagen_G.jpg">
   <meta property="og:url" content="https://gmmg20.github.io/mateo-portafolio/index-en.html">
-  <meta name="theme-color" content="#0f2b3c">
+  <meta name="theme-color" content="#14213d">
 
   <!-- Favicon optimizado en línea (SVG) -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2b3c'/><text x='50%' y='50%' font-family='sans-serif' font-size='45' font-weight='bold' fill='%2300a88f' text-anchor='middle' dominant-baseline='central'>MM</text></svg>" type="image/svg+xml">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2314213d'/><text x='50%' y='50%' font-family='sans-serif' font-size='45' font-weight='bold' fill='%23e9a23b' text-anchor='middle' dominant-baseline='central'>MM</text></svg>" type="image/svg+xml">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,21 +27,23 @@
 
   <style>
     :root {
-      --ink: #0f2b3c;
-      --ink-light: #1e3e54;
-      --acc: #00a88f;
-      --acc-text: #00806b;
-      --acc-soft: #e7f6f3;
-      --gold: #d4af37;
-      --gold-text: #7a5f0c;
-      --gold-soft: #fbf6e3;
-      --mist: #f4f7f6;
+      /* Tinta y ámbar: el ámbar es el color de la alerta temprana; se usa como único acento */
+      --ink: #14213d;
+      --ink-light: #1c2b4d;
+      --acc: #e9a23b;
+      --acc-light: #f2b84b;
+      --acc-text: #9a6412;
+      --acc-soft: #fbf0dc;
+      --gold: #e9a23b;
+      --gold-text: #7c4f0e;
+      --gold-soft: #fdf3e1;
+      --mist: #faf8f3;
       --card-bg: #ffffff;
-      --text: #1e293b;
-      --text-muted: #475569;
-      --border: #e2e8f0;
-      --shadow: 0 10px 25px -5px rgba(15, 43, 60, 0.08);
-      --shadow-hover: 0 18px 36px -10px rgba(15, 43, 60, 0.2);
+      --text: #1b2436;
+      --text-muted: #4f5b70;
+      --border: #e8e2d6;
+      --shadow: 0 10px 25px -5px rgba(20, 33, 61, 0.08);
+      --shadow-hover: 0 18px 36px -10px rgba(20, 33, 61, 0.2);
       --radius: 12px;
       --header-h: 68px;
     }
@@ -60,7 +62,9 @@
     [id] { scroll-margin-top: calc(var(--header-h) + 1rem); }
 
     /* Accesibilidad: foco visible y enlace para saltar al contenido */
-    *:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
+    *:focus-visible { outline: 3px solid var(--acc-text); outline-offset: 2px; }
+    header *:focus-visible, .hero *:focus-visible, .contact *:focus-visible, footer *:focus-visible,
+    .modal-header *:focus-visible, .tool-card.cta *:focus-visible { outline-color: var(--acc-light); }
     .skip-link {
       position: absolute; left: -9999px; top: 0; z-index: 200;
       background-color: var(--acc); color: var(--ink);
@@ -71,7 +75,7 @@
     /* ---- Encabezado: marca, secciones e idioma ---- */
     header {
       position: sticky; top: 0; z-index: 100;
-      background-color: rgba(15, 43, 60, 0.97);
+      background-color: rgba(20, 33, 61, 0.97);
       backdrop-filter: saturate(140%) blur(8px);
       color: #ffffff;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
@@ -82,8 +86,8 @@
     }
     .brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; }
     .logo-badge {
-      background: linear-gradient(135deg, var(--acc), var(--gold));
-      color: #fff; font-weight: 700; font-size: 1.1rem; padding: 0.4rem 0.75rem; border-radius: 8px;
+      background: var(--acc);
+      color: var(--ink); font-weight: 700; font-size: 1.1rem; padding: 0.4rem 0.75rem; border-radius: 8px;
     }
     .brand-title { font-weight: 600; font-size: 1.1rem; }
     .header-right { display: flex; align-items: center; gap: 1rem; }
@@ -108,7 +112,7 @@
     /* ---- Portada ---- */
     .hero {
       background:
-        radial-gradient(900px 420px at 88% 0%, rgba(0, 168, 143, 0.16), transparent 65%),
+        radial-gradient(900px 420px at 88% 0%, rgba(233, 162, 59, 0.14), transparent 65%),
         linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%);
       color: #ffffff;
       padding: 4.5rem 2rem 7rem;
@@ -119,7 +123,7 @@
       display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: 3.5rem; align-items: center;
     }
     .hero-subtitle {
-      color: var(--acc); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem; margin-bottom: 0.9rem;
+      color: var(--acc-light); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem; margin-bottom: 0.9rem;
     }
     .hero h1 {
       font-size: clamp(2.1rem, 4.6vw, 3.2rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 1.5rem;
@@ -138,8 +142,8 @@
     .btn-hero.primary { background-color: var(--acc); color: var(--ink); }
     .btn-hero.secondary { border-color: rgba(255, 255, 255, 0.3); color: #ffffff; }
     @media (hover: hover) {
-      .btn-hero.primary:hover { background-color: #2ac2ab; transform: translateY(-2px); }
-      .btn-hero.secondary:hover { border-color: var(--acc); color: var(--acc); transform: translateY(-2px); }
+      .btn-hero.primary:hover { background-color: var(--acc-light); transform: translateY(-2px); }
+      .btn-hero.secondary:hover { border-color: var(--acc-light); color: var(--acc-light); transform: translateY(-2px); }
     }
     /* Matriz decorativa: probabilidad (filas) por impacto (columnas) */
     .hero-visual { justify-self: end; }
@@ -148,7 +152,7 @@
     .hm .g { background: #2f9e6e; } .hm .y { background: #d9b23a; } .hm .o { background: #df7c3a; } .hm .r { background: #cf4538; }
     .hm .x::after {
       content: ""; position: absolute; width: 12px; height: 12px; left: 50%; top: 50%; margin: -6px 0 0 -6px;
-      border-radius: 50%; background: #ffffff; box-shadow: 0 0 0 3px rgba(15, 43, 60, 0.35);
+      border-radius: 50%; background: #ffffff; box-shadow: 0 0 0 3px rgba(20, 33, 61, 0.35);
     }
     .hm .foco { box-shadow: 0 0 0 3px #ffffff; animation: latido 2.4s ease-in-out infinite; }
     @keyframes latido { 50% { box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.15); } }
@@ -190,7 +194,7 @@
     .creds li { max-width: 62ch; }
     .creds li b { color: var(--text); font-weight: 600; }
     .demo-note {
-      padding: 0.9rem 1.1rem; background-color: var(--mist); border-left: 4px solid var(--gold);
+      padding: 0.9rem 1.1rem; background-color: var(--mist); border-left: 4px solid var(--acc);
       border-radius: 0 8px 8px 0; font-size: 0.93rem; line-height: 1.65; color: var(--text-muted);
     }
     .demo-note strong { color: var(--ink); }
@@ -217,22 +221,22 @@
       font-size: 0.72rem; letter-spacing: 0.5px; vertical-align: middle;
     }
     .badge-demo { background-color: var(--mist); border: 1px solid var(--border); color: var(--text-muted); }
-    .badge-beta { background-color: var(--gold-soft); border: 1px solid #ead9a0; color: var(--gold-text); }
+    .badge-beta { background-color: var(--gold-soft); border: 1px solid #ecd3a6; color: var(--gold-text); }
     .btn-open {
       background-color: var(--ink); color: #ffffff; border: none; padding: 0.85rem 1.25rem; border-radius: 8px;
       font-family: inherit; font-weight: 600; font-size: 0.95rem; cursor: pointer; text-decoration: none;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;
       transition: background-color 0.2s ease;
     }
-    .btn-open:hover, .btn-open:active { background-color: var(--acc); }
+    .btn-open:hover, .btn-open:active { background-color: var(--acc); color: var(--ink); }
     /* La tarjeta final invita al contacto: se distingue de las demostraciones */
     .tool-card.cta { background: linear-gradient(160deg, var(--ink) 0%, var(--ink-light) 100%); border-color: var(--ink); }
-    .tool-card.cta .tool-icon { background: rgba(255, 255, 255, 0.08); color: #5fd3bf; }
-    .tool-card.cta .tool-category { color: #5fd3bf; }
+    .tool-card.cta .tool-icon { background: rgba(255, 255, 255, 0.08); color: var(--acc-light); }
+    .tool-card.cta .tool-category { color: var(--acc-light); }
     .tool-card.cta .tool-title { color: #ffffff; }
     .tool-card.cta .tool-description { color: #cbd5e1; }
     .tool-card.cta .btn-open { background-color: var(--acc); color: var(--ink); }
-    .tool-card.cta .btn-open:hover { background-color: #2ac2ab; }
+    .tool-card.cta .btn-open:hover { background-color: var(--acc-light); }
     @media (hover: hover) {
       .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
     }
@@ -247,7 +251,7 @@
     .game-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
     .game-thumb .play {
       position: absolute; left: 1rem; bottom: 1rem; display: inline-flex; align-items: center; gap: 0.45rem;
-      background: rgba(15, 43, 60, 0.88); color: #ffffff; font-family: inherit; font-weight: 600; font-size: 0.88rem;
+      background: rgba(20, 33, 61, 0.88); color: #ffffff; font-family: inherit; font-weight: 600; font-size: 0.88rem;
       padding: 0.45rem 0.95rem; border-radius: 999px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
     }
     .game-body { padding: 1.6rem 1.75rem 1.75rem; display: flex; flex-direction: column; flex: 1; }
@@ -268,7 +272,7 @@
     /* ---- Cierre: contacto ---- */
     .contact { background-color: var(--ink); color: #cbd5e1; padding: 4rem 1.5rem; text-align: center; }
     .contact-inner { max-width: 640px; margin: 0 auto; }
-    .contact .eyebrow { color: #5fd3bf; }
+    .contact .eyebrow { color: var(--acc-light); }
     .contact h2 { color: #ffffff; font-size: 1.85rem; margin-bottom: 0.75rem; }
     .contact-inner > p { font-size: 1.05rem; line-height: 1.7; }
     .contact-actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem; }
@@ -280,12 +284,12 @@
     .btn-contact.primary { background-color: var(--acc); color: var(--ink); }
     .btn-contact.secondary { border-color: rgba(255, 255, 255, 0.3); color: #ffffff; }
     @media (hover: hover) {
-      .btn-contact.primary:hover { background-color: #2ac2ab; transform: translateY(-2px); }
-      .btn-contact.secondary:hover { border-color: var(--acc); color: var(--acc); transform: translateY(-2px); }
+      .btn-contact.primary:hover { background-color: var(--acc-light); transform: translateY(-2px); }
+      .btn-contact.secondary:hover { border-color: var(--acc-light); color: var(--acc-light); transform: translateY(-2px); }
     }
 
     /* ---- Pie ---- */
-    footer { background-color: #0b2231; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid var(--ink-light); }
+    footer { background-color: #0e1730; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid var(--ink-light); }
     .footer-inner {
       max-width: 1400px; margin: 0 auto; padding: 1.6rem 2rem;
       display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; justify-content: space-between; align-items: center;
@@ -293,11 +297,11 @@
     footer span { color: #ffffff; }
     .footer-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; }
     .footer-links a { color: #cbd5e1; text-decoration: none; }
-    .footer-links a:hover { color: var(--acc); text-decoration: underline; }
+    .footer-links a:hover { color: var(--acc-light); text-decoration: underline; }
 
     /* ---- Visor (ventana sobre la página) ---- */
     .modal-overlay {
-      position: fixed; inset: 0; background-color: rgba(15, 43, 60, 0.85); backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background-color: rgba(20, 33, 61, 0.85); backdrop-filter: blur(4px);
       display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem;
     }
     .modal-overlay.active { display: flex; animation: aparecer 0.25s ease; }
@@ -317,7 +321,7 @@
       transition: background 0.2s ease, border-color 0.2s ease;
     }
     .btn-newtab { color: #e2e8f0; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.25); }
-    .btn-newtab:hover, .btn-newtab:focus-visible { border-color: var(--acc); color: #ffffff; }
+    .btn-newtab:hover, .btn-newtab:focus-visible { border-color: var(--acc-light); color: #ffffff; }
     .btn-close { background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid transparent; }
     .btn-close:hover, .btn-close:focus-visible { background: rgba(239, 68, 68, 0.9); border-color: #fca5a5; }
     .modal-body { flex: 1; position: relative; background: #f8fafc; }
