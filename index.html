@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <!-- SEO Básico y Metadatos -->
   <title>Mateo Meléndez — Consultor de Riesgos Empresariales</title>
-  <meta name="description" content="Mateo Meléndez, consultor de riesgos empresariales. Riesgos que se gestionan, no que se documentan: matriz de riesgos, Bow Tie, apetito y tolerancia, y muestreo de auditoría, en funcionamiento.">
+  <meta name="description" content="Mateo Meléndez, consultor de riesgos empresariales. Riesgos que se gestionan, no que se documentan: matriz de riesgos, Bow Tie, apetito y tolerancia, muestreo de auditoría y juegos de formación, en funcionamiento.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="author" content="Mateo Meléndez">
-  
+
   <!-- Open Graph / Compartibilidad (LinkedIn, WhatsApp) -->
   <meta property="og:title" content="Mateo Meléndez — Consultor de Riesgos">
   <meta property="og:description" content="Los instrumentos con los que gestiono riesgos operativos y estratégicos. En funcionamiento, no en diapositivas.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://gmmg20.github.io/mateo-portafolio/Imagen_G.jpg">
   <meta property="og:url" content="https://gmmg20.github.io/mateo-portafolio/">
+  <meta name="theme-color" content="#0f2b3c">
 
   <!-- Favicon optimizado en línea (SVG) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2b3c'/><text x='50%' y='50%' font-family='sans-serif' font-size='45' font-weight='bold' fill='%2300a88f' text-anchor='middle' dominant-baseline='central'>MM</text></svg>" type="image/svg+xml">
@@ -23,30 +24,30 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <style>
     :root {
       --ink: #0f2b3c;
       --ink-light: #1e3e54;
       --acc: #00a88f;
       --acc-text: #00806b;
-      --acc-hover: #008f7a;
+      --acc-soft: #e7f6f3;
       --gold: #d4af37;
+      --gold-text: #7a5f0c;
+      --gold-soft: #fbf6e3;
       --mist: #f4f7f6;
       --card-bg: #ffffff;
       --text: #1e293b;
-      --text-muted: #475569; /* Contraste mejorado para accesibilidad */
+      --text-muted: #475569;
       --border: #e2e8f0;
       --shadow: 0 10px 25px -5px rgba(15, 43, 60, 0.08);
+      --shadow-hover: 0 18px 36px -10px rgba(15, 43, 60, 0.2);
       --radius: 12px;
+      --header-h: 68px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background-color: var(--mist);
@@ -54,612 +55,397 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
+    img { display: block; max-width: 100%; }
+    /* Las anclas no quedan tapadas por el encabezado fijo */
+    [id] { scroll-margin-top: calc(var(--header-h) + 1rem); }
 
-    /* Accesibilidad: Estilos de foco global */
-    *:focus-visible {
-      outline: 3px solid var(--acc);
-      outline-offset: 2px;
-    }
-
-    /* Header */
-    header {
-      background-color: var(--ink);
-      color: #ffffff;
-      padding: 1.25rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-      color: #fff;
-    }
-
-    .logo-badge {
-      background: linear-gradient(135deg, var(--acc), var(--gold));
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 0.4rem 0.75rem;
-      border-radius: 8px;
-    }
-
-    .badge-demo {
-      display: inline-block;
-      margin-left: 0.5rem;
-      padding: 0.1rem 0.45rem;
-      border-radius: 4px;
-      background-color: var(--mist);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 0.62rem;
-      letter-spacing: 0.5px;
-      vertical-align: middle;
-    }
-    .demo-note {
-      margin-top: 1.25rem;
-      padding: 0.9rem 1.1rem;
-      background-color: var(--mist);
-      border-left: 4px solid var(--gold);
-      border-radius: 0 8px 8px 0;
-      font-size: 0.93rem;
-      line-height: 1.65;
-      color: var(--text-muted);
-    }
-    .demo-note strong { color: var(--ink); }
+    /* Accesibilidad: foco visible y enlace para saltar al contenido */
+    *:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
     .skip-link {
-      position: absolute;
-      left: -9999px;
-      top: 0;
-      z-index: 200;
-      background-color: var(--acc);
-      color: var(--ink);
-      padding: 0.7rem 1.1rem;
-      border-radius: 0 0 8px 0;
-      font-weight: 700;
-      text-decoration: none;
+      position: absolute; left: -9999px; top: 0; z-index: 200;
+      background-color: var(--acc); color: var(--ink);
+      padding: 0.7rem 1.1rem; border-radius: 0 0 8px 0; font-weight: 700; text-decoration: none;
     }
     .skip-link:focus { left: 0; }
-    .lang-switch {
-      display: flex;
-      gap: 0.25rem;
-      align-items: center;
-    }
-    .lang-switch a {
-      color: #94a3b8;
-      text-decoration: none;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      padding: 0.35rem 0.6rem;
-      border-radius: 6px;
-      transition: color 0.2s ease, background-color 0.2s ease;
-    }
-    .lang-switch a[aria-current="page"] {
-      color: var(--ink);
-      background-color: var(--acc);
-    }
-    @media (hover: hover) {
-      .lang-switch a:not([aria-current]):hover {
-        color: #ffffff;
-        background-color: var(--ink-light);
-      }
-    }
-    .brand-title {
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
 
-    /* Hero Section */
-    .hero {
-      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%);
+    /* ---- Encabezado: marca, secciones e idioma ---- */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background-color: rgba(15, 43, 60, 0.97);
+      backdrop-filter: saturate(140%) blur(8px);
       color: #ffffff;
-      padding: 5rem 1.5rem 4rem;
-      text-align: center;
-      position: relative;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+    .header-inner {
+      max-width: 1400px; margin: 0 auto; height: var(--header-h); padding: 0 2rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;
+    }
+    .brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #fff; }
+    .logo-badge {
+      background: linear-gradient(135deg, var(--acc), var(--gold));
+      color: #fff; font-weight: 700; font-size: 1.1rem; padding: 0.4rem 0.75rem; border-radius: 8px;
+    }
+    .brand-title { font-weight: 600; font-size: 1.1rem; }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-links { display: flex; gap: 0.15rem; list-style: none; }
+    .nav-links a {
+      color: #cbd5e1; text-decoration: none; font-size: 0.92rem; font-weight: 500;
+      padding: 0.5rem 0.8rem; border-radius: 6px; transition: color 0.2s ease, background-color 0.2s ease;
+    }
+    .lang-switch { display: flex; gap: 0.25rem; align-items: center; padding-left: 1rem; border-left: 1px solid rgba(255, 255, 255, 0.15); }
+    .lang-switch a {
+      position: relative; color: #94a3b8; text-decoration: none; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.5px; padding: 0.35rem 0.6rem; border-radius: 6px; transition: color 0.2s ease, background-color 0.2s ease;
+    }
+    /* Área táctil de 44 px sin alterar el aspecto del selector */
+    .lang-switch a::after { content: ""; position: absolute; inset: -6px -2px; }
+    .lang-switch a[aria-current="page"] { color: var(--ink); background-color: var(--acc); }
+    @media (hover: hover) {
+      .nav-links a:hover { color: #ffffff; background-color: var(--ink-light); }
+      .lang-switch a:not([aria-current]):hover { color: #ffffff; background-color: var(--ink-light); }
     }
 
-    .hero-content {
-      max-width: 800px;
-      margin: 0 auto;
+    /* ---- Portada ---- */
+    .hero {
+      background:
+        radial-gradient(900px 420px at 88% 0%, rgba(0, 168, 143, 0.16), transparent 65%),
+        linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%);
+      color: #ffffff;
+      padding: 4.5rem 2rem 7rem;
+      overflow: hidden;
     }
-
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); gap: 3.5rem; align-items: center;
+    }
     .hero-subtitle {
-      color: var(--acc);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-size: 0.9rem;
-      margin-bottom: 0.75rem;
+      color: var(--acc); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem; margin-bottom: 0.9rem;
     }
-
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem); /* Tipografía fluida para móviles */
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 1.25rem;
+      font-size: clamp(2.1rem, 4.6vw, 3.2rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 1.5rem;
     }
-
-    .hero p {
-      font-size: clamp(1rem, 3vw, 1.2rem);
-      color: #e2e8f0;
-      margin-bottom: 2rem;
-    }
-
     .quote-badge {
-      display: inline-block;
-      background-color: rgba(255, 255, 255, 0.08);
-      border-left: 4px solid var(--acc);
-      padding: 0.75rem 1.25rem;
-      border-radius: 0 8px 8px 0;
-      font-style: italic;
-      color: #f8fafc;
+      display: inline-block; max-width: 40rem;
+      background-color: rgba(255, 255, 255, 0.08); border-left: 4px solid var(--acc);
+      padding: 0.85rem 1.25rem; border-radius: 0 8px 8px 0; font-style: italic; color: #f8fafc; font-size: 1.05rem;
     }
-
-    /* Main Container */
-    .container {
-      max-width: 1200px;
-      margin: -2rem auto 4rem;
-      padding: 0 1.5rem;
-      position: relative;
-      z-index: 10;
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2rem; }
+    .btn-hero {
+      display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.85rem 1.5rem; border-radius: 8px;
+      font-weight: 600; font-size: 0.98rem; text-decoration: none; border: 2px solid transparent;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
     }
-
-    .section-header {
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 2rem;
-      border: 1px solid var(--border);
+    .btn-hero.primary { background-color: var(--acc); color: var(--ink); }
+    .btn-hero.secondary { border-color: rgba(255, 255, 255, 0.3); color: #ffffff; }
+    @media (hover: hover) {
+      .btn-hero.primary:hover { background-color: #2ac2ab; transform: translateY(-2px); }
+      .btn-hero.secondary:hover { border-color: var(--acc); color: var(--acc); transform: translateY(-2px); }
     }
-
-    .section-header h2 {
-      color: var(--ink);
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+    /* Matriz decorativa: probabilidad (filas) por impacto (columnas) */
+    .hero-visual { justify-self: end; }
+    .hm { position: relative; display: grid; grid-template-columns: repeat(5, 46px); grid-auto-rows: 46px; gap: 6px; padding: 0 0 30px 30px; }
+    .hm span { border-radius: 8px; opacity: 0.9; position: relative; }
+    .hm .g { background: #2f9e6e; } .hm .y { background: #d9b23a; } .hm .o { background: #df7c3a; } .hm .r { background: #cf4538; }
+    .hm .x::after {
+      content: ""; position: absolute; width: 12px; height: 12px; left: 50%; top: 50%; margin: -6px 0 0 -6px;
+      border-radius: 50%; background: #ffffff; box-shadow: 0 0 0 3px rgba(15, 43, 60, 0.35);
     }
+    .hm .foco { box-shadow: 0 0 0 3px #ffffff; animation: latido 2.4s ease-in-out infinite; }
+    @keyframes latido { 50% { box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.15); } }
+    .hm-y, .hm-x { position: absolute; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #94a3b8; }
+    .hm-y { left: 0; top: 50%; transform: translate(-38%, -50%) rotate(-90deg); transform-origin: center; white-space: nowrap; margin-top: -15px; }
+    .hm-x { bottom: 0; left: 30px; right: 0; text-align: center; }
 
-    .section-header p {
-      color: var(--text-muted);
+    /* ---- Contenido ---- */
+    .container { max-width: 1400px; margin: -4rem auto 4rem; padding: 0 1.5rem; position: relative; z-index: 10; }
+
+    /* Cifras de trayectoria */
+    .stats {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+      margin-bottom: 2rem; list-style: none;
     }
+    .stat { padding: 1.4rem 1.75rem; border-left: 1px solid var(--border); }
+    .stat:first-child { border-left: 0; }
+    .stat b { display: block; font-size: 1.7rem; font-weight: 700; color: var(--ink); line-height: 1.15; letter-spacing: -0.01em; }
+    .stat span { display: block; margin-top: 0.2rem; font-size: 0.88rem; line-height: 1.45; color: var(--text-muted); }
 
-    /* Grid de Herramientas */
+    .eyebrow { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acc-text); margin-bottom: 0.45rem; }
+    .about, .section-header {
+      background: var(--card-bg); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow);
+      border: 1px solid var(--border); margin-bottom: 2rem;
+    }
+    .about p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.75; }
+    .about .about-punch { margin-top: 1.5rem; padding-left: 1.1rem; border-left: 4px solid var(--acc); color: var(--ink); font-weight: 600; }
+    .section-header h2 { color: var(--ink); font-size: 1.6rem; line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 0.6rem; }
+    .section-header p { color: var(--text-muted); }
+    /* Dos columnas: la medida de lectura se respeta por columna y el ancho se aprovecha con contenido */
+    .about-grid, .sec-grid {
+      display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 2.5rem; align-items: start;
+    }
+    .creds { border-left: 1px solid var(--border); padding-left: 2rem; }
+    .creds h3 { font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--acc-text); margin-bottom: 0.55rem; }
+    .creds ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.88rem; line-height: 1.5; color: var(--text-muted); margin-bottom: 1.4rem; }
+    .creds ul:last-child { margin-bottom: 0; }
+    .creds li { max-width: 62ch; }
+    .creds li b { color: var(--text); font-weight: 600; }
+    .demo-note {
+      padding: 0.9rem 1.1rem; background-color: var(--mist); border-left: 4px solid var(--gold);
+      border-radius: 0 8px 8px 0; font-size: 0.93rem; line-height: 1.65; color: var(--text-muted);
+    }
+    .demo-note strong { color: var(--ink); }
+
+    /* ---- Instrumentos ---- */
     .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); /* Ajustado minmax para móviles pequeños */
-      gap: 1.75rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;
     }
-
     .tool-card {
-      background-color: var(--card-bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      padding: 1.75rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      background-color: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);
+      padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-
-    @media (hover: hover) {
-      .tool-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px -5px rgba(15, 43, 60, 0.15);
-      }
+    .tool-icon {
+      width: 44px; height: 44px; border-radius: 10px; background: var(--acc-soft); color: var(--acc-text);
+      display: grid; place-items: center; margin-bottom: 1.1rem;
     }
-
-    .tool-category {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--acc);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.5rem;
+    .tool-icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .tool-category { font-size: 0.75rem; font-weight: 700; color: var(--acc-text); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+    .tool-title { color: var(--ink); font-size: 1.25rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.75rem; }
+    .tool-description { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1; }
+    .badge-demo, .badge-beta {
+      display: inline-block; margin-left: 0.5rem; padding: 0.1rem 0.45rem; border-radius: 4px;
+      font-size: 0.72rem; letter-spacing: 0.5px; vertical-align: middle;
     }
-
-    .tool-title {
-      color: var(--ink);
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-
-    .tool-description {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-      flex-grow: 1;
-    }
-
+    .badge-demo { background-color: var(--mist); border: 1px solid var(--border); color: var(--text-muted); }
+    .badge-beta { background-color: var(--gold-soft); border: 1px solid #ead9a0; color: var(--gold-text); }
     .btn-open {
-      background-color: var(--ink);
-      color: #ffffff;
-      border: none;
-      padding: 0.85rem 1.25rem; /* Área táctil ampliada para móviles */
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
+      background-color: var(--ink); color: #ffffff; border: none; padding: 0.85rem 1.25rem; border-radius: 8px;
+      font-family: inherit; font-weight: 600; font-size: 0.95rem; cursor: pointer; text-decoration: none;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;
       transition: background-color 0.2s ease;
-      width: 100%;
+    }
+    .btn-open:hover, .btn-open:active { background-color: var(--acc); }
+    /* La tarjeta final invita al contacto: se distingue de las demostraciones */
+    .tool-card.cta { background: linear-gradient(160deg, var(--ink) 0%, var(--ink-light) 100%); border-color: var(--ink); }
+    .tool-card.cta .tool-icon { background: rgba(255, 255, 255, 0.08); color: #5fd3bf; }
+    .tool-card.cta .tool-category { color: #5fd3bf; }
+    .tool-card.cta .tool-title { color: #ffffff; }
+    .tool-card.cta .tool-description { color: #cbd5e1; }
+    .tool-card.cta .btn-open { background-color: var(--acc); color: var(--ink); }
+    .tool-card.cta .btn-open:hover { background-color: #2ac2ab; }
+    @media (hover: hover) {
+      .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
     }
 
-    .btn-open:hover, .btn-open:active {
-      background-color: var(--acc);
+    /* ---- Formación: juegos ---- */
+    .games-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; }
+    .game-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+      overflow: hidden; display: flex; flex-direction: column; transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .game-thumb { position: relative; display: block; width: 100%; border: 0; padding: 0; cursor: pointer; background: #0a0e1f; aspect-ratio: 2 / 1; overflow: hidden; }
+    .game-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .game-thumb .play {
+      position: absolute; left: 1rem; bottom: 1rem; display: inline-flex; align-items: center; gap: 0.45rem;
+      background: rgba(15, 43, 60, 0.88); color: #ffffff; font-family: inherit; font-weight: 600; font-size: 0.88rem;
+      padding: 0.45rem 0.95rem; border-radius: 999px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+    .game-body { padding: 1.6rem 1.75rem 1.75rem; display: flex; flex-direction: column; flex: 1; }
+    .game-meta { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.5rem; }
+    .game-meta li {
+      font-size: 0.8rem; font-weight: 500; color: var(--ink); background: var(--mist);
+      border: 1px solid var(--border); border-radius: 999px; padding: 0.22rem 0.7rem;
+    }
+    .game-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-top: auto; }
+    .game-actions .btn-open { width: auto; flex: 1 1 12rem; }
+    .btn-link { color: var(--acc-text); font-weight: 600; font-size: 0.92rem; text-decoration: none; padding: 0.75rem 0.25rem; }
+    .btn-link:hover { text-decoration: underline; }
+    @media (hover: hover) {
+      .game-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+      .game-card:hover .game-thumb img { transform: scale(1.03); }
     }
 
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(15, 43, 60, 0.85);
-      backdrop-filter: blur(4px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 1rem; /* Reducido para maximizar espacio en móvil */
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-      opacity: 1;
-    }
-
-    .modal-container {
-      background: #ffffff;
-      width: 100%;
-      max-width: 1280px;
-      height: 95vh; /* Altura generosa para iframes en móvil */
-      border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-    }
-
-    .modal-header {
-      background-color: var(--ink);
-      color: #ffffff;
-      padding: 0.85rem 1.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-title {
-      font-weight: 600;
-      font-size: 1.1rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding-right: 1rem;
-    }
-
-    .btn-close {
-      background: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
-      border: 1px solid transparent;
-      padding: 0.5rem 1rem; /* Área táctil optimizada */
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s ease;
-    }
-
-    .btn-close:hover, .btn-close:focus-visible {
-      background: rgba(239, 68, 68, 0.9);
-      border-color: #fca5a5;
-    }
-
-    .modal-body {
-      flex: 1;
-      width: 100%;
-      height: 100%;
-      background: #f8fafc;
-      position: relative;
-    }
-    
-    /* Skeleton loader visual mientras carga el iframe */
-    .iframe-loader {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--text-muted);
-      font-weight: 500;
-      z-index: 1;
-    }
-
-    .modal-body iframe {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: transparent;
-    }
-
-    /* Footer */
-    footer {
-      background-color: var(--ink);
-      color: #94a3b8;
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.9rem;
-      border-top: 1px solid var(--ink-light);
-    }
-
-    footer p span {
-      color: #ffffff;
-    }
-
-    /* Ajustes específicos para móviles */
     /* ---- Cierre: contacto ---- */
-    .contact {
-      background-color: var(--ink);
-      color: #cbd5e1;
-      padding: 3.5rem 1.5rem;
-      text-align: center;
-    }
-    .contact-inner {
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    .contact h2 {
-      color: #ffffff;
-      font-size: 1.75rem;
-      margin-bottom: 0.75rem;
-    }
-    .contact > .contact-inner > p {
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-    .contact-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-      margin: 2rem 0 1.5rem;
-    }
+    .contact { background-color: var(--ink); color: #cbd5e1; padding: 4rem 1.5rem; text-align: center; }
+    .contact-inner { max-width: 640px; margin: 0 auto; }
+    .contact .eyebrow { color: #5fd3bf; }
+    .contact h2 { color: #ffffff; font-size: 1.85rem; margin-bottom: 0.75rem; }
+    .contact-inner > p { font-size: 1.05rem; line-height: 1.7; }
+    .contact-actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem; }
     .btn-contact {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.9rem 1.6rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.98rem;
-      text-decoration: none;
-      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
-      border: 2px solid transparent;
+      display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.6rem; border-radius: 8px;
+      font-weight: 600; font-size: 0.98rem; text-decoration: none; border: 2px solid transparent;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
     }
-    .btn-contact.primary {
-      background-color: var(--acc);
-      color: var(--ink);
-    }
-    .btn-contact.secondary {
-      border-color: rgba(255, 255, 255, 0.3);
-      color: #ffffff;
-    }
+    .btn-contact.primary { background-color: var(--acc); color: var(--ink); }
+    .btn-contact.secondary { border-color: rgba(255, 255, 255, 0.3); color: #ffffff; }
     @media (hover: hover) {
       .btn-contact.primary:hover { background-color: #2ac2ab; transform: translateY(-2px); }
       .btn-contact.secondary:hover { border-color: var(--acc); color: var(--acc); transform: translateY(-2px); }
     }
-    .contact-note {
-      font-size: 0.92rem;
-      color: #94a3b8;
-      border-top: 1px solid var(--ink-light);
-      padding-top: 1.5rem;
-    }
-    .contact-note strong { color: #e2e8f0; font-weight: 600; }
-    @media (max-width: 480px) {
-      .contact { padding: 2.5rem 1.25rem; }
-      .contact h2 { font-size: 1.45rem; }
-      .contact-actions { flex-direction: column; }
-      .btn-contact { justify-content: center; }
-    }
 
-    /* ---- Presentación ---- */
-    .about {
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      margin-bottom: 2rem;
+    /* ---- Pie ---- */
+    footer { background-color: #0b2231; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid var(--ink-light); }
+    .footer-inner {
+      max-width: 1400px; margin: 0 auto; padding: 1.6rem 2rem;
+      display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; justify-content: space-between; align-items: center;
     }
-    .about p {
-      color: var(--text-muted);
-      font-size: 1.02rem;
-      line-height: 1.75;
-    }
-    .about .about-punch {
-      margin-top: 1.5rem;
-      padding-left: 1.1rem;
-      border-left: 4px solid var(--acc);
-      color: var(--ink);
-      font-weight: 600;
-    }
-    @media (max-width: 480px) {
-      .about { padding: 1.25rem; }
-      .about p { font-size: 0.98rem; }
-    }
+    footer span { color: #ffffff; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; }
+    .footer-links a { color: #cbd5e1; text-decoration: none; }
+    .footer-links a:hover { color: var(--acc); text-decoration: underline; }
 
-    /* ---- Tablet y móvil grande ---- */
+    /* ---- Visor (ventana sobre la página) ---- */
+    .modal-overlay {
+      position: fixed; inset: 0; background-color: rgba(15, 43, 60, 0.85); backdrop-filter: blur(4px);
+      display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem;
+    }
+    .modal-overlay.active { display: flex; animation: aparecer 0.25s ease; }
+    @keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+    .modal-container {
+      background: #ffffff; width: 100%; max-width: 1280px; height: 95vh; border-radius: var(--radius);
+      display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+    }
+    .modal-header {
+      background-color: var(--ink); color: #ffffff; padding: 0.75rem 1.1rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    }
+    .modal-title { font-weight: 600; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .modal-tools { display: flex; align-items: center; gap: 0.5rem; flex: none; }
+    .btn-newtab, .btn-close {
+      font-family: inherit; font-weight: 600; font-size: 0.88rem; padding: 0.5rem 0.95rem; border-radius: 6px; cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .btn-newtab { color: #e2e8f0; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.25); }
+    .btn-newtab:hover, .btn-newtab:focus-visible { border-color: var(--acc); color: #ffffff; }
+    .btn-close { background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid transparent; }
+    .btn-close:hover, .btn-close:focus-visible { background: rgba(239, 68, 68, 0.9); border-color: #fca5a5; }
+    .modal-body { flex: 1; position: relative; background: #f8fafc; }
+    .iframe-loader {
+      position: absolute; inset: 0; display: flex; flex-direction: column; gap: 0.9rem; align-items: center; justify-content: center;
+      color: var(--text-muted); font-weight: 500;
+    }
+    .iframe-loader::before {
+      content: ""; width: 34px; height: 34px; border-radius: 50%;
+      border: 3px solid var(--border); border-top-color: var(--acc); animation: girar 0.9s linear infinite;
+    }
+    @keyframes girar { to { transform: rotate(360deg); } }
+    .modal-body iframe { position: relative; z-index: 2; width: 100%; height: 100%; border: none; background: transparent; }
+
+    /* ---- Pantallas medianas y pequeñas ---- */
+    @media (min-width: 1001px) {
+      .stats { margin-top: 0; }
+    }
+    @media (max-width: 1000px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .about-grid, .sec-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+      /* Apiladas, las tarjetas se estrechan a la medida de lectura */
+      .about, .section-header, .stats { max-width: 760px; margin-left: auto; margin-right: auto; }
+      .creds { border-left: 0; border-top: 1px solid var(--border); padding-left: 0; padding-top: 1.5rem; }
+      .games-grid { grid-template-columns: 1fr; max-width: 760px; margin: 0 auto; }
+    }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .lang-switch { border-left: 0; padding-left: 0; }
+    }
     @media (max-width: 768px) {
-      header { padding: 1.1rem 1.5rem; }
-      .hero { padding: 3.5rem 1.5rem 3rem; }
+      .header-inner { padding: 0 1.25rem; }
+      .hero { padding: 3.25rem 1.5rem 6rem; }
       .container { padding: 0 1rem; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stat:nth-child(3) { border-left: 0; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--border); }
       .section-header, .about { padding: 1.5rem; }
       .tool-card { padding: 1.5rem; }
       .tools-grid { gap: 1.25rem; }
-      .contact { padding: 3rem 1.5rem; }
+      .game-body { padding: 1.35rem 1.4rem 1.5rem; }
       .modal-container { height: 92vh; }
     }
-
     @media (max-width: 480px) {
-      .container {
-        margin-top: -1rem;
-      }
-      .section-header, .tool-card {
-        padding: 1.25rem;
-      }
-      header {
-        padding: 1rem;
-      }
-    }
-    /* ---- Ajustes finales: van al final para vencer en la cascada ---- */
-    /* Medida de lectura: sin tope, estos parrafos corrian a 130 caracteres por linea */
-    /* Dos columnas: la medida de lectura se respeta por columna y el ancho
-       de pantalla se aprovecha con contenido, no con lineas mas largas. */
-    .container {
-      max-width: 1200px;
-    }
-    .about-grid,
-    .sec-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
-      gap: 2.5rem;
-      align-items: start;
-    }
-    .creds {
-      border-left: 1px solid var(--border);
-      padding-left: 2rem;
-    }
-    .creds h3 {
-      font-size: 0.72rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--acc-text);
-      margin-bottom: 0.55rem;
-    }
-    .creds ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      font-size: 0.88rem;
-      line-height: 1.5;
-      color: var(--text-muted);
-      margin-bottom: 1.4rem;
-    }
-    .creds ul:last-child { margin-bottom: 0; }
-    .creds li { max-width: 62ch; }
-    .creds li b { color: var(--text); font-weight: 600; }
-    .sec-grid .demo-note { margin-top: 0; }
-    @media (max-width: 1000px) {
-      .about-grid,
-      .sec-grid {
-        grid-template-columns: 1fr;
-        gap: 1.75rem;
-      }
-      /* Apiladas, las tarjetas se estrechan a la medida de lectura:
-         a todo el ancho el texto llegaba a 90 caracteres por linea. */
-      .about,
-      .section-header {
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .creds {
-        border-left: 0;
-        border-top: 1px solid var(--border);
-        padding-left: 0;
-        padding-top: 1.5rem;
-      }
-    }
-    /* Contraste AA para texto pequeno sobre blanco */
-    .tool-category {
-      color: var(--acc-text);
-    }
-    /* Area tactil de 44px sin alterar el aspecto del selector */
-    .lang-switch a {
-      position: relative;
-    }
-    .lang-switch a::after {
-      content: "";
-      position: absolute;
-      inset: -6px -2px;
-    }
-    .badge-demo {
-      font-size: 0.72rem;
-    }
-
-    @media (max-width: 420px) {
+      :root { --header-h: 60px; }
+      .header-inner { padding: 0 1rem; }
+      .brand-title { font-size: 1rem; }
+      .hero-actions { flex-direction: column; }
+      .btn-hero { justify-content: center; }
+      .stat { padding: 1.1rem 1.15rem; }
+      .stat b { font-size: 1.4rem; }
+      .section-header, .about, .tool-card { padding: 1.25rem; }
+      .about p { font-size: 0.98rem; }
       .demo-note { padding: 0.8rem 0.85rem; }
-      .tool-card { padding: 1.15rem; }
+      .contact { padding: 3rem 1.25rem; }
+      .contact h2 { font-size: 1.5rem; }
+      .contact-actions { flex-direction: column; }
+      .btn-contact { justify-content: center; }
+      .modal-overlay { padding: 0.5rem; }
+      .modal-title { font-size: 0.95rem; }
+      .btn-newtab { display: none; }
     }
-    /* El contenido llegaba solo a 1200px: en un monitor de 1920 quedaban
-       350px muertos a cada lado. */
-    .container {
-      max-width: 1400px;
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
-    /* Con el contenedor mas ancho, la columna de texto crecia a 87 car./linea.
-       Se reequilibra el reparto para mantener la medida de lectura. */
-    @media (min-width: 1001px) {
-      .about-grid,
-      .sec-grid {
-        grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
-      }
-    }
-    /* La tarjeta 6 usa un enlace donde las otras usan boton */
-    a.btn-open { text-decoration: none; }
   </style>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <!-- Header -->
+  <!-- Encabezado -->
   <header>
-    <a href="./" class="brand" aria-label="Mateo Meléndez - Inicio">
-      <div class="logo-badge" aria-hidden="true">MM</div>
-      <div class="brand-title">Mateo Meléndez</div>
-    </a>
-    <nav class="lang-switch" aria-label="Idioma">
-      <a href="./" aria-current="page">ES</a>
-      <a href="index-en.html">EN</a>
-    </nav>
+    <div class="header-inner">
+      <a href="./" class="brand" aria-label="Mateo Meléndez - Inicio">
+        <div class="logo-badge" aria-hidden="true">MM</div>
+        <div class="brand-title">Mateo Meléndez</div>
+      </a>
+      <div class="header-right">
+        <nav aria-label="Secciones">
+          <ul class="nav-links">
+            <li><a href="#perfil">Perfil</a></li>
+            <li><a href="#instrumentos">Instrumentos</a></li>
+            <li><a href="#formacion">Formación</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+          </ul>
+        </nav>
+        <nav class="lang-switch" aria-label="Idioma">
+          <a href="./" aria-current="page">ES</a>
+          <a href="index-en.html">EN</a>
+        </nav>
+      </div>
+    </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Portada -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-content">
-      <p class="hero-subtitle">Consultor de Riesgos Empresariales</p>
-      <h1 id="hero-title">Gestión de riesgos, en funcionamiento</h1>
-      <div class="quote-badge">
-        “Riesgos que se gestionan, no que se documentan. Estos son los instrumentos con los que lo hago.”
+    <div class="hero-inner">
+      <div>
+        <p class="hero-subtitle">Consultor de Riesgos Empresariales</p>
+        <h1 id="hero-title">Gestión de riesgos, en funcionamiento</h1>
+        <div class="quote-badge">“Riesgos que se gestionan, no que se documentan. Estos son los instrumentos con los que lo hago.”</div>
+        <div class="hero-actions">
+          <a class="btn-hero primary" href="#instrumentos">Ver los instrumentos <span aria-hidden="true">→</span></a>
+          <a class="btn-hero secondary" href="#contacto">Conversemos</a>
+        </div>
       </div>
+      <div class="hero-visual"><div class="hm" aria-hidden="true"><span class="y"></span><span class="o"></span><span class="o x"></span><span class="r"></span><span class="r"></span><span class="y"></span><span class="y"></span><span class="o"></span><span class="o x"></span><span class="r x foco"></span><span class="g"></span><span class="y x"></span><span class="y"></span><span class="o"></span><span class="o"></span><span class="g"></span><span class="g"></span><span class="y"></span><span class="y x"></span><span class="o"></span><span class="g"></span><span class="g"></span><span class="g"></span><span class="y"></span><span class="y"></span><div class="hm-y">Probabilidad</div><div class="hm-x">Impacto</div></div></div>
     </div>
   </section>
 
   <!-- Contenido principal -->
   <main class="container" id="contenido">
+    <ul class="stats" aria-label="Trayectoria en cifras">
+      <li class="stat"><b>5 años</b><span>de auditoría interna en Deloitte</span></li>
+      <li class="stat"><b>10+</b><span>auditorías internas ejecutadas</span></li>
+      <li class="stat"><b>SOX</b><span>lideré el testeo de controles</span></li>
+      <li class="stat"><b>7</b><span>instrumentos y juegos en vivo</span></li>
+    </ul>
+
     <!-- Presentación -->
-    <section class="about">
+    <section class="about" id="perfil" aria-labelledby="titulo-perfil">
       <div class="about-grid">
         <div>
-          <p>Soy consultor de riesgos empresariales en Marsh. Antes pas&eacute; cinco a&ntilde;os en Deloitte como auditor interno senior, donde ejecut&eacute; m&aacute;s de diez auditor&iacute;as y lider&eacute; el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy dise&ntilde;o metodolog&iacute;as, pol&iacute;ticas e indicadores clave de riesgo para empresas de varios sectores y tama&ntilde;os, y facilito los talleres donde esos riesgos se discuten con los comit&eacute;s directivos.</p>
-      <p class="about-punch">Las herramientas de esta p&aacute;gina salieron de ese trabajo: las constru&iacute; porque las necesitaba.</p>
+          <h2 class="eyebrow" id="titulo-perfil">Perfil</h2>
+          <p>Soy consultor de riesgos empresariales en Marsh. Antes pasé cinco años en Deloitte como auditor interno senior, donde ejecuté más de diez auditorías y lideré el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy diseño metodologías, políticas e indicadores clave de riesgo para empresas de varios sectores y tamaños, y facilito los talleres donde esos riesgos se discuten con los comités directivos.</p>
+          <p class="about-punch">Las herramientas de esta página salieron de ese trabajo: las construí porque las necesitaba.</p>
         </div>
         <aside class="creds">
           <h3>Trayectoria</h3>
@@ -667,13 +453,13 @@
             <li><b>Marsh</b> &middot; Consultor de Riesgos Empresariales &mdash; 2024 a hoy</li>
             <li><b>Deloitte</b> &middot; Auditor Interno Senior, Risk Advisory &mdash; 2019 a 2024</li>
           </ul>
-          <h3>Formaci&oacute;n</h3>
+          <h3>Formación</h3>
           <ul>
-            <li><b>Especializaci&oacute;n en Administraci&oacute;n Financiera</b> &mdash; Universidad EAN, 2025</li>
+            <li><b>Especialización en Administración Financiera</b> &mdash; Universidad EAN, 2025</li>
             <li>Diplomado <b>SARLAFT 4.0</b> &mdash; Javeriana Cali, 2024</li>
             <li><b>Scrum Master</b> Professional &mdash; CertiProf, 2021</li>
             <li>Datos e inteligencia de negocios &mdash; EAN, 2019</li>
-            <li>Administraci&oacute;n de Empresas &mdash; EAN y Universit&eacute; du Qu&eacute;bec &agrave; Chicoutimi</li>
+            <li>Administración de Empresas &mdash; EAN y Université du Québec à Chicoutimi</li>
           </ul>
           <h3>Herramientas</h3>
           <ul>
@@ -683,20 +469,24 @@
       </div>
     </section>
 
-    <div class="section-header">
-      <div class="sec-grid">
-        <div>
-          <h2>Instrumentos de trabajo</h2>
-          <p>Cada uno resuelve un problema que me he encontrado en campo: valorar y priorizar, mapear causas y barreras, homologar matrices dispares, fijar umbrales de apetito y decidir cuánto probar. Están en vivo: ábralos y úselos.</p>
+    <!-- Instrumentos -->
+    <section id="instrumentos" aria-labelledby="titulo-instrumentos">
+      <div class="section-header">
+        <div class="sec-grid">
+          <div>
+            <p class="eyebrow">Demostraciones interactivas</p>
+            <h2 id="titulo-instrumentos">Instrumentos de trabajo</h2>
+            <p>Cada uno resuelve un problema que me he encontrado en campo: valorar y priorizar, mapear causas y barreras, homologar matrices dispares, fijar umbrales de apetito y decidir cuánto probar. Están en vivo: ábralos y úselos.</p>
+          </div>
+          <p class="demo-note"><strong>Son versiones demostrativas.</strong> Están simplificadas a propósito y traen datos de ejemplo: sirven para mostrar el enfoque en cinco minutos, no para operar. Las versiones completas se parametrizan con la metodología, las escalas de valoración y los reportes de cada organización. Si le interesa alguna en serio, escríbame y se la muestro funcionando de verdad.</p>
         </div>
-        <p class="demo-note"><strong>Son versiones demostrativas.</strong> Están simplificadas a propósito y traen datos de ejemplo: sirven para mostrar el enfoque en cinco minutos, no para operar. Las versiones completas se parametrizan con la metodología, las escalas de valoración y los reportes de cada organización. Si le interesa alguna en serio, escríbame y se la muestro funcionando de verdad.</p>
       </div>
-    </div>
 
-    <div class="tools-grid">
+      <div class="tools-grid">
       <!-- Tarjeta 1 -->
       <article class="tool-card">
         <div>
+          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
           <div class="tool-category">Matriz de Riesgos <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Matriz de Riesgos de Procesos</h3>
           <p class="tool-description">Tiene cuarenta riesgos en la matriz y capacidad para atender cinco. Ordénelos por magnitud real y sustente ante el comité por qué esos cinco.</p>
@@ -709,6 +499,7 @@
       <!-- Tarjeta 2 -->
       <article class="tool-card">
         <div>
+          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12 3 6v12zM12 12l9-6v12z"/><circle cx="12" cy="12" r="1.5"/></svg></div>
           <div class="tool-category">Análisis Causa-Efecto <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">RiskVantage — Bow Tie</h3>
           <p class="tool-description">Un evento se materializó: la pregunta es por dónde entró y qué barrera falló. Separe causas de consecuencias y deje ver dónde está descubierto.</p>
@@ -721,6 +512,7 @@
       <!-- Tarjeta 3 -->
       <article class="tool-card">
         <div>
+          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg></div>
           <div class="tool-category">Normalización de Datos <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Consolidador de Matrices</h3>
           <p class="tool-description">Cada área entregó su matriz en un formato distinto. Homologue las estructuras, detecte el mismo riesgo escrito de tres maneras y deje una sola base.</p>
@@ -733,6 +525,7 @@
       <!-- Tarjeta 4 -->
       <article class="tool-card">
         <div>
+          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="m12 17 4.5-5"/><circle cx="12" cy="17" r="1.3"/></svg></div>
           <div class="tool-category">Capacidad y Exposición <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Apetito y Tolerancia al Riesgo</h3>
           <p class="tool-description">La junta pregunta cuánto riesgo puede asumir la compañía. Traduzca la capacidad financiera a umbrales de apetito y tolerancia que pueda defender.</p>
@@ -745,6 +538,7 @@
       <!-- Tarjeta 5 -->
       <article class="tool-card">
         <div>
+          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8M8 10.5h5"/></svg></div>
           <div class="tool-category">Control y Auditoría <span class="badge-demo">Demo</span></div>
           <h3 class="tool-title">Muestreo de Auditoría</h3>
           <p class="tool-description">Tiene que probar un control y no sabe cuántas partidas revisar. Calcule el tamaño de muestra y deje documentado el sustento estadístico.</p>
@@ -755,22 +549,79 @@
       </article>
 
       <!-- Tarjeta 6: cierra la rejilla y lleva al contacto -->
-      <article class="tool-card">
+      <article class="tool-card cta">
         <div>
+          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></div>
           <div class="tool-category">A la medida</div>
-          <h3 class="tool-title">&iquest;Su caso no est&aacute; aqu&iacute;?</h3>
-          <p class="tool-description">Estas cinco salieron de necesidades concretas. Si la suya es otra, probablemente se resuelve con el mismo m&eacute;todo: escr&iacute;bame y la miramos.</p>
+          <h3 class="tool-title">¿Su caso no está aquí?</h3>
+          <p class="tool-description">Estas cinco salieron de necesidades concretas. Si la suya es otra, probablemente se resuelve con el mismo método: escríbame y la miramos.</p>
         </div>
         <a class="btn-open" href="mailto:mmelendezgomez@gmail.com?subject=Contacto%20desde%20el%20portafolio">
           Escribirme <span aria-hidden="true">&rarr;</span>
         </a>
       </article>
-    </div>
+      </div>
+    </section>
+
+    <!-- Formación: juegos (beta) -->
+    <section id="formacion" aria-labelledby="titulo-formacion">
+      <div class="section-header">
+        <div class="sec-grid">
+          <div>
+            <p class="eyebrow">Formación y cultura de riesgos</p>
+            <h2 id="titulo-formacion">Juegos para aprender a gestionar riesgos</h2>
+            <p>La cultura de riesgos no se instala con diapositivas. Para cursos y talleres diseñé dos juegos de rol que se juegan en el navegador, sin instalar nada: el participante enfrenta los riesgos de una empresa ficticia y decide cómo gestionarlos, guiado por un mentor. Ambos traen modo facilitador para jugar en grupo con el juego proyectado, y una prueba de entrada y salida para medir lo aprendido.</p>
+          </div>
+          <p class="demo-note"><strong>Son versiones beta.</strong> Funcionan completas, pero siguen en prueba con grupos y pueden cambiar. Están en español y se disfrutan más en computador y con sonido; también responden a pantallas táctiles.</p>
+        </div>
+      </div>
+
+      <div class="games-grid">
+      <article class="game-card">
+        <div class="game-thumb" onclick="openTool('riskquestgo', this.closest('.game-card').querySelector('.btn-open'))">
+          <img src="juegos/riskquest-go.jpg" alt="Captura de RiskQuest Go: la planta de producción de una empresa ficticia, con los riesgos del piso señalados para enfrentarlos" width="800" height="400" loading="lazy">
+          <span class="play" aria-hidden="true">▶ Jugar</span>
+        </div>
+        <div class="game-body">
+          <div class="tool-category">Cultura de riesgos · Todo público <span class="badge-beta">Beta</span></div>
+          <h3 class="tool-title">RiskQuest Go</h3>
+          <p class="tool-description">Para quien parte de cero. En seis pisos de una empresa ficticia aprende, una idea a la vez, qué es un riesgo, sus causas y consecuencias, el semáforo de probabilidad e impacto, las cuatro respuestas, los controles y los indicadores. Nadie pierde: si se equivoca, el mentor le explica y vuelve a intentarlo.</p>
+          <ul class="game-meta"><li>20 a 30 minutos</li><li>Desde cero</li><li>Lectura en voz alta</li></ul>
+          <div class="game-actions">
+            <button class="btn-open" onclick="openTool('riskquestgo', this)" aria-haspopup="dialog" aria-expanded="false">
+              Jugar la versión beta <span aria-hidden="true">→</span>
+            </button>
+            <a class="btn-link" href="juegos/RiskQuest_Go.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card">
+        <div class="game-thumb" onclick="openTool('riskquest', this.closest('.game-card').querySelector('.btn-open'))">
+          <img src="juegos/riskquest.jpg" alt="Captura de RiskQuest: enfrentamiento por turnos contra un riesgo de ciberseguridad, con su nivel inherente y residual" width="800" height="400" loading="lazy">
+          <span class="play" aria-hidden="true">▶ Jugar</span>
+        </div>
+        <div class="game-body">
+          <div class="tool-category">Gestión de riesgos aplicada <span class="badge-beta">Beta</span></div>
+          <h3 class="tool-title">RiskQuest</h3>
+          <p class="tool-description">Para equipos que ya manejan lo básico. Ocho pisos y veinticinco riesgos: evaluar en una matriz de 5×5, distinguir el riesgo inherente del residual, decidir con presupuesto limitado, transferir con pólizas, leer indicadores clave de riesgo y rendir cuentas ante el directorio.</p>
+          <ul class="game-meta"><li>45 a 60 minutos</li><li>Analistas y líderes de proceso</li><li>Modo facilitador</li></ul>
+          <div class="game-actions">
+            <button class="btn-open" onclick="openTool('riskquest', this)" aria-haspopup="dialog" aria-expanded="false">
+              Jugar la versión beta <span aria-hidden="true">→</span>
+            </button>
+            <a class="btn-link" href="juegos/RiskQuest.html" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </article>
+      </div>
+    </section>
   </main>
 
   <!-- Cierre: contacto -->
-  <section class="contact" aria-labelledby="contact-title">
+  <section class="contact" id="contacto" aria-labelledby="contact-title">
     <div class="contact-inner">
+      <p class="eyebrow">Contacto</p>
       <h2 id="contact-title">Conversemos</h2>
       <p>Si algo de esto le sirve a su organización, o si está montando un área de riesgos y no sabe por dónde empezar, escríbame. Respondo todo.</p>
       <div class="contact-actions">
@@ -784,24 +635,33 @@
     </div>
   </section>
 
-  <!-- Modal para visualizar la herramienta -->
+  <!-- Visor de herramientas y juegos -->
   <div class="modal-overlay" id="toolModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-container">
       <div class="modal-header">
         <h2 class="modal-title" id="modalTitle">Cargando herramienta...</h2>
-        <button class="btn-close" onclick="closeTool()" id="closeModalBtn" aria-label="Cerrar herramienta">✕ Cerrar</button>
+        <div class="modal-tools">
+          <a class="btn-newtab" id="newTabLink" href="#" target="_blank" rel="noopener">Abrir en pestaña nueva <span aria-hidden="true">↗</span></a>
+          <button class="btn-close" onclick="closeTool()" id="closeModalBtn" aria-label="Cerrar herramienta">✕ Cerrar</button>
+        </div>
       </div>
       <div class="modal-body">
         <div class="iframe-loader">Cargando...</div>
-        <!-- Rendimiento: Se agrega loading="lazy" -->
-        <iframe id="toolFrame" src="about:blank" loading="lazy" title="Visor de herramienta interactiva"></iframe>
+        <iframe id="toolFrame" src="about:blank" title="Visor de herramienta interactiva" allow="fullscreen; autoplay" allowfullscreen></iframe>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
+  <!-- Pie -->
   <footer>
-    <p>© Mateo Meléndez · <span>Consultor de Riesgos Empresariales</span></p>
+    <div class="footer-inner">
+      <p>© Mateo Meléndez · <span>Consultor de Riesgos Empresariales</span></p>
+      <ul class="footer-links" aria-label="Enlaces">
+        <li><a href="https://www.linkedin.com/in/mateo-melendez" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href="mailto:mmelendezgomez@gmail.com?subject=Contacto%20desde%20el%20portafolio">Correo</a></li>
+        <li><a href="index-en.html" lang="en">English</a></li>
+      </ul>
+    </div>
   </footer>
 
   <!-- Analítica (opcional, sin cookies). Para activarla, crea una cuenta gratis en
@@ -832,48 +692,48 @@
       bowtie: { title: "RiskVantage — Bow Tie", src: "herramientas/RiskVantage_Demo.html" },
       consolidador: { title: "Consolidador de Matrices", src: "herramientas/Consolidador_Demo.html" },
       apetito: { title: "Apetito y Tolerancia al Riesgo", src: "herramientas/Apetito_Demo.html" },
-      muestreo: { title: "Muestreo de Auditoría", src: "herramientas/Papeles_Demo.html" }
+      muestreo: { title: "Muestreo de Auditoría", src: "herramientas/Papeles_Demo.html" },
+      riskquestgo: { title: "RiskQuest Go (beta)", src: "juegos/RiskQuest_Go.html", game: true },
+      riskquest: { title: "RiskQuest (beta)", src: "juegos/RiskQuest.html", game: true }
     };
 
-    let triggerButton = null; // Para devolver el foco al botón al cerrar el modal (Accesibilidad)
+    const modal = document.getElementById('toolModal');
+    const frame = document.getElementById('toolFrame');
+    const loader = modal.querySelector('.iframe-loader');
+    let triggerButton = null; // Para devolver el foco al botón al cerrar el visor (accesibilidad)
 
     function openTool(toolKey, btnElement) {
       const tool = toolsData[toolKey];
       if (!tool) return;
 
       triggerButton = btnElement;
-      triggerButton.setAttribute('aria-expanded', 'true');
+      if (triggerButton) triggerButton.setAttribute('aria-expanded', 'true');
       trackTool(toolKey, tool.title);
 
-      const modal = document.getElementById('toolModal');
-      const frame = document.getElementById('toolFrame');
-      const title = document.getElementById('modalTitle');
-      const closeBtn = document.getElementById('closeModalBtn');
-
-      title.textContent = tool.title;
-      frame.title = `Herramienta: ${tool.title}`; // Accesibilidad dinámica para el iframe
+      document.getElementById('modalTitle').textContent = tool.title;
+      document.getElementById('newTabLink').href = tool.src;
+      frame.title = 'Herramienta: ' + tool.title; // Accesibilidad dinámica para el iframe
+      loader.hidden = false;
+      // Los juegos reciben el foco al cargar, para jugar con el teclado sin hacer clic primero
+      frame.onload = () => {
+        if (frame.src === 'about:blank' || !modal.classList.contains('active')) return;
+        loader.hidden = true;
+        if (tool.game) { try { frame.contentWindow.focus(); } catch (e) {} }
+      };
       frame.src = tool.src;
-      
+
       modal.classList.add('active');
       modal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden'; // Previene scroll en el fondo
-      
-      // Mover el foco al botón de cerrar por accesibilidad de teclado
-      setTimeout(() => closeBtn.focus(), 100);
+      document.body.style.overflow = 'hidden'; // Previene el desplazamiento del fondo
+      if (!tool.game) setTimeout(() => document.getElementById('closeModalBtn').focus(), 100);
     }
 
     function closeTool() {
-      const modal = document.getElementById('toolModal');
-      const frame = document.getElementById('toolFrame');
-
       modal.classList.remove('active');
       modal.setAttribute('aria-hidden', 'true');
-      
-      // Limpiar iframe para liberar memoria
-      setTimeout(() => { frame.src = 'about:blank'; }, 300); 
-      
+      // Limpiar el iframe para liberar memoria (y detener la música de los juegos)
+      setTimeout(() => { frame.src = 'about:blank'; }, 300);
       document.body.style.overflow = '';
-
       // Devolver el foco al botón que originó la acción
       if (triggerButton) {
         triggerButton.setAttribute('aria-expanded', 'false');
@@ -882,18 +742,17 @@
       }
     }
 
-    // Cerrar modal al presionar la tecla ESC
-    document.addEventListener('keydown', function(event) {
-      if (event.key === 'Escape' && document.getElementById('toolModal').classList.contains('active')) {
-        closeTool();
-      }
+    // Cerrar con Esc (dentro de un juego, Esc abre su propio menú)
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && modal.classList.contains('active')) closeTool();
     });
-
-    // Cerrar modal al hacer clic fuera del contenido
-    document.getElementById('toolModal').addEventListener('click', function(event) {
-      if (event.target === this) {
-        closeTool();
-      }
+    // Cerrar al hacer clic fuera del contenido
+    modal.addEventListener('click', function (event) {
+      if (event.target === this) closeTool();
+    });
+    // Con el visor abierto, el foco del teclado no se escapa a la página de fondo
+    document.addEventListener('focusin', function (event) {
+      if (modal.classList.contains('active') && !modal.contains(event.target)) document.getElementById('closeModalBtn').focus();
     });
   </script>
 </body>
