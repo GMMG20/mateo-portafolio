@@ -1,227 +1,330 @@
+<!doctype html>
+<html lang="es">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-<title>RiskVantage Bow Tie</title>
+<meta name="robots" content="noindex, nofollow">
+<title>RiskVantage — Bow Tie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
 <style>
+/* Layout: encabezado de marca, introducción, el evento central, las listas de causas y consecuencias y el diagrama que se arma solo */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
-  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
-  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
-  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
-  --causa:#0C6B64; --conse:#17A398; --evento:#0B3A45; --falta:#DC2626;
+  /* Tinta y ámbar: la misma paleta del portafolio */
+  --ink:#14213d; --ink-2:#1c2b4d; --ink-soft:#eef1f6;
+  --acc:#e9a23b; --acc-light:#f2b84b; --acc-text:#9a6412; --acc-soft:#fdf3e1;
+  --paper:#faf8f3; --card:#ffffff;
+  --text:#1b2436; --muted:#4f5b70; --faint:#667085; --line:#e8e2d6; --field:#9c9384;
+  --ok:#2f7d4f; --ok-soft:#e7f4ec; --warn-text:#7c4f0e; --warn-soft:#fdf3e1; --bad:#b4372b; --bad-soft:#fbe9e7;
+  /* Niveles de riesgo: los mismos de la matriz de la portada del portafolio */
+  --r-bajo:#2f9e6e; --r-mod:#d9b23a; --r-alto:#df7c3a; --r-ext:#cf4538;
+  --radius:14px; --radius-sm:8px;
+  --shadow-sm:0 1px 2px rgba(20,33,61,.05), 0 6px 16px -8px rgba(20,33,61,.12);
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:light;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
-  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
-.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
-  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
-.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
-  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
-.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
-.app-name{color:#fff;font-size:14px;font-weight:600;}
-.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
-.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1180px;margin:0 auto;width:100%;}
-.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
-.card h3{font-size:15px;margin-bottom:4px;}
-.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
-.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
-.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
-.banner-amb{background:var(--amb-bg);color:#7A5514;border-left:3px solid var(--amb);}
-button{font-family:inherit;}
-.btn{background:var(--acc-dk);color:#fff;border:none;padding:9px 15px;border-radius:5px;
-  cursor:pointer;font-size:13px;font-weight:700;}
-.btn:hover{background:#09524D;}
-input{font-family:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
-  border-radius:5px;background:#fff;color:var(--tx);width:100%;}
-label{display:block;font-size:11.5px;font-weight:700;color:var(--tx-2);margin-bottom:4px;}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:820px){.cols{grid-template-columns:1fr;}}
-.fila{display:flex;gap:8px;margin-bottom:8px;}
-.fila input{flex:1;}
-.item{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);
-  border-radius:6px;margin-bottom:7px;background:#fff;font-size:13px;}
-.item .t{flex:1;}
-.item .bar{width:8px;height:22px;border-radius:3px;flex:none;}
-.x{background:none;border:none;color:var(--tx-3);cursor:pointer;font-size:14px;padding:2px 5px;}
-.x:hover{color:var(--falta);}
-.vacio{padding:20px 12px;text-align:center;color:var(--tx-3);font-size:12.5px;
-  border:1px dashed var(--line);border-radius:7px;}
-#bowtie{width:100%;height:auto;}
-footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
-footer b{color:#fff;}
-footer .wrap2{max-width:1180px;margin:0 auto;}
-.toast{position:fixed;top:70px;right:20px;background:var(--acc-dk);color:#fff;padding:11px 16px;
-  border-radius:6px;font-size:13px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:99;
-  transition:opacity .3s;}
-.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
-  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
-  transition:opacity .2s ease,border-color .2s ease;}
-.volver:hover{opacity:1;border-color:var(--acc);}
-.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+html,body{background:var(--paper);}
+body{font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--text);min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;}
+*:focus-visible{outline:3px solid var(--acc-text);outline-offset:2px;}
+.app-header *:focus-visible{outline-color:var(--acc-light);}
+.num{font-variant-numeric:tabular-nums;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* Encabezado */
+.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  min-height:58px;padding:9px 24px;background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06);}
+.marca{display:flex;align-items:center;gap:12px;min-width:0;}
+.logo{flex:none;display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 9px;border-radius:7px;
+  background:var(--acc);color:var(--ink);font-weight:700;font-size:14px;}
+.sep{flex:none;width:1px;height:28px;background:rgba(255,255,255,.18);}
+.app-name{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.2;color:#fff;}
+.app-tag{font-size:12.5px;line-height:1.3;color:#c9d2e3;}
+.volver{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:7px 12px;
+  border:1px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);white-space:nowrap;}
+.volver:hover{border-color:var(--acc-light);color:var(--acc-light);}
+
+.wrap{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:20px;}
+.wrap.angosta{max-width:1000px;}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-text);}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--acc);}
+
+/* Introducción: borde tinta, para no confundirla con un aviso */
+.intro{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--ink);border-radius:var(--radius-sm);
+  padding:14px 18px;box-shadow:var(--shadow-sm);}
+.intro p+p{margin-top:6px;font-size:14.5px;line-height:1.6;}
+.intro b{font-weight:600;color:var(--ink);}
+
+/* Tarjetas */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px 22px;min-width:0;}
+.card h2{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.3;color:var(--ink);}
+.card h2 .paso{color:var(--acc-text);}
+.hint{margin-top:4px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 18px;font:inherit;font-size:14px;
+  font-weight:600;border-radius:var(--radius-sm);border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease;}
+.btn.sec{background:#fff;color:var(--ink);}
+@media (hover:hover){
+  .btn:hover:not([disabled]){background:var(--ink-2);border-color:var(--ink-2);}
+  .btn.sec:hover:not([disabled]){background:var(--paper);color:var(--ink);border-color:var(--ink);}
+}
+.btn[disabled]{opacity:.6;cursor:default;}
+.enlace{font:inherit;font-size:13.5px;font-weight:600;color:var(--acc-text);background:none;border:0;padding:6px 0;cursor:pointer;
+  text-decoration:underline;text-decoration-color:rgba(154,100,18,.4);text-underline-offset:3px;}
+.quitar{flex:none;width:32px;height:32px;display:inline-grid;place-items:center;font:inherit;font-size:14px;line-height:1;color:var(--faint);
+  background:none;border:1px solid transparent;border-radius:var(--radius-sm);cursor:pointer;}
+@media (hover:hover){.quitar:hover{color:var(--bad);border-color:var(--line);background:#fff;}}
+
+/* Campos */
+label,.lab-campo{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600;color:var(--text);}
+input,select{width:100%;min-height:42px;padding:0 12px;font:inherit;font-size:14px;color:var(--text);background:#fff;
+  border:1px solid var(--field);border-radius:var(--radius-sm);}
+input:focus-visible,select:focus-visible{outline:3px solid var(--acc-text);outline-offset:1px;border-color:var(--ink);}
+.ayuda-campo{margin-top:5px;font-size:12px;line-height:1.45;color:var(--faint);}
+
+/* Tablas */
+.tabla-wrap{position:relative;overflow-x:auto;}   /* posicionado: así lo oculto para lectores de pantalla no se escapa del desplazamiento */
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th{padding:10px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:var(--paper);border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:0;}
+
+/* Píldoras de nivel: punto de color y texto en tinta (el color nunca va solo en el texto) */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 7px;border-radius:999px;font-size:12px;font-weight:600;
+  white-space:nowrap;background:color-mix(in srgb, var(--c) 18%, #fff);color:var(--ink);}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;background:var(--paper);
+  border:1px solid var(--line);color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+/* Mensajes: el color acompaña a la palabra, nunca la reemplaza */
+.msg{padding:12px 14px;border-radius:var(--radius-sm);font-size:13.5px;line-height:1.55;border-left:3px solid currentColor;}
+.msg.ok{background:var(--ok-soft);color:var(--ok);}
+.msg.warn{background:var(--warn-soft);color:var(--warn-text);}
+.msg.bad{background:var(--bad-soft);color:var(--bad);}
+.msg .det{display:block;margin-top:2px;color:var(--text);}
+
+/* Aviso flotante */
+.toast{position:fixed;top:72px;right:20px;z-index:99;max-width:min(360px, calc(100vw - 32px));padding:11px 16px;border-radius:var(--radius-sm);
+  background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);transition:opacity .3s;}
+.toast[hidden]{display:none;}
+
+/* Pie */
+footer{border-top:1px solid var(--line);}
+.pie{max-width:1180px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;
+  font-size:12.5px;color:var(--faint);}
+.pie b{font-weight:600;color:var(--text);}
+@media (max-width:640px){
+  .wrap{padding:16px;gap:16px;}
+  .app-header{padding:8px 16px;}
+  .app-tag{display:none;}
+  .volver .lbl{display:none;}
+  .card{padding:16px;}
+  .pie{padding:16px;}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important;}}
+
+/* ---- Propio de esta herramienta ---- */
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.cab-lado{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+.cupo{font-size:12.5px;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.fila{display:flex;gap:8px;margin-top:14px;}
+.fila input{flex:1;min-width:0;}
+.items{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.item{display:flex;align-items:center;gap:10px;padding:6px 6px 6px 12px;font-size:13.5px;background:#fff;border:1px solid var(--line);
+  border-left:4px solid var(--lado);border-radius:var(--radius-sm);}
+.item .t{flex:1;min-width:0;}
+.vacio{padding:18px 12px;text-align:center;font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:var(--radius-sm);}
+.diagrama{overflow-x:auto;margin-top:12px;}
+#bowtie{display:block;width:100%;min-width:640px;height:auto;font-family:var(--sans);}
+.desliza{display:none;margin-top:8px;font-size:12.5px;color:var(--faint);}
+@media (max-width:860px){.cols{grid-template-columns:minmax(0,1fr);}}
+@media (max-width:700px){.desliza{display:block;}}
 </style>
+</head>
+<body>
 
-<div class="app-header">
-  <span class="logo">MM</span>
-  <div class="sep"></div>
-  <div>
-    <div class="app-name">RiskVantage — Bow Tie</div>
-    <div class="app-tag">Causas · evento central · consecuencias</div>
+<header class="app-header">
+  <div class="marca">
+    <span class="logo" aria-hidden="true">MM</span>
+    <span class="sep" aria-hidden="true"></span>
+    <div>
+      <h1 class="app-name">RiskVantage — Bow Tie</h1>
+      <p class="app-tag">Causas · evento · consecuencias</p>
+    </div>
   </div>
-</div>
+</header>
 
-<div class="wrap">
-  <div class="banner banner-info">
-    <b>Cómo funciona.</b> El Bow Tie ordena un riesgo en una sola imagen: a la izquierda
-    las <b>causas</b> que pueden desencadenarlo, en el centro el <b>evento</b>, y a la derecha las
-    <b>consecuencias</b> si se materializa. Escriba y el diagrama se arma solo.
-  </div>
+<main class="wrap">
+  <section class="intro" aria-label="Cómo funciona">
+    <p class="eyebrow">Cómo funciona</p>
+    <p>El bow tie ordena un riesgo en una sola imagen: a la izquierda las <b>causas</b> que pueden desencadenarlo, al centro el <b>evento</b> y a la derecha las <b>consecuencias</b> si ocurre. Escriba y el diagrama se arma solo.</p>
+  </section>
 
-  <div class="card">
-    <label>Evento central</label>
-    <input id="evento" value="Interrupción prolongada de la operación" oninput="dibujar()">
-  </div>
+  <section class="card">
+    <label for="evento">Evento central</label>
+    <input id="evento" value="Interrupción prolongada de la operación" autocomplete="off">
+  </section>
 
   <div class="cols">
-    <div class="card">
-      <h3>Causas</h3>
+    <section class="card" style="--lado:var(--ink-2)" aria-labelledby="t-causas">
+      <div class="cab-lado"><h2 id="t-causas">Causas</h2><span class="cupo" id="cupoC"></span></div>
       <p class="hint">Qué puede desencadenar el evento.</p>
-      <div class="fila" style="margin-top:12px">
-        <input id="inCausa" placeholder="Ej.: Falla del proveedor crítico">
-        <button class="btn" onclick="add('c')">Agregar</button>
+      <div class="fila">
+        <input id="inCausa" autocomplete="off" aria-label="Nueva causa" placeholder="Ej.: Falla del proveedor crítico">
+        <button type="button" class="btn" id="addC">Agregar</button>
       </div>
-      <div id="listaC"></div>
-    </div>
-    <div class="card">
-      <h3>Consecuencias</h3>
-      <p class="hint">Qué ocurre si el evento se materializa.</p>
-      <div class="fila" style="margin-top:12px">
-        <input id="inConse" placeholder="Ej.: Incumplimiento contractual">
-        <button class="btn" onclick="add('k')">Agregar</button>
+      <div class="items" id="listaC"></div>
+    </section>
+    <section class="card" style="--lado:var(--acc-text)" aria-labelledby="t-conse">
+      <div class="cab-lado"><h2 id="t-conse">Consecuencias</h2><span class="cupo" id="cupoK"></span></div>
+      <p class="hint">Qué pasaría si el evento ocurre.</p>
+      <div class="fila">
+        <input id="inConse" autocomplete="off" aria-label="Nueva consecuencia" placeholder="Ej.: Incumplimiento contractual">
+        <button type="button" class="btn" id="addK">Agregar</button>
       </div>
-      <div id="listaK"></div>
-    </div>
+      <div class="items" id="listaK"></div>
+    </section>
   </div>
 
-  <div class="card">
-    <h3>Diagrama Bow Tie</h3>
-    <p class="hint">Se actualiza a medida que escribe.</p>
-    <div style="overflow-x:auto;margin-top:12px"><svg id="bowtie" viewBox="0 0 900 420" role="img" aria-label="Diagrama Bow Tie"></svg></div>
-  </div>
-  </div>
+  <section class="card" aria-labelledby="t-diag">
+    <h2 id="t-diag">Diagrama bow tie</h2>
+    <p class="hint">Se actualiza mientras escribe.</p>
+    <div class="diagrama"><svg id="bowtie" viewBox="0 0 900 420" role="img" aria-label="Diagrama bow tie"></svg></div>
+    <p class="desliza">Deslice hacia los lados para ver el diagrama completo.</p>
+  </section>
+</main>
 
-<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+<div class="toast" id="aviso" role="status" aria-live="polite" hidden></div>
+
+<footer>
+  <div class="pie"><span><b>Mateo Meléndez</b> · Consultor de Riesgos Empresariales</span><span>Riesgo de ejemplo.</span></div>
+</footer>
 
 <script>
-/* Herramienta enfocada en un solo flujo de trabajo. */
-var causas=['Falla del proveedor crítico','Corte prolongado de energía','Ausencia de personal clave'];
-var conse =['Incumplimiento contractual','Pérdida de ingresos','Daño reputacional'];
-
 function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function $(id){ return document.getElementById(id); }
+/* Aviso flotante: se anuncia a los lectores de pantalla y desaparece solo */
+var avisoT = null;
 function aviso(msg){
-  var t=document.createElement('div'); t.className='toast'; t.textContent=msg;
-  document.body.appendChild(t);
-  setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){t.remove();},320); },2200);
+  var t = $('aviso'); t.textContent = msg; t.hidden = false; t.style.opacity = '1';
+  clearTimeout(avisoT);
+  avisoT = setTimeout(function(){ t.style.opacity = '0'; avisoT = setTimeout(function(){ t.hidden = true; }, 320); }, 2600);
 }
+/* Abierta por su URL directa, la herramienta ofrece volver al portafolio; dentro del visor del portafolio sobra */
+(function(){
+  if (window.self !== window.top) return;
+  var a = document.createElement('a');
+  a.className = 'volver'; a.href = '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
+  a.innerHTML = '\u2190<span class="lbl"> Portafolio</span>';
+  document.querySelector('.app-header').appendChild(a);
+})();
+
+var MAX = 6;   /* máximo de elementos por lado: más no caben con buena lectura */
+var causas = ['Falla del proveedor crítico','Corte prolongado de energía','Ausencia de personal clave'];
+var conse  = ['Incumplimiento contractual','Pérdida de ingresos','Daño reputacional'];
+var LADO = {
+  c: {arr:function(){ return causas; }, entrada:'inCausa', lista:'listaC', cupo:'cupoC', nombre:'causa', plural:'causas'},
+  k: {arr:function(){ return conse; },  entrada:'inConse', lista:'listaK', cupo:'cupoK', nombre:'consecuencia', plural:'consecuencias'}
+};
+
 function add(tipo){
-  var id = tipo==='c'? 'inCausa':'inConse';
-  var el=document.getElementById(id), v=el.value.trim();
-  if(!v){ aviso('Escriba el texto primero'); el.focus(); return; }
-  var arr = tipo==='c'? causas:conse;
-  if(arr.length>=6){ aviso('Máximo 6 elementos por lado'); return; }
-  arr.push(v); el.value=''; el.focus(); pintar();
+  var L = LADO[tipo], el = $(L.entrada), v = el.value.trim(), arr = L.arr();
+  if(!v){ aviso('Escriba la '+L.nombre+' primero.'); el.focus(); return; }
+  if(arr.length>=MAX){ aviso('Ya hay '+MAX+' '+L.plural+': es el máximo por lado.'); return; }
+  arr.push(v); el.value = ''; el.focus(); pintar();
 }
-function quitar(tipo,i){ (tipo==='c'?causas:conse).splice(i,1); pintar(); }
+function quitar(tipo, i){
+  var L = LADO[tipo], arr = L.arr(), t = arr[i];
+  arr.splice(i,1); pintar();
+  aviso('Se quitó «'+t+'».');
+  var sig = $(L.lista).querySelector('.quitar[data-i="'+Math.min(i, arr.length-1)+'"]');
+  (sig || $(L.entrada)).focus();
+}
 function pintarListas(){
-  function html(arr,tipo,color){
-    if(!arr.length) return '<div class="vacio">Sin elementos todavía.</div>';
-    return arr.map(function(x,i){
-      return '<div class="item"><span class="bar" style="background:'+color+'"></span>'+
-        '<span class="t">'+escH(x)+'</span>'+
-        '<button class="x" title="Quitar" onclick="quitar(\''+tipo+'\','+i+')">✕</button></div>';
-    }).join('');
-  }
-  document.getElementById('listaC').innerHTML=html(causas,'c','var(--causa)');
-  document.getElementById('listaK').innerHTML=html(conse,'k','var(--conse)');
+  ['c','k'].forEach(function(tipo){
+    var L = LADO[tipo], arr = L.arr();
+    $(L.cupo).textContent = arr.length+' de '+MAX;
+    $(L.lista).innerHTML = arr.length ? arr.map(function(x,i){
+      return '<div class="item"><span class="t">'+escH(x)+'</span>'+
+        '<button type="button" class="quitar" data-tipo="'+tipo+'" data-i="'+i+'" title="Quitar" aria-label="Quitar «'+escH(x)+'»">✕</button></div>';
+    }).join('') : '<div class="vacio">Todavía no hay '+L.plural+'.</div>';
+  });
 }
-/* Parte un texto largo en varias líneas para que quepa en la caja */
-function partir(txt,max){
-  var pal=String(txt).split(' '), li=[], act='';
+/* Parte un texto largo en varias líneas para que quepa en la caja (máximo tres) */
+function partir(txt, max){
+  var pal = String(txt).split(' '), li = [], act = '';
   pal.forEach(function(p){
-    if((act+' '+p).trim().length<=max) act=(act+' '+p).trim();
-    else { if(act) li.push(act); act=p; }
+    if((act+' '+p).trim().length<=max) act = (act+' '+p).trim();
+    else { if(act) li.push(act); act = p; }
   });
   if(act) li.push(act);
   return li.slice(0,3);
 }
+function caja(x, y, txt, color){
+  var s = '<rect x="'+x+'" y="'+(y-26)+'" width="198" height="52" rx="8" fill="#fff" stroke="'+color+'" stroke-width="1.6"/>';
+  s += '<rect x="'+x+'" y="'+(y-26)+'" width="5" height="52" rx="2" fill="'+color+'"/>';
+  var li = partir(txt, 26);
+  li.forEach(function(l,k){
+    s += '<text x="'+(x+102)+'" y="'+(y-26+(52-li.length*14)/2+11+k*14)+'" font-size="12" text-anchor="middle" fill="#1b2436">'+escH(l)+'</text>';
+  });
+  return s;
+}
 function dibujar(){
-  var ev=document.getElementById('evento').value.trim()||'Evento central';
-  var W=900, H=420, cx=450, cy=210, rx=118, ry=62;
-  var s='';
-  var n=Math.max(causas.length,1), m=Math.max(conse.length,1);
-  var altoC=H/(causas.length+1), altoK=H/(conse.length+1);
+  var ev = $('evento').value.trim() || 'Evento central';
+  var H = 420, cx = 450, cy = 210, rx = 120, ry = 64;
+  var CAUSA = 'var(--ink-2)', CONSE = 'var(--acc-text)', LINEA = '#cfc6b6';
+  /* Con n elementos, cada uno va en alto/(n+1)·(i+1): quedan centrados y equidistantes */
+  var s = '', altoC = H/(causas.length+1), altoK = H/(conse.length+1);
 
-  /* Conectores y cajas de causas */
   causas.forEach(function(t,i){
-    var y=altoC*(i+1);
-    s+='<path d="M212 '+y+' C300 '+y+' 300 '+cy+' '+(cx-rx)+' '+cy+'" stroke="#B7CFCC" stroke-width="1.6" fill="none"/>';
-    s+='<rect x="14" y="'+(y-26)+'" width="198" height="52" rx="7" fill="#fff" stroke="var(--causa)" stroke-width="1.5"/>';
-    var li=partir(t,26);
-    li.forEach(function(l,k){
-      s+='<text x="113" y="'+(y-26+ (52-li.length*13)/2 + 10 + k*13)+'" font-size="11" text-anchor="middle" fill="#17262B">'+escH(l)+'</text>';
-    });
+    var y = altoC*(i+1);
+    s += '<path d="M212 '+y+' C300 '+y+' 300 '+cy+' '+(cx-rx)+' '+cy+'" stroke="'+LINEA+'" stroke-width="1.8" fill="none"/>';
+    s += caja(14, y, t, CAUSA);
   });
-  if(!causas.length){
-    s+='<text x="113" y="'+cy+'" font-size="12" text-anchor="middle" fill="#87979C">Agregue una causa</text>';
-  }
+  if(!causas.length) s += '<text x="113" y="'+cy+'" font-size="13" text-anchor="middle" fill="#667085">Agregue una causa</text>';
 
-  /* Conectores y cajas de consecuencias */
   conse.forEach(function(t,i){
-    var y=altoK*(i+1);
-    s+='<path d="M'+(cx+rx)+' '+cy+' C600 '+cy+' 600 '+y+' 688 '+y+'" stroke="#B7CFCC" stroke-width="1.6" fill="none"/>';
-    s+='<rect x="688" y="'+(y-26)+'" width="198" height="52" rx="7" fill="#fff" stroke="var(--conse)" stroke-width="1.5"/>';
-    var li=partir(t,26);
-    li.forEach(function(l,k){
-      s+='<text x="787" y="'+(y-26+ (52-li.length*13)/2 + 10 + k*13)+'" font-size="11" text-anchor="middle" fill="#17262B">'+escH(l)+'</text>';
-    });
+    var y = altoK*(i+1);
+    s += '<path d="M'+(cx+rx)+' '+cy+' C600 '+cy+' 600 '+y+' 688 '+y+'" stroke="'+LINEA+'" stroke-width="1.8" fill="none"/>';
+    s += caja(688, y, t, CONSE);
   });
-  if(!conse.length){
-    s+='<text x="787" y="'+cy+'" font-size="12" text-anchor="middle" fill="#87979C">Agregue una consecuencia</text>';
-  }
+  if(!conse.length) s += '<text x="787" y="'+cy+'" font-size="13" text-anchor="middle" fill="#667085">Agregue una consecuencia</text>';
 
-  /* Evento central */
-  s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="var(--evento)"/>';
-  var le=partir(ev,20);
+  /* Evento central: la elipse tinta con un borde ámbar */
+  s += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(rx+5)+'" ry="'+(ry+5)+'" fill="none" stroke="var(--acc)" stroke-width="1.5" opacity=".7"/>';
+  s += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="var(--ink)"/>';
+  var le = partir(ev, 20);
   le.forEach(function(l,k){
-    s+='<text x="'+cx+'" y="'+(cy - (le.length-1)*8 + k*16 + 5)+'" font-size="13" text-anchor="middle" fill="#fff" font-weight="bold">'+escH(l)+'</text>';
+    s += '<text x="'+cx+'" y="'+(cy-(le.length-1)*9+k*18+5)+'" font-size="14" font-weight="600" text-anchor="middle" fill="#fff">'+escH(l)+'</text>';
   });
 
-  /* Rótulos de los ejes */
-  s+='<text x="113" y="18" font-size="11" text-anchor="middle" fill="#87979C" font-weight="bold">CAUSAS</text>';
-  s+='<text x="787" y="18" font-size="11" text-anchor="middle" fill="#87979C" font-weight="bold">CONSECUENCIAS</text>';
-  s+='<text x="'+cx+'" y="18" font-size="11" text-anchor="middle" fill="#87979C" font-weight="bold">EVENTO</text>';
+  /* Rótulos de las tres zonas */
+  s += '<text x="113" y="18" font-size="11.5" font-weight="600" letter-spacing="1.5" text-anchor="middle" fill="#4f5b70">CAUSAS</text>';
+  s += '<text x="'+cx+'" y="18" font-size="11.5" font-weight="600" letter-spacing="1.5" text-anchor="middle" fill="#4f5b70">EVENTO</text>';
+  s += '<text x="787" y="18" font-size="11.5" font-weight="600" letter-spacing="1.5" text-anchor="middle" fill="#4f5b70">CONSECUENCIAS</text>';
 
-  document.getElementById('bowtie').innerHTML=s;
+  $('bowtie').innerHTML = s;
+  $('bowtie').setAttribute('aria-label', 'Diagrama bow tie del evento «'+ev+'», con '+causas.length+' causas y '+conse.length+' consecuencias.');
 }
 function pintar(){ pintarListas(); dibujar(); }
-document.addEventListener('keydown',function(e){
-  if(e.key!=='Enter') return;
-  var a=document.activeElement; if(!a) return;
-  if(a.id==='inCausa') add('c');
-  else if(a.id==='inConse') add('k');
+
+$('evento').addEventListener('input', dibujar);
+$('addC').addEventListener('click', function(){ add('c'); });
+$('addK').addEventListener('click', function(){ add('k'); });
+$('inCausa').addEventListener('keydown', function(e){ if(e.key==='Enter') add('c'); });
+$('inConse').addEventListener('keydown', function(e){ if(e.key==='Enter') add('k'); });
+['listaC','listaK'].forEach(function(id){
+  $(id).addEventListener('click', function(e){
+    var q = e.target.closest('.quitar'); if(q) quitar(q.dataset.tipo, parseInt(q.dataset.i,10));
+  });
 });
 pintar();
 </script>
-<script>
-/* Enlace de regreso al portafolio. Solo aparece si la herramienta se abrio
-   por su URL directa: dentro del visor modal del portafolio sobraria. */
-(function () {
-  if (window.self !== window.top) return;
-  var h = document.querySelector('.app-header');
-  if (!h) return;
-  var a = document.createElement('a');
-  a.className = 'volver';
-  a.href = '../index.html';
-  a.textContent = '\u2190 Portafolio';
-  h.appendChild(a);
-})();
-</script>
+</body>
+</html>

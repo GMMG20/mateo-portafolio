@@ -286,6 +286,19 @@
       .tool-card:hover, .game-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
       .tool-card:hover .vista img { transform: translate(-6px, -6px); }
     }
+    /* Instrumento destacado (Mapa 3D): toda la fila, la escena a sangre a la izquierda y el texto a la derecha */
+    .tool-card.destacada { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+    .vista-3d { aspect-ratio: 16 / 10; border-bottom: 0; border-right: 1px solid var(--line); background: linear-gradient(165deg, var(--ink) 0%, var(--ink-3) 100%); }
+    .vista-3d img { left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 0; box-shadow: none; background: none; }
+    .sello {
+      position: absolute; left: 1rem; top: 1rem; padding: 0.25rem 0.7rem; border-radius: 999px;
+      background: var(--acc); color: var(--ink); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.04em;
+    }
+    .tool-card.destacada .tool-body { justify-content: center; padding: 2rem 2.2rem; }
+    .tool-card.destacada .tool-title { font-family: var(--serif); font-size: 1.6rem; }
+    .tool-card.destacada .tool-description { flex: 0 0 auto; font-size: 1rem; }
+    @media (hover: hover) { .tool-card.destacada:hover .vista-3d img { transform: scale(1.02); } }
+
     /* La tarjeta final invita al contacto: un marco vacío para «su» instrumento */
     .tool-card.cta { background: linear-gradient(165deg, var(--ink) 0%, var(--ink-2) 100%); border-color: var(--ink); }
     .vista-cta { cursor: default; display: grid; place-items: center; border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -433,6 +446,10 @@
     @media (min-width: 901px) { .menu-movil { display: none !important; } }
     @media (max-width: 768px) {
       .wrap, .header-inner { padding: 0 1.25rem; }
+      .tool-card.destacada { grid-template-columns: minmax(0, 1fr); }
+      .vista-3d { border-right: 0; border-bottom: 1px solid var(--line); }
+      .tool-card.destacada .tool-body { padding: 1.5rem 1.6rem 1.6rem; }
+      .tool-card.destacada .tool-title { font-size: 1.35rem; }
       .hero { padding: 3.5rem 0 7rem; }
       .seccion { padding-top: 4.75rem; }
       .perfil { margin-top: 4.75rem; padding: 4.5rem 0; }
@@ -557,7 +574,7 @@
         <li class="stat"><b>5 years</b><span>in internal audit at Deloitte</span></li>
         <li class="stat"><b>10+</b><span>internal audits carried out</span></li>
         <li class="stat"><b>SOX</b><span>led control testing</span></li>
-        <li class="stat"><b>7</b><span>live tools and mini-games</span></li>
+        <li class="stat"><b>8</b><span>live tools and mini-games</span></li>
       </ul>
     </div>
 
@@ -580,6 +597,7 @@
               <span class="prueba-tit">Try it</span>
               <button type="button" class="enlace" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">Risk matrix <span aria-hidden="true">→</span></button>
               <button type="button" class="enlace" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">Appetite and tolerance <span aria-hidden="true">→</span></button>
+              <button type="button" class="enlace" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">Matrix consolidator <span aria-hidden="true">→</span></button>
             </div>
           </li>
           <li class="frente reveal" style="--i:1">
@@ -588,8 +606,8 @@
             <p class="desc">Strategic, operational and project risk. Sessions with the people who decide, to identify, rate and prioritise what can really affect the objectives.</p>
             <div class="prueba">
               <span class="prueba-tit">Try it</span>
+              <button type="button" class="enlace" onclick="openTool('mapa3d', this)" aria-haspopup="dialog" aria-expanded="false">3D risk map <span aria-hidden="true">→</span></button>
               <button type="button" class="enlace" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">Bow Tie <span aria-hidden="true">→</span></button>
-              <button type="button" class="enlace" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">Matrix consolidator <span aria-hidden="true">→</span></button>
             </div>
           </li>
           <li class="frente reveal" style="--i:2">
@@ -627,6 +645,22 @@
         </div>
 
         <div class="tools-grid">
+        <!-- Instrumento destacado: el único en 3D, a todo el ancho de la rejilla -->
+        <article class="tool-card destacada reveal">
+          <div class="vista vista-3d" onclick="openTool('mapa3d', this.closest('.tool-card').querySelector('.btn-open'))">
+            <img src="herramientas/capturas/mapa3d.jpg" alt="3D scene on an ink-blue background: the heat map as the floor and twenty risks as spheres at different heights according to their velocity, with the amber fast zone" width="1200" height="720" loading="lazy" decoding="async">
+            <span class="sello" aria-hidden="true">3D</span>
+          </div>
+          <div class="tool-body">
+            <div class="tool-category">3D visualisation <span class="badge-demo">Demo</span></div>
+            <h3 class="tool-title">3D Risk Map</h3>
+            <p class="tool-description">Two risks with the same severity do not carry the same urgency. The matrix gains a third axis, velocity, and shows which risks strike within days: the ones to deal with first.</p>
+            <ul class="game-meta"><li>20 sample risks</li><li>Three views</li><li>2D fallback table</li></ul>
+            <button type="button" class="btn-open" onclick="openTool('mapa3d', this)" aria-haspopup="dialog" aria-expanded="false">
+              Open tool <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
         <article class="tool-card reveal" style="--i:0">
           <div class="vista" onclick="openTool('matriz', this.closest('.tool-card').querySelector('.btn-open'))">
             <img src="herramientas/capturas/matriz.jpg" alt="Risk matrix heat map: five likelihood levels by five impact levels, with the risks placed in their cells" width="880" height="550" loading="lazy" decoding="async">
@@ -648,7 +682,7 @@
           <div class="tool-body">
             <div class="tool-category">Cause and Effect <span class="badge-demo">Demo</span></div>
             <h3 class="tool-title">RiskVantage — Bow Tie</h3>
-            <p class="tool-description">An event materialised: the question is how it got through and which barrier failed. Separate causes from consequences and show where you are exposed.</p>
+            <p class="tool-description">One event can have several causes and more than one consequence. Arrange them around the event and see the whole risk in a single picture, ready to discuss in the workshop.</p>
             <button type="button" class="btn-open" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">
               Open tool <span aria-hidden="true">→</span>
             </button>
@@ -703,7 +737,7 @@
           <div class="tool-body">
             <div class="tool-category">Bespoke</div>
             <h3 class="tool-title">Your case not here?</h3>
-            <p class="tool-description">These five came out of concrete needs. If yours is different, it probably yields to the same method: write to me and we will look at it.</p>
+            <p class="tool-description">These six came out of concrete needs. If yours is different, it probably yields to the same method: write to me and we will look at it.</p>
             <a class="btn-open" href="mailto:mmelendezgomez@gmail.com?subject=Contact%20from%20the%20portfolio">
               Send me an email <span aria-hidden="true">&rarr;</span>
             </a>
@@ -869,6 +903,7 @@
   <!-- Lógica JavaScript -->
   <script>
     const toolsData = {
+      mapa3d: { title: "3D Risk Map", src: "herramientas/Mapa_Riesgos_3D_Demo.html" },
       matriz: { title: "Process Risk Matrix", src: "herramientas/Matriz_Riesgos_Demo.html" },
       bowtie: { title: "RiskVantage — Bow Tie", src: "herramientas/RiskVantage_Demo.html" },
       consolidador: { title: "Matrix Consolidator", src: "herramientas/Consolidador_Demo.html" },

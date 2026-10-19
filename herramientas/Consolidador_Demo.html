@@ -1,203 +1,321 @@
+<!doctype html>
+<html lang="es">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, nofollow">
 <title>Consolidador de Matrices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
 <style>
+/* Layout: encabezado de marca, introducción, las dos matrices de origen lado a lado, el botón de consolidar y el resultado */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
-  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
-  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
-  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C; --dup:#FFFBEB;
+  /* Tinta y ámbar: la misma paleta del portafolio */
+  --ink:#14213d; --ink-2:#1c2b4d; --ink-soft:#eef1f6;
+  --acc:#e9a23b; --acc-light:#f2b84b; --acc-text:#9a6412; --acc-soft:#fdf3e1;
+  --paper:#faf8f3; --card:#ffffff;
+  --text:#1b2436; --muted:#4f5b70; --faint:#667085; --line:#e8e2d6; --field:#9c9384;
+  --ok:#2f7d4f; --ok-soft:#e7f4ec; --warn-text:#7c4f0e; --warn-soft:#fdf3e1; --bad:#b4372b; --bad-soft:#fbe9e7;
+  /* Niveles de riesgo: los mismos de la matriz de la portada del portafolio */
+  --r-bajo:#2f9e6e; --r-mod:#d9b23a; --r-alto:#df7c3a; --r-ext:#cf4538;
+  --radius:14px; --radius-sm:8px;
+  --shadow-sm:0 1px 2px rgba(20,33,61,.05), 0 6px 16px -8px rgba(20,33,61,.12);
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:light;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
-  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
-.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
-  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
-.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
-  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
-.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
-.app-name{color:#fff;font-size:14px;font-weight:600;}
-.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
-.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1180px;margin:0 auto;width:100%;}
-.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
-.card h3{font-size:15px;margin-bottom:4px;}
-.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
-.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
-.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
-.banner-amb{background:var(--amb-bg);color:#7A5514;border-left:3px solid var(--amb);}
-button{font-family:inherit;}
-.btn{background:var(--acc-dk);color:#fff;border:none;padding:11px 20px;border-radius:5px;
-  cursor:pointer;font-size:13.5px;font-weight:700;}
-.btn:hover{background:#09524D;}
-.btn:disabled{background:var(--tx-3);cursor:default;}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:840px){.cols{grid-template-columns:1fr;}}
-.fuente{border:1px solid var(--line);border-radius:8px;overflow:hidden;}
-.fuente .cab{background:var(--bg);padding:9px 13px;font-size:12.5px;font-weight:700;
-  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;}
-.fuente .cab .ic{font-size:15px;}
-table{width:100%;border-collapse:collapse;font-size:12px;}
-th{text-align:left;padding:7px 9px;background:#FAFBFB;color:var(--tx-2);font-weight:700;
-  border-bottom:1px solid var(--line);font-size:10px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;}
-td{padding:7px 9px;border-bottom:1px solid var(--line);}
-tr:last-child td{border-bottom:none;}
-.scroll{overflow-x:auto;}
-.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:10.5px;font-weight:700;
-  background:var(--bg);border:1px solid var(--line);color:var(--tx-2);}
-.norm{background:var(--mist);border-color:#9FD9D1;color:var(--acc-dk);}
-.dupfila td{background:var(--dup)!important;}
-.flecha{text-align:center;font-size:22px;color:var(--acc);margin:4px 0;}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:14px;}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px;text-align:center;}
-.kpi .v{font-size:21px;font-weight:800;color:var(--ink);}
-.kpi .l{font-size:11px;color:var(--tx-2);margin-top:2px;}
-footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
-footer b{color:#fff;}
-footer .wrap2{max-width:1180px;margin:0 auto;}
-.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
-  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
-  transition:opacity .2s ease,border-color .2s ease;}
-.volver:hover{opacity:1;border-color:var(--acc);}
-.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+html,body{background:var(--paper);}
+body{font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--text);min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;}
+*:focus-visible{outline:3px solid var(--acc-text);outline-offset:2px;}
+.app-header *:focus-visible{outline-color:var(--acc-light);}
+.num{font-variant-numeric:tabular-nums;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* Encabezado */
+.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  min-height:58px;padding:9px 24px;background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06);}
+.marca{display:flex;align-items:center;gap:12px;min-width:0;}
+.logo{flex:none;display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 9px;border-radius:7px;
+  background:var(--acc);color:var(--ink);font-weight:700;font-size:14px;}
+.sep{flex:none;width:1px;height:28px;background:rgba(255,255,255,.18);}
+.app-name{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.2;color:#fff;}
+.app-tag{font-size:12.5px;line-height:1.3;color:#c9d2e3;}
+.volver{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:7px 12px;
+  border:1px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);white-space:nowrap;}
+.volver:hover{border-color:var(--acc-light);color:var(--acc-light);}
+
+.wrap{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:20px;}
+.wrap.angosta{max-width:1000px;}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-text);}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--acc);}
+
+/* Introducción: borde tinta, para no confundirla con un aviso */
+.intro{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--ink);border-radius:var(--radius-sm);
+  padding:14px 18px;box-shadow:var(--shadow-sm);}
+.intro p+p{margin-top:6px;font-size:14.5px;line-height:1.6;}
+.intro b{font-weight:600;color:var(--ink);}
+
+/* Tarjetas */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px 22px;min-width:0;}
+.card h2{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.3;color:var(--ink);}
+.card h2 .paso{color:var(--acc-text);}
+.hint{margin-top:4px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 18px;font:inherit;font-size:14px;
+  font-weight:600;border-radius:var(--radius-sm);border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease;}
+.btn.sec{background:#fff;color:var(--ink);}
+@media (hover:hover){
+  .btn:hover:not([disabled]){background:var(--ink-2);border-color:var(--ink-2);}
+  .btn.sec:hover:not([disabled]){background:var(--paper);color:var(--ink);border-color:var(--ink);}
+}
+.btn[disabled]{opacity:.6;cursor:default;}
+.enlace{font:inherit;font-size:13.5px;font-weight:600;color:var(--acc-text);background:none;border:0;padding:6px 0;cursor:pointer;
+  text-decoration:underline;text-decoration-color:rgba(154,100,18,.4);text-underline-offset:3px;}
+.quitar{flex:none;width:32px;height:32px;display:inline-grid;place-items:center;font:inherit;font-size:14px;line-height:1;color:var(--faint);
+  background:none;border:1px solid transparent;border-radius:var(--radius-sm);cursor:pointer;}
+@media (hover:hover){.quitar:hover{color:var(--bad);border-color:var(--line);background:#fff;}}
+
+/* Campos */
+label,.lab-campo{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600;color:var(--text);}
+input,select{width:100%;min-height:42px;padding:0 12px;font:inherit;font-size:14px;color:var(--text);background:#fff;
+  border:1px solid var(--field);border-radius:var(--radius-sm);}
+input:focus-visible,select:focus-visible{outline:3px solid var(--acc-text);outline-offset:1px;border-color:var(--ink);}
+.ayuda-campo{margin-top:5px;font-size:12px;line-height:1.45;color:var(--faint);}
+
+/* Tablas */
+.tabla-wrap{position:relative;overflow-x:auto;}   /* posicionado: así lo oculto para lectores de pantalla no se escapa del desplazamiento */
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th{padding:10px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:var(--paper);border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:0;}
+
+/* Píldoras de nivel: punto de color y texto en tinta (el color nunca va solo en el texto) */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 7px;border-radius:999px;font-size:12px;font-weight:600;
+  white-space:nowrap;background:color-mix(in srgb, var(--c) 18%, #fff);color:var(--ink);}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;background:var(--paper);
+  border:1px solid var(--line);color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+/* Mensajes: el color acompaña a la palabra, nunca la reemplaza */
+.msg{padding:12px 14px;border-radius:var(--radius-sm);font-size:13.5px;line-height:1.55;border-left:3px solid currentColor;}
+.msg.ok{background:var(--ok-soft);color:var(--ok);}
+.msg.warn{background:var(--warn-soft);color:var(--warn-text);}
+.msg.bad{background:var(--bad-soft);color:var(--bad);}
+.msg .det{display:block;margin-top:2px;color:var(--text);}
+
+/* Aviso flotante */
+.toast{position:fixed;top:72px;right:20px;z-index:99;max-width:min(360px, calc(100vw - 32px));padding:11px 16px;border-radius:var(--radius-sm);
+  background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);transition:opacity .3s;}
+.toast[hidden]{display:none;}
+
+/* Pie */
+footer{border-top:1px solid var(--line);}
+.pie{max-width:1180px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;
+  font-size:12.5px;color:var(--faint);}
+.pie b{font-weight:600;color:var(--text);}
+@media (max-width:640px){
+  .wrap{padding:16px;gap:16px;}
+  .app-header{padding:8px 16px;}
+  .app-tag{display:none;}
+  .volver .lbl{display:none;}
+  .card{padding:16px;}
+  .pie{padding:16px;}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important;}}
+
+/* ---- Propio de esta herramienta ---- */
+.fuentes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.fuente{padding:0;overflow:hidden;}
+.cab{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:12px 16px;border-bottom:1px solid var(--line);}
+.ext{flex:none;display:inline-grid;place-items:center;min-width:46px;height:26px;padding:0 8px;border-radius:6px;font-size:11px;font-weight:700;
+  letter-spacing:.06em;color:#fff;}
+.ext.xlsx{background:var(--ok);}
+.ext.csv{background:var(--ink-2);}
+.cab h2{min-width:0;overflow-wrap:anywhere;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink);}
+.cab small{margin-left:auto;font-size:12px;color:var(--faint);white-space:nowrap;}
+.fuente table{font-size:13px;}
+.centro{display:flex;flex-direction:column;align-items:center;gap:6px;}
+#salida{display:flex;flex-direction:column;gap:20px;scroll-margin-top:76px;}
+#salida:empty{display:none;}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.kpi{padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);}
+.kpi b{display:block;font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums;}
+.kpi b.alerta{color:var(--acc-text);}
+.kpi span{display:block;margin-top:4px;font-size:12.5px;color:var(--muted);}
+.norm{background:var(--ink-soft);border-color:#c9d2e3;color:var(--ink);}
+.flecha{margin:0 5px;color:var(--faint);}
+.origen{font-size:12.5px;color:var(--faint);white-space:nowrap;}
+tr.dup td{background:var(--acc-soft);}
+.marca-dup{display:inline-block;margin-left:8px;padding:0 7px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;
+  color:var(--warn-text);background:#fff;border:1px solid #ecd3a6;}
+@media (max-width:860px){.fuentes{grid-template-columns:minmax(0,1fr);} .kpis{grid-template-columns:repeat(2,minmax(0,1fr));}}
 </style>
+</head>
+<body>
 
-<div class="app-header">
-  <span class="logo">MM</span>
-  <div class="sep"></div>
-  <div>
-    <div class="app-name">Consolidador de Matrices</div>
-    <div class="app-tag">Unifica matrices con estructuras y vocabularios distintos</div>
+<header class="app-header">
+  <div class="marca">
+    <span class="logo" aria-hidden="true">MM</span>
+    <span class="sep" aria-hidden="true"></span>
+    <div>
+      <h1 class="app-name">Consolidador de Matrices</h1>
+      <p class="app-tag">Unifica matrices con estructuras y vocabularios distintos</p>
+    </div>
   </div>
-</div>
+</header>
 
-<div class="wrap">
-  <div class="banner banner-info">
-    <b>Cómo funciona.</b> Dos áreas entregan su matriz de riesgos con
-    <b>columnas distintas y escalas distintas</b>: una dice «Alta», la otra dice «4». Consolidarlas a
-    mano cuesta días. Pulse el botón y vea cómo quedan en una sola estructura.
-  </div>
+<main class="wrap">
+  <section class="intro" aria-label="Cómo funciona">
+    <p class="eyebrow">Cómo funciona</p>
+    <p>Dos áreas entregan su matriz de riesgos con <b>columnas y escalas distintas</b>: una dice «Alta» y la otra dice «4». Consolidarlas a mano cuesta días. Pulse el botón y vea cómo quedan en una sola estructura.</p>
+  </section>
 
-  <div class="cols">
-    <div class="fuente">
-      <div class="cab"><span class="ic">📗</span> Matriz_Operaciones.xlsx</div>
-      <div class="scroll"><table>
+  <div class="fuentes">
+    <section class="card fuente" aria-labelledby="t-f1">
+      <div class="cab"><span class="ext xlsx" aria-hidden="true">XLSX</span><h2 id="t-f1">Matriz_Operaciones.xlsx</h2><small>Área de Operaciones</small></div>
+      <div class="tabla-wrap"><table>
         <thead><tr><th>Proceso</th><th>Riesgo</th><th>Frecuencia</th><th>Severidad</th></tr></thead>
         <tbody id="f1"></tbody>
       </table></div>
-    </div>
-    <div class="fuente">
-      <div class="cab"><span class="ic">📄</span> riesgos_financiera.csv</div>
-      <div class="scroll"><table>
+    </section>
+    <section class="card fuente" aria-labelledby="t-f2">
+      <div class="cab"><span class="ext csv" aria-hidden="true">CSV</span><h2 id="t-f2">riesgos_financiera.csv</h2><small>Área Financiera</small></div>
+      <div class="tabla-wrap"><table>
         <thead><tr><th>Área</th><th>Nombre del riesgo</th><th>Prob.</th><th>Impacto</th></tr></thead>
         <tbody id="f2"></tbody>
       </table></div>
-    </div>
+    </section>
   </div>
 
-  <div style="text-align:center">
-    <button class="btn" id="btn" onclick="consolidar()">⇩ Consolidar las dos matrices</button>
+  <div class="centro">
+    <button type="button" class="btn" id="btn">Consolidar las dos matrices <span aria-hidden="true">↓</span></button>
+    <button type="button" class="enlace" id="reiniciar" hidden>Volver a empezar</button>
   </div>
 
-  <div id="salida"></div>
-  </div>
+  <div id="salida" aria-live="polite"></div>
+</main>
 
-<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+<div class="toast" id="aviso" role="status" aria-live="polite" hidden></div>
+
+<footer>
+  <div class="pie"><span><b>Mateo Meléndez</b> · Consultor de Riesgos Empresariales</span><span>Datos de ejemplo de dos áreas ficticias.</span></div>
+</footer>
 
 <script>
-/* Herramienta enfocada en un solo flujo de trabajo. */
-var F1=[
-  {proc:'Producción',  riesgo:'Interrupción de planta por falla mecánica', frec:'Alta',  sev:'Mayor'},
-  {proc:'Logística',   riesgo:'Retraso en entregas a cliente clave',        frec:'Media', sev:'Moderado'},
-  {proc:'Producción',  riesgo:'Accidente laboral en zona de hornos',        frec:'Baja',  sev:'Catastrófico'}
-];
-var F2=[
-  {area:'Tesorería', riesgo:'Fraude en pagos a proveedores',        prob:'4', imp:'4'},
-  {area:'Contable',  riesgo:'Error en cierre contable mensual',      prob:'3', imp:'2'},
-  {area:'Tesorería', riesgo:'Fraude en pagos a proveedores',        prob:'4', imp:'4'}
-];
-var VOC_P={'muy baja':1,'baja':2,'media':3,'alta':4,'muy alta':5};
-var VOC_I={'insignificante':1,'menor':2,'moderado':3,'mayor':4,'catastrófico':5,'catastrofico':5};
-var NIV=[{n:'Bajo',c:'#22C55E'},{n:'Moderado',c:'#FFBF00'},{n:'Alto',c:'#F97316'},{n:'Extremo',c:'#DB0000'}];
-
 function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function $(id){ return document.getElementById(id); }
+/* Aviso flotante: se anuncia a los lectores de pantalla y desaparece solo */
+var avisoT = null;
+function aviso(msg){
+  var t = $('aviso'); t.textContent = msg; t.hidden = false; t.style.opacity = '1';
+  clearTimeout(avisoT);
+  avisoT = setTimeout(function(){ t.style.opacity = '0'; avisoT = setTimeout(function(){ t.hidden = true; }, 320); }, 2600);
+}
+/* Abierta por su URL directa, la herramienta ofrece volver al portafolio; dentro del visor del portafolio sobra */
+(function(){
+  if (window.self !== window.top) return;
+  var a = document.createElement('a');
+  a.className = 'volver'; a.href = '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
+  a.innerHTML = '\u2190<span class="lbl"> Portafolio</span>';
+  document.querySelector('.app-header').appendChild(a);
+})();
+
+var F1 = [
+  {proc:'Producción', riesgo:'Interrupción de planta por falla mecánica', frec:'Alta',  sev:'Mayor'},
+  {proc:'Logística',  riesgo:'Retraso en entregas a cliente clave',        frec:'Media', sev:'Moderado'},
+  {proc:'Producción', riesgo:'Accidente laboral en zona de hornos',        frec:'Baja',  sev:'Catastrófico'}
+];
+var F2 = [
+  {area:'Tesorería', riesgo:'Fraude en pagos a proveedores',   prob:'4', imp:'4'},
+  {area:'Contable',  riesgo:'Error en cierre contable mensual', prob:'3', imp:'2'},
+  {area:'Tesorería', riesgo:'Fraude en pagos a proveedores',   prob:'4', imp:'4'}
+];
+/* Vocabularios de cada área llevados a la escala común de 1 a 5 */
+var VOC_P = {'muy baja':1,'baja':2,'media':3,'alta':4,'muy alta':5};
+var VOC_I = {'insignificante':1,'menor':2,'moderado':3,'mayor':4,'catastrófico':5,'catastrofico':5};
+var NIV = [{n:'Bajo',c:'var(--r-bajo)'},{n:'Moderado',c:'var(--r-mod)'},{n:'Alto',c:'var(--r-alto)'},{n:'Extremo',c:'var(--r-ext)'}];
+
 function norm(s){ return String(s||'').toLowerCase().trim(); }
 function aEscala(v,voc){
-  var n=norm(v);
-  if(/^\d+$/.test(n)) return parseInt(n);
-  return voc[n]!==undefined? voc[n] : null;
+  var n = norm(v);
+  if(/^\d+$/.test(n)) return parseInt(n,10);
+  return voc[n]!==undefined ? voc[n] : null;
 }
 function nivelDe(p,i){
-  var s=p*i;
+  var s = p*i;
   if(s>=15) return NIV[3];
   if(s>=9)  return NIV[2];
   if(s>=4)  return NIV[1];
   return NIV[0];
 }
 function pintarFuentes(){
-  document.getElementById('f1').innerHTML=F1.map(function(r){
-    return '<tr><td>'+escH(r.proc)+'</td><td>'+escH(r.riesgo)+'</td>'+
-           '<td><span class="pill">'+escH(r.frec)+'</span></td>'+
-           '<td><span class="pill">'+escH(r.sev)+'</span></td></tr>'; }).join('');
-  document.getElementById('f2').innerHTML=F2.map(function(r){
-    return '<tr><td>'+escH(r.area)+'</td><td>'+escH(r.riesgo)+'</td>'+
-           '<td><span class="pill">'+escH(r.prob)+'</span></td>'+
-           '<td><span class="pill">'+escH(r.imp)+'</span></td></tr>'; }).join('');
+  $('f1').innerHTML = F1.map(function(r){
+    return '<tr><td>'+escH(r.proc)+'</td><td>'+escH(r.riesgo)+'</td><td><span class="tag">'+escH(r.frec)+'</span></td><td><span class="tag">'+escH(r.sev)+'</span></td></tr>';
+  }).join('');
+  $('f2').innerHTML = F2.map(function(r){
+    return '<tr><td>'+escH(r.area)+'</td><td>'+escH(r.riesgo)+'</td><td><span class="tag">'+escH(r.prob)+'</span></td><td><span class="tag">'+escH(r.imp)+'</span></td></tr>';
+  }).join('');
+}
+function cambio(orig, n){
+  return '<span class="tag">'+escH(orig)+'</span><span class="flecha" aria-hidden="true">→</span><span class="sr"> pasa a </span><span class="tag norm">'+n+'</span>';
 }
 function consolidar(){
-  var regs=[];
+  var regs = [];
   F1.forEach(function(r){
-    regs.push({origen:'Matriz_Operaciones.xlsx', proceso:r.proc, riesgo:r.riesgo,
-      pOrig:r.frec, iOrig:r.sev, p:aEscala(r.frec,VOC_P), i:aEscala(r.sev,VOC_I)});
+    regs.push({origen:'Matriz_Operaciones.xlsx', proceso:r.proc, riesgo:r.riesgo, pOrig:r.frec, iOrig:r.sev, p:aEscala(r.frec,VOC_P), i:aEscala(r.sev,VOC_I)});
   });
   F2.forEach(function(r){
-    regs.push({origen:'riesgos_financiera.csv', proceso:r.area, riesgo:r.riesgo,
-      pOrig:r.prob, iOrig:r.imp, p:aEscala(r.prob,VOC_P), i:aEscala(r.imp,VOC_I)});
+    regs.push({origen:'riesgos_financiera.csv', proceso:r.area, riesgo:r.riesgo, pOrig:r.prob, iOrig:r.imp, p:aEscala(r.prob,VOC_P), i:aEscala(r.imp,VOC_I)});
   });
-  /* Duplicados: mismo riesgo y mismo proceso, normalizados */
-  var vistos={};
-  regs.forEach(function(r){ var k=norm(r.riesgo)+'|'+norm(r.proceso); vistos[k]=(vistos[k]||0)+1; r._k=k; });
-  regs.forEach(function(r){ r.dup=vistos[r._k]>1; });
+  /* Posibles duplicados: mismo riesgo en el mismo proceso, comparados sin mayúsculas ni espacios de más */
+  var vistos = {};
+  regs.forEach(function(r){ r._k = norm(r.riesgo)+'|'+norm(r.proceso); vistos[r._k] = (vistos[r._k]||0)+1; });
+  regs.forEach(function(r){ r.dup = vistos[r._k]>1; });
+  var dups = regs.filter(function(r){ return r.dup; }).length;
 
-  var dups=regs.filter(function(r){return r.dup;}).length;
-  var h='<div class="flecha">↓</div>'+
+  $('salida').innerHTML =
     '<div class="kpis">'+
-      '<div class="kpi"><div class="v">'+regs.length+'</div><div class="l">Registros consolidados</div></div>'+
-      '<div class="kpi"><div class="v">2</div><div class="l">Archivos de origen</div></div>'+
-      '<div class="kpi"><div class="v" style="color:'+(dups?'#B45309':'#0C6B64')+'">'+dups+'</div><div class="l">Posibles duplicados</div></div>'+
-      '<div class="kpi"><div class="v">1</div><div class="l">Estructura común</div></div>'+
+      '<div class="kpi"><b>'+regs.length+'</b><span>registros consolidados</span></div>'+
+      '<div class="kpi"><b>2</b><span>archivos de origen</span></div>'+
+      '<div class="kpi"><b'+(dups?' class="alerta"':'')+'>'+dups+'</b><span>posibles duplicados</span></div>'+
+      '<div class="kpi"><b>1</b><span>estructura común</span></div>'+
     '</div>'+
-    '<div class="card"><h3>Consolidado</h3>'+
-    '<p class="hint">Las columnas quedaron unificadas y los vocabularios llevados a una escala común. '+
-    'Las filas en amarillo comparten riesgo y proceso con otra.</p>'+
-    '<div class="scroll" style="margin-top:12px"><table><thead><tr>'+
+    '<section class="card" aria-labelledby="t-base"><h2 id="t-base">Base consolidada</h2>'+
+    '<p class="hint">Las columnas quedaron unificadas y las escalas llevadas a una sola, de 1 a 5. Las filas resaltadas comparten riesgo y proceso con otra: revíselas antes de cerrar la base.</p>'+
+    '<div class="tabla-wrap" style="margin-top:14px"><table><thead><tr>'+
       '<th>Origen</th><th>Proceso</th><th>Riesgo</th><th>Probabilidad</th><th>Impacto</th><th>Nivel</th>'+
     '</tr></thead><tbody>'+
     regs.map(function(r){
-      var niv=nivelDe(r.p,r.i);
-      return '<tr class="'+(r.dup?'dupfila':'')+'">'+
-        '<td><span class="hint">'+escH(r.origen)+'</span></td>'+
-        '<td>'+escH(r.proceso)+'</td><td>'+escH(r.riesgo)+'</td>'+
-        '<td><span class="pill">'+escH(r.pOrig)+'</span> → <span class="pill norm">'+r.p+'</span></td>'+
-        '<td><span class="pill">'+escH(r.iOrig)+'</span> → <span class="pill norm">'+r.i+'</span></td>'+
-        '<td><span class="pill" style="background:'+niv.c+';color:#fff;border-color:'+niv.c+'">'+niv.n+'</span></td></tr>';
-    }).join('')+'</tbody></table></div></div>';
-  document.getElementById('salida').innerHTML=h;
-  var b=document.getElementById('btn'); b.disabled=true; b.textContent='✓ Consolidado';
+      var niv = nivelDe(r.p, r.i);
+      return '<tr'+(r.dup?' class="dup"':'')+'>'+
+        '<td><span class="origen">'+escH(r.origen)+'</span></td>'+
+        '<td>'+escH(r.proceso)+'</td>'+
+        '<td>'+escH(r.riesgo)+(r.dup?'<span class="marca-dup">Posible duplicado</span>':'')+'</td>'+
+        '<td style="white-space:nowrap">'+cambio(r.pOrig, r.p)+'</td>'+
+        '<td style="white-space:nowrap">'+cambio(r.iOrig, r.i)+'</td>'+
+        '<td><span class="pill" style="--c:'+niv.c+'">'+niv.n+'</span></td></tr>';
+    }).join('')+'</tbody></table></div></section>';
+
+  var b = $('btn'); b.disabled = true; b.innerHTML = '✓ Consolidado';
+  $('reiniciar').hidden = false;
+  var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $('salida').scrollIntoView({behavior: quieto ? 'auto' : 'smooth', block:'start'});
 }
+function reiniciar(){
+  $('salida').innerHTML = '';
+  var b = $('btn'); b.disabled = false; b.innerHTML = 'Consolidar las dos matrices <span aria-hidden="true">↓</span>';
+  $('reiniciar').hidden = true;
+  b.focus();
+}
+$('btn').addEventListener('click', consolidar);
+$('reiniciar').addEventListener('click', reiniciar);
 pintarFuentes();
 </script>
-<script>
-/* Enlace de regreso al portafolio. Solo aparece si la herramienta se abrio
-   por su URL directa: dentro del visor modal del portafolio sobraria. */
-(function () {
-  if (window.self !== window.top) return;
-  var h = document.querySelector('.app-header');
-  if (!h) return;
-  var a = document.createElement('a');
-  a.className = 'volver';
-  a.href = '../index.html';
-  a.textContent = '\u2190 Portafolio';
-  h.appendChild(a);
-})();
-</script>
+</body>
+</html>

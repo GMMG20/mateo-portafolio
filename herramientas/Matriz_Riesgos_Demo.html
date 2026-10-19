@@ -1,229 +1,351 @@
+<!doctype html>
+<html lang="es">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-<title>Matriz de Riesgos</title>
+<meta name="robots" content="noindex, nofollow">
+<title>Matriz de Riesgos de Procesos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
 <style>
+/* Layout: encabezado de marca, introducción y dos columnas: la lista de riesgos con su formulario y el mapa de calor 5 × 5 */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
-  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
-  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
-  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
-  --r-bajo:#22C55E; --r-mod:#FFBF00; --r-alto:#F97316; --r-ext:#DB0000;
+  /* Tinta y ámbar: la misma paleta del portafolio */
+  --ink:#14213d; --ink-2:#1c2b4d; --ink-soft:#eef1f6;
+  --acc:#e9a23b; --acc-light:#f2b84b; --acc-text:#9a6412; --acc-soft:#fdf3e1;
+  --paper:#faf8f3; --card:#ffffff;
+  --text:#1b2436; --muted:#4f5b70; --faint:#667085; --line:#e8e2d6; --field:#9c9384;
+  --ok:#2f7d4f; --ok-soft:#e7f4ec; --warn-text:#7c4f0e; --warn-soft:#fdf3e1; --bad:#b4372b; --bad-soft:#fbe9e7;
+  /* Niveles de riesgo: los mismos de la matriz de la portada del portafolio */
+  --r-bajo:#2f9e6e; --r-mod:#d9b23a; --r-alto:#df7c3a; --r-ext:#cf4538;
+  --radius:14px; --radius-sm:8px;
+  --shadow-sm:0 1px 2px rgba(20,33,61,.05), 0 6px 16px -8px rgba(20,33,61,.12);
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:light;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
-  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
-.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
-  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
-.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
-  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
-.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
-.app-name{color:#fff;font-size:14px;font-weight:600;}
-.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
-.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1180px;margin:0 auto;width:100%;}
-.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
-.card h3{font-size:15px;margin-bottom:4px;}
-.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
-.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
-.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
-.banner-amb{background:var(--amb-bg);color:#7A5514;border-left:3px solid var(--amb);}
-.cols{display:grid;grid-template-columns:1fr 1.05fr;gap:16px;align-items:start;}
-@media(max-width:900px){.cols{grid-template-columns:1fr;}}
-button{font-family:inherit;}
-.btn{background:var(--acc-dk);color:#fff;border:none;padding:9px 16px;border-radius:5px;
-  cursor:pointer;font-size:13px;font-weight:700;}
-.btn:hover{background:#09524D;}
-.btn2{background:#fff;border:1px solid var(--line);color:var(--tx);padding:8px 14px;
-  border-radius:5px;cursor:pointer;font-size:12.5px;}
-.btn2:hover{background:var(--bg);}
-input,select{font-family:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
-  border-radius:5px;background:#fff;color:var(--tx);width:100%;}
-label{display:block;font-size:11.5px;font-weight:700;color:var(--tx-2);margin-bottom:4px;}
-.g3{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:10px;align-items:end;}
-@media(max-width:620px){.g3{grid-template-columns:1fr;}}
-/* Evita el scroll horizontal en movil: los hijos de un grid no encogen por debajo de su min-content salvo que se fuerce */
-@media(max-width:620px){.cols>*,.g3>*{min-width:0;}.card{min-width:0;}.wrap{padding:16px 14px;}}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th{text-align:left;padding:8px 10px;background:var(--bg);color:var(--tx-2);font-weight:700;
-  border-bottom:2px solid var(--line);font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;}
-td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
-tr:last-child td{border-bottom:none;}
-tbody tr:hover td{background:#FAFBFB;}
-.mag{display:inline-block;padding:2px 10px;border-radius:11px;font-size:11px;font-weight:700;
-  color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.22);}
-.combo{font-size:11px;color:var(--tx-3);font-weight:600;margin-left:6px;}
-.x{background:none;border:none;color:var(--tx-3);cursor:pointer;font-size:14px;padding:2px 6px;}
-.x:hover{color:var(--r-ext);}
+html,body{background:var(--paper);}
+body{font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--text);min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;}
+*:focus-visible{outline:3px solid var(--acc-text);outline-offset:2px;}
+.app-header *:focus-visible{outline-color:var(--acc-light);}
+.num{font-variant-numeric:tabular-nums;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* Encabezado */
+.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  min-height:58px;padding:9px 24px;background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06);}
+.marca{display:flex;align-items:center;gap:12px;min-width:0;}
+.logo{flex:none;display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 9px;border-radius:7px;
+  background:var(--acc);color:var(--ink);font-weight:700;font-size:14px;}
+.sep{flex:none;width:1px;height:28px;background:rgba(255,255,255,.18);}
+.app-name{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.2;color:#fff;}
+.app-tag{font-size:12.5px;line-height:1.3;color:#c9d2e3;}
+.volver{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:7px 12px;
+  border:1px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);white-space:nowrap;}
+.volver:hover{border-color:var(--acc-light);color:var(--acc-light);}
+
+.wrap{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:20px;}
+.wrap.angosta{max-width:1000px;}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-text);}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--acc);}
+
+/* Introducción: borde tinta, para no confundirla con un aviso */
+.intro{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--ink);border-radius:var(--radius-sm);
+  padding:14px 18px;box-shadow:var(--shadow-sm);}
+.intro p+p{margin-top:6px;font-size:14.5px;line-height:1.6;}
+.intro b{font-weight:600;color:var(--ink);}
+
+/* Tarjetas */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px 22px;min-width:0;}
+.card h2{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.3;color:var(--ink);}
+.card h2 .paso{color:var(--acc-text);}
+.hint{margin-top:4px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 18px;font:inherit;font-size:14px;
+  font-weight:600;border-radius:var(--radius-sm);border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease;}
+.btn.sec{background:#fff;color:var(--ink);}
+@media (hover:hover){
+  .btn:hover:not([disabled]){background:var(--ink-2);border-color:var(--ink-2);}
+  .btn.sec:hover:not([disabled]){background:var(--paper);color:var(--ink);border-color:var(--ink);}
+}
+.btn[disabled]{opacity:.6;cursor:default;}
+.enlace{font:inherit;font-size:13.5px;font-weight:600;color:var(--acc-text);background:none;border:0;padding:6px 0;cursor:pointer;
+  text-decoration:underline;text-decoration-color:rgba(154,100,18,.4);text-underline-offset:3px;}
+.quitar{flex:none;width:32px;height:32px;display:inline-grid;place-items:center;font:inherit;font-size:14px;line-height:1;color:var(--faint);
+  background:none;border:1px solid transparent;border-radius:var(--radius-sm);cursor:pointer;}
+@media (hover:hover){.quitar:hover{color:var(--bad);border-color:var(--line);background:#fff;}}
+
+/* Campos */
+label,.lab-campo{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600;color:var(--text);}
+input,select{width:100%;min-height:42px;padding:0 12px;font:inherit;font-size:14px;color:var(--text);background:#fff;
+  border:1px solid var(--field);border-radius:var(--radius-sm);}
+input:focus-visible,select:focus-visible{outline:3px solid var(--acc-text);outline-offset:1px;border-color:var(--ink);}
+.ayuda-campo{margin-top:5px;font-size:12px;line-height:1.45;color:var(--faint);}
+
+/* Tablas */
+.tabla-wrap{position:relative;overflow-x:auto;}   /* posicionado: así lo oculto para lectores de pantalla no se escapa del desplazamiento */
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th{padding:10px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:var(--paper);border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:0;}
+
+/* Píldoras de nivel: punto de color y texto en tinta (el color nunca va solo en el texto) */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 7px;border-radius:999px;font-size:12px;font-weight:600;
+  white-space:nowrap;background:color-mix(in srgb, var(--c) 18%, #fff);color:var(--ink);}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;background:var(--paper);
+  border:1px solid var(--line);color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+/* Mensajes: el color acompaña a la palabra, nunca la reemplaza */
+.msg{padding:12px 14px;border-radius:var(--radius-sm);font-size:13.5px;line-height:1.55;border-left:3px solid currentColor;}
+.msg.ok{background:var(--ok-soft);color:var(--ok);}
+.msg.warn{background:var(--warn-soft);color:var(--warn-text);}
+.msg.bad{background:var(--bad-soft);color:var(--bad);}
+.msg .det{display:block;margin-top:2px;color:var(--text);}
+
+/* Aviso flotante */
+.toast{position:fixed;top:72px;right:20px;z-index:99;max-width:min(360px, calc(100vw - 32px));padding:11px 16px;border-radius:var(--radius-sm);
+  background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);transition:opacity .3s;}
+.toast[hidden]{display:none;}
+
+/* Pie */
+footer{border-top:1px solid var(--line);}
+.pie{max-width:1180px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;
+  font-size:12.5px;color:var(--faint);}
+.pie b{font-weight:600;color:var(--text);}
+@media (max-width:640px){
+  .wrap{padding:16px;gap:16px;}
+  .app-header{padding:8px 16px;}
+  .app-tag{display:none;}
+  .volver .lbl{display:none;}
+  .card{padding:16px;}
+  .pie{padding:16px;}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important;}}
+
+/* ---- Propio de esta herramienta ---- */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:20px;align-items:start;}
+.form{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1.15fr);gap:12px;align-items:end;margin:16px 0 14px;}
+.acciones{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.acciones .hint{margin:0;}
+.lista{margin-top:18px;}
+.lista td.mag{white-space:nowrap;}
+.combo{margin-left:6px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums;}
+.lista tr.nuevo td{animation:destello 1.8s ease;}
+@keyframes destello{0%{background:var(--acc-soft);}100%{background:transparent;}}
+.vacio{padding:24px 16px;text-align:center;font-size:13.5px;color:var(--muted);border:1px dashed var(--line);border-radius:var(--radius-sm);}
+.restablecer{margin-top:10px;}
 /* Mapa de calor */
-.heat{border-collapse:separate;border-spacing:4px;width:auto;margin:0 auto;}
-.heat td{width:74px;height:52px;text-align:center;border-radius:5px;font-weight:700;font-size:11px;
-  color:#17262B;position:relative;padding:3px;}
-.heat .ax{background:transparent!important;color:var(--tx-2);font-weight:600;font-size:10.5px;
-  width:auto;min-width:64px;padding:0 6px;}
-.heat .ax.col{text-align:center;min-width:0;}
-.cell-n{display:block;font-size:9.5px;font-weight:700;opacity:.72;}
-.dot{display:inline-block;background:rgba(0,0,0,.62);color:#fff;border-radius:50%;
-  padding:1px 7px;font-size:11px;font-weight:700;}
-.leyenda{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:12px;font-size:12px;color:var(--tx-2);}
-.leyenda span.li{display:inline-flex;align-items:center;gap:6px;}
-.sw{width:13px;height:13px;border-radius:4px;border:1px solid rgba(0,0,0,.16);}
-.vacio{padding:26px 16px;text-align:center;color:var(--tx-2);font-size:13px;}
-footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
-footer b{color:#fff;}
-footer .wrap2{max-width:1180px;margin:0 auto;}
-.toast{position:fixed;top:70px;right:20px;background:var(--acc-dk);color:#fff;padding:11px 16px;
-  border-radius:6px;font-size:13px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:99;
-  transition:opacity .3s;}
-.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
-  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
-  transition:opacity .2s ease,border-color .2s ease;}
-.volver:hover{opacity:1;border-color:var(--acc);}
-.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+.heat{border-collapse:separate;border-spacing:5px;width:auto;margin:14px auto 0;font-size:12px;}
+.heat td{border:0;padding:0;}
+.heat th{padding:0 6px;background:none;border:0;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap;}
+.heat th b{font-weight:700;color:var(--ink);}
+.heat th.fila{text-align:right;}
+.heat th.col{padding-top:4px;text-align:center;vertical-align:top;line-height:1.35;}
+.heat td.c{position:relative;width:76px;height:56px;padding:4px;text-align:center;border-radius:var(--radius-sm);background:var(--z);color:var(--ink);}
+.heat td.c.oscuro{color:#fff;}
+.zn{display:block;font-size:11px;font-weight:700;line-height:1.2;}
+.pi{display:block;margin-top:2px;font-size:10.5px;font-weight:600;opacity:.78;}
+.cuenta{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-top:3px;padding:0 6px;border-radius:999px;
+  background:rgba(20,33,61,.86);color:#fff;font-size:11.5px;font-weight:700;}
+.heat td.c.oscuro .cuenta{background:#fff;color:var(--ink);}
+.heat td.c.nuevo{animation:pulso 1.8s ease;}
+@keyframes pulso{0%{box-shadow:0 0 0 0 rgba(233,162,59,.95);}100%{box-shadow:0 0 0 14px rgba(233,162,59,0);}}
+.leyenda{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:14px;font-size:12.5px;color:var(--muted);}
+.leyenda span{display:inline-flex;align-items:center;gap:6px;}
+.leyenda i{width:12px;height:12px;border-radius:4px;background:var(--z);}
+@media (max-width:900px){.cols{grid-template-columns:minmax(0,1fr);}}
+@media (max-width:620px){.form{grid-template-columns:1fr 1fr;} .form .nombre{grid-column:1/-1;}}
+/* En celular el mapa se compacta: sin nombres de zona dentro de las celdas ni nombres de los niveles en los ejes */
+@media (max-width:520px){
+  .heat{border-spacing:3px;}
+  .heat td.c{width:48px;height:46px;padding:2px;}
+  .zn,.heat th .nm{display:none;}
+  .heat th{padding:0 3px;font-size:11px;}
+  .lista td.mag{white-space:normal;}
+  .combo{display:block;margin:3px 0 0;}
+}
 </style>
+</head>
+<body>
 
-<div class="app-header">
-  <span class="logo">MM</span>
-  <div class="sep"></div>
-  <div>
-    <div class="app-name">Matriz de Riesgos de Procesos</div>
-    <div class="app-tag">La magnitud se define por combinación, no por una fórmula</div>
+<header class="app-header">
+  <div class="marca">
+    <span class="logo" aria-hidden="true">MM</span>
+    <span class="sep" aria-hidden="true"></span>
+    <div>
+      <h1 class="app-name">Matriz de Riesgos de Procesos</h1>
+      <p class="app-tag">La magnitud se asigna por combinación, no por una fórmula</p>
+    </div>
   </div>
-</div>
+</header>
 
-<div class="wrap">
-  <div class="banner banner-info">
-    <b>Cómo funciona.</b> En la mayoría de matrices la magnitud sale de multiplicar
-    probabilidad por impacto. Aquí cada una de las <b>25 combinaciones</b> tiene su magnitud asignada
-    a mano. Por eso <b>P1 × I5 es Extremo</b> aunque su producto sea apenas 5: un impacto catastrófico
-    no se diluye porque sea poco probable.
-  </div>
+<main class="wrap">
+  <section class="intro" aria-label="Cómo funciona">
+    <p class="eyebrow">Cómo funciona</p>
+    <p>En muchas matrices la magnitud sale de multiplicar probabilidad por impacto. Aquí cada una de las <b>25 combinaciones</b> tiene una magnitud asignada por criterio: por eso <b>P1 × I5 es Extremo</b> aunque su producto sea apenas 5. Un impacto catastrófico no se diluye por ser poco probable.</p>
+  </section>
 
   <div class="cols">
-    <div class="card">
-      <h3>Riesgos</h3>
+    <section class="card" aria-labelledby="t-riesgos">
+      <h2 id="t-riesgos">Riesgos</h2>
       <p class="hint">Agregue un riesgo y vea dónde cae en la matriz.</p>
-      <div class="g3" style="margin:14px 0">
-        <div><label>Nombre del riesgo</label><input id="nom" placeholder="Ej.: Interrupción del suministro"></div>
-        <div><label>Probabilidad</label><select id="prob"></select></div>
-        <div><label>Impacto</label><select id="imp"></select></div>
+      <div class="form">
+        <div class="nombre"><label for="nom">Nombre del riesgo</label><input id="nom" autocomplete="off" placeholder="Ej.: Interrupción del suministro"></div>
+        <div><label for="prob">Probabilidad</label><select id="prob"></select></div>
+        <div><label for="imp">Impacto</label><select id="imp"></select></div>
       </div>
-      <button class="btn" onclick="agregar()">+ Agregar riesgo</button>
-      <div id="lista" style="margin-top:16px"></div>
-    </div>
+      <div class="acciones">
+        <button type="button" class="btn" id="agregar">Agregar riesgo</button>
+        <span class="hint num" id="conteo"></span>
+      </div>
+      <div class="lista" id="lista"></div>
+    </section>
 
-    <div class="card">
-      <h3>Mapa de calor</h3>
-      <p class="hint">Eje vertical: probabilidad · Eje horizontal: impacto. El número indica cuántos riesgos caen en esa combinación.</p>
-      <div style="overflow-x:auto;margin-top:14px"><div id="mapa"></div></div>
-      <div class="leyenda" id="leyenda"></div>
-    </div>
+    <section class="card" aria-labelledby="t-mapa">
+      <h2 id="t-mapa">Mapa de calor</h2>
+      <p class="hint">Filas: probabilidad. Columnas: impacto. El número indica cuántos riesgos caen en cada combinación; pase el cursor
+        sobre la celda para ver cuáles.</p>
+      <div class="tabla-wrap"><div id="mapa"></div></div>
+      <div class="leyenda" id="leyenda" aria-hidden="true"></div>
+    </section>
   </div>
-  </div>
+</main>
 
-<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+<div class="toast" id="aviso" role="status" aria-live="polite" hidden></div>
+
+<footer>
+  <div class="pie"><span><b>Mateo Meléndez</b> · Consultor de Riesgos Empresariales</span><span>Riesgos de ejemplo.</span></div>
+</footer>
 
 <script>
-/* Herramienta enfocada en un solo flujo de trabajo. */
-var ZONAS=[
-  {id:'bajo',    nombre:'Bajo',     color:'#22C55E'},
-  {id:'moderado',nombre:'Moderado', color:'#FFBF00'},
-  {id:'alto',    nombre:'Alto',     color:'#F97316'},
-  {id:'extremo', nombre:'Extremo',  color:'#DB0000'}
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function $(id){ return document.getElementById(id); }
+/* Aviso flotante: se anuncia a los lectores de pantalla y desaparece solo */
+var avisoT = null;
+function aviso(msg){
+  var t = $('aviso'); t.textContent = msg; t.hidden = false; t.style.opacity = '1';
+  clearTimeout(avisoT);
+  avisoT = setTimeout(function(){ t.style.opacity = '0'; avisoT = setTimeout(function(){ t.hidden = true; }, 320); }, 2600);
+}
+/* Abierta por su URL directa, la herramienta ofrece volver al portafolio; dentro del visor del portafolio sobra */
+(function(){
+  if (window.self !== window.top) return;
+  var a = document.createElement('a');
+  a.className = 'volver'; a.href = '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
+  a.innerHTML = '\u2190<span class="lbl"> Portafolio</span>';
+  document.querySelector('.app-header').appendChild(a);
+})();
+
+/* Zonas de magnitud, con los colores de nivel del portafolio. En la zona oscura el texto va en blanco */
+var ZONAS = [
+  {id:'bajo',     nombre:'Bajo',     color:'var(--r-bajo)'},
+  {id:'moderado', nombre:'Moderado', color:'var(--r-mod)'},
+  {id:'alto',     nombre:'Alto',     color:'var(--r-alto)'},
+  {id:'extremo',  nombre:'Extremo',  color:'var(--r-ext)', oscuro:true}
 ];
-/* Filas = probabilidad 1..5 · Columnas = impacto 1..5 */
-var MATRIZ=[
+/* Filas = probabilidad 1..5 · Columnas = impacto 1..5. Asignada por criterio, no por multiplicación */
+var MATRIZ = [
   ['bajo',    'bajo',    'moderado','alto',   'extremo'],
   ['bajo',    'moderado','moderado','alto',   'extremo'],
   ['bajo',    'moderado','alto',    'extremo','extremo'],
   ['moderado','moderado','alto',    'extremo','extremo'],
   ['moderado','alto',    'extremo', 'extremo','extremo']
 ];
-var PROBS=['Muy Baja','Baja','Media','Alta','Muy Alta'];
-var IMPS =['Insignificante','Menor','Moderado','Mayor','Catastrófico'];
-
-var riesgos=[
+var PROBS = ['Muy baja','Baja','Media','Alta','Muy alta'];
+var IMPS  = ['Insignificante','Menor','Moderado','Mayor','Catastrófico'];
+var EJEMPLO = [
   {nombre:'Interrupción no programada de planta', prob:3, imp:4},
   {nombre:'Fuga de información de clientes',      prob:2, imp:5},
   {nombre:'Retraso en entregas a cliente clave',  prob:4, imp:2},
   {nombre:'Error de digitación en conciliaciones',prob:4, imp:1}
 ];
+var riesgos = copiar(EJEMPLO), ultimo = null;
 
-function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function copiar(a){ return a.map(function(r){ return {nombre:r.nombre, prob:r.prob, imp:r.imp}; }); }
 function zonaDe(p,i){
-  var id=MATRIZ[p-1][i-1];
+  var id = MATRIZ[p-1][i-1];
   for(var k=0;k<ZONAS.length;k++){ if(ZONAS[k].id===id) return ZONAS[k]; }
   return null;
 }
 function llenarSelects(){
-  document.getElementById('prob').innerHTML=PROBS.map(function(n,i){
-    return '<option value="'+(i+1)+'" '+(i===2?'selected':'')+'>'+(i+1)+' · '+n+'</option>'; }).join('');
-  document.getElementById('imp').innerHTML=IMPS.map(function(n,i){
-    return '<option value="'+(i+1)+'" '+(i===2?'selected':'')+'>'+(i+1)+' · '+n+'</option>'; }).join('');
+  $('prob').innerHTML = PROBS.map(function(n,i){ return '<option value="'+(i+1)+'"'+(i===2?' selected':'')+'>'+(i+1)+' · '+n+'</option>'; }).join('');
+  $('imp').innerHTML  = IMPS.map(function(n,i){ return '<option value="'+(i+1)+'"'+(i===2?' selected':'')+'>'+(i+1)+' · '+n+'</option>'; }).join('');
 }
 function agregar(){
-  var el=document.getElementById('nom'), n=el.value.trim();
-  if(!n){ aviso('Escriba el nombre del riesgo'); el.focus(); return; }
-  riesgos.push({nombre:n, prob:parseInt(document.getElementById('prob').value),
-                imp:parseInt(document.getElementById('imp').value)});
-  el.value=''; el.focus(); pintar();
+  var el = $('nom'), n = el.value.trim();
+  if(!n){ aviso('Escriba el nombre del riesgo.'); el.focus(); return; }
+  var p = parseInt($('prob').value,10), i = parseInt($('imp').value,10);
+  riesgos.push({nombre:n, prob:p, imp:i});
+  ultimo = riesgos.length-1;
+  el.value = ''; el.focus(); pintar();
+  aviso('«'+n+'» quedó en '+zonaDe(p,i).nombre+' (P'+p+' × I'+i+').');
 }
-function quitar(i){ riesgos.splice(i,1); pintar(); }
-function aviso(msg){
-  var t=document.createElement('div'); t.className='toast'; t.textContent=msg;
-  document.body.appendChild(t);
-  setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){t.remove();},320); },2200);
+function quitar(i){
+  var n = riesgos[i].nombre;
+  riesgos.splice(i,1); ultimo = null; pintar();
+  aviso('Se quitó «'+n+'».');
+  /* El foco pasa al botón de la fila que quedó en su lugar (o a la anterior); sin filas, al nombre */
+  var sig = document.querySelector('.quitar[data-i="'+Math.min(i, riesgos.length-1)+'"]');
+  (sig || $('nom')).focus();
 }
+function restablecer(){ riesgos = copiar(EJEMPLO); ultimo = null; pintar(); aviso('Se restableció el ejemplo.'); }
+
 function pintarLista(){
-  var c=document.getElementById('lista');
-  if(!riesgos.length){ c.innerHTML='<div class="vacio">Sin riesgos. Agregue el primero arriba.</div>'; return; }
-  c.innerHTML='<table><thead><tr><th>Riesgo</th><th>Magnitud</th><th></th></tr></thead><tbody>'+
+  var c = $('lista');
+  $('conteo').textContent = riesgos.length + (riesgos.length===1 ? ' riesgo' : ' riesgos');
+  if(!riesgos.length){
+    c.innerHTML = '<div class="vacio">Todavía no hay riesgos. Agregue el primero arriba o '+
+      '<button type="button" class="enlace" data-accion="restablecer">restablezca el ejemplo</button>.</div>';
+    return;
+  }
+  c.innerHTML = '<div class="tabla-wrap"><table><thead><tr><th>Riesgo</th><th>Magnitud</th><th><span class="sr">Quitar</span></th></tr></thead><tbody>'+
     riesgos.map(function(r,i){
-      var z=zonaDe(r.prob,r.imp);
-      return '<tr><td>'+escH(r.nombre)+'</td>'+
-        '<td><span class="mag" style="background:'+z.color+'">'+z.nombre+'</span>'+
-        '<span class="combo">P'+r.prob+' × I'+r.imp+'</span></td>'+
-        '<td style="text-align:right"><button class="x" title="Quitar" onclick="quitar('+i+')">✕</button></td></tr>';
-    }).join('')+'</tbody></table>';
+      var z = zonaDe(r.prob,r.imp);
+      return '<tr'+(i===ultimo?' class="nuevo"':'')+'><td>'+escH(r.nombre)+'</td>'+
+        '<td class="mag"><span class="pill" style="--c:'+z.color+'">'+z.nombre+'</span><span class="combo">P'+r.prob+' × I'+r.imp+'</span></td>'+
+        '<td style="text-align:right"><button type="button" class="quitar" data-i="'+i+'" title="Quitar" aria-label="Quitar «'+escH(r.nombre)+'»">✕</button></td></tr>';
+    }).join('')+'</tbody></table></div>'+
+    '<p class="restablecer"><button type="button" class="enlace" data-accion="restablecer">Restablecer el ejemplo</button></p>';
 }
 function pintarMapa(){
-  var celdas={};
-  riesgos.forEach(function(r){ var k=r.prob+'-'+r.imp; (celdas[k]=celdas[k]||[]).push(r.nombre); });
-  var h='<table class="heat"><tbody>';
+  var celdas = {};
+  riesgos.forEach(function(r){ var k = r.prob+'-'+r.imp; (celdas[k] = celdas[k] || []).push(r.nombre); });
+  var nueva = (ultimo!==null && riesgos[ultimo]) ? riesgos[ultimo].prob+'-'+riesgos[ultimo].imp : null;
+  var h = '<table class="heat"><caption class="sr">Mapa de calor: probabilidad en las filas e impacto en las columnas</caption><tbody>';
   for(var p=5;p>=1;p--){
-    h+='<tr><td class="ax"><b>'+p+'</b> · '+escH(PROBS[p-1])+'</td>';
+    h += '<tr><th scope="row" class="fila"><b>'+p+'</b><span class="nm"> · '+escH(PROBS[p-1])+'</span></th>';
     for(var i=1;i<=5;i++){
-      var z=zonaDe(p,i), k=p+'-'+i, ns=celdas[k]||[];
-      var dentro = ns.length? '<span class="dot" title="'+escH(ns.join(', '))+'">'+ns.length+'</span>'
-                            : '<span class="cell-n">P'+p+'·I'+i+'</span>';
-      h+='<td style="background:'+z.color+'" title="Probabilidad '+p+' × Impacto '+i+' → '+z.nombre+'">'+
-         '<span class="cell-n" style="opacity:.9">'+z.nombre+'</span>'+dentro+'</td>';
+      var z = zonaDe(p,i), k = p+'-'+i, ns = celdas[k] || [];
+      var titulo = 'Probabilidad '+p+' × impacto '+i+': '+z.nombre+(ns.length ? '. '+ns.length+(ns.length===1?' riesgo: ':' riesgos: ')+ns.join(', ') : '');
+      h += '<td class="c'+(z.oscuro?' oscuro':'')+(k===nueva?' nuevo':'')+'" style="--z:'+z.color+'" title="'+escH(titulo)+'">'+
+        '<span class="zn">'+z.nombre+'</span>'+
+        (ns.length ? '<span class="cuenta" aria-label="'+ns.length+(ns.length===1?' riesgo':' riesgos')+'">'+ns.length+'</span>'
+                   : '<span class="pi">P'+p+'·I'+i+'</span>')+'</td>';
     }
-    h+='</tr>';
+    h += '</tr>';
   }
-  h+='<tr><td class="ax"></td>';
-  for(var j=1;j<=5;j++){ h+='<td class="ax col"><b>'+j+'</b><br>'+escH(IMPS[j-1])+'</td>'; }
-  h+='</tr></tbody></table>';
-  document.getElementById('mapa').innerHTML=h;
-  document.getElementById('leyenda').innerHTML=ZONAS.map(function(z){
-    return '<span class="li"><span class="sw" style="background:'+z.color+'"></span>'+z.nombre+'</span>'; }).join('');
+  h += '<tr><td></td>';
+  for(var j=1;j<=5;j++){ h += '<th scope="col" class="col"><b>'+j+'</b><span class="nm"><br>'+escH(IMPS[j-1])+'</span></th>'; }
+  h += '</tr></tbody></table>';
+  $('mapa').innerHTML = h;
+  $('leyenda').innerHTML = ZONAS.map(function(z){ return '<span><i style="--z:'+z.color+'"></i>'+z.nombre+'</span>'; }).join('');
 }
 function pintar(){ pintarLista(); pintarMapa(); }
-document.addEventListener('keydown',function(e){
-  if(e.key==='Enter' && document.activeElement && document.activeElement.id==='nom') agregar();
+
+$('agregar').addEventListener('click', agregar);
+$('nom').addEventListener('keydown', function(e){ if(e.key==='Enter') agregar(); });
+$('lista').addEventListener('click', function(e){
+  var q = e.target.closest('.quitar'); if(q){ quitar(parseInt(q.dataset.i,10)); return; }
+  if(e.target.closest('[data-accion="restablecer"]')) restablecer();
 });
 llenarSelects(); pintar();
 </script>
-<script>
-/* Enlace de regreso al portafolio. Solo aparece si la herramienta se abrio
-   por su URL directa: dentro del visor modal del portafolio sobraria. */
-(function () {
-  if (window.self !== window.top) return;
-  var h = document.querySelector('.app-header');
-  if (!h) return;
-  var a = document.createElement('a');
-  a.className = 'volver';
-  a.href = '../index.html';
-  a.textContent = '\u2190 Portafolio';
-  h.appendChild(a);
-})();
-</script>
+</body>
+</html>

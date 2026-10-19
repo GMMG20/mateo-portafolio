@@ -1,209 +1,323 @@
+<!doctype html>
+<html lang="es">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-<title>Apetito y Tolerancia</title>
+<meta name="robots" content="noindex, nofollow">
+<title>Apetito y Tolerancia al Riesgo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
 <style>
+/* Layout: encabezado de marca, introducción y tres pasos: parámetros, umbrales resultantes y la prueba de una exposición */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
-  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
-  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
-  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
-  --verde:#22C55E; --ambar:#FFBF00; --rojo:#DB0000;
+  /* Tinta y ámbar: la misma paleta del portafolio */
+  --ink:#14213d; --ink-2:#1c2b4d; --ink-soft:#eef1f6;
+  --acc:#e9a23b; --acc-light:#f2b84b; --acc-text:#9a6412; --acc-soft:#fdf3e1;
+  --paper:#faf8f3; --card:#ffffff;
+  --text:#1b2436; --muted:#4f5b70; --faint:#667085; --line:#e8e2d6; --field:#9c9384;
+  --ok:#2f7d4f; --ok-soft:#e7f4ec; --warn-text:#7c4f0e; --warn-soft:#fdf3e1; --bad:#b4372b; --bad-soft:#fbe9e7;
+  /* Niveles de riesgo: los mismos de la matriz de la portada del portafolio */
+  --r-bajo:#2f9e6e; --r-mod:#d9b23a; --r-alto:#df7c3a; --r-ext:#cf4538;
+  --radius:14px; --radius-sm:8px;
+  --shadow-sm:0 1px 2px rgba(20,33,61,.05), 0 6px 16px -8px rgba(20,33,61,.12);
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:light;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
-  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
-.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
-  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
-.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
-  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
-.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
-.app-name{color:#fff;font-size:14px;font-weight:600;}
-.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
-.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1000px;margin:0 auto;width:100%;}
-.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
-.card h3{font-size:15px;margin-bottom:4px;}
-.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
-.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
-.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
-.banner-amb{background:var(--amb-bg);color:#7A5514;border-left:3px solid var(--amb);}
-.banner-ok{background:#DCFCE7;color:#14532D;border-left:3px solid var(--verde);}
-.banner-warn{background:#FEF3C7;color:#7A5514;border-left:3px solid var(--ambar);}
-.banner-err{background:#FEE2E2;color:#991B1B;border-left:3px solid var(--rojo);}
-input,select{font-family:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
-  border-radius:5px;background:#fff;color:var(--tx);width:100%;}
-label{display:block;font-size:11.5px;font-weight:700;color:var(--tx-2);margin-bottom:4px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-@media(max-width:640px){.g2{grid-template-columns:1fr;}}
-.mono{font-variant-numeric:tabular-nums;}
-/* Escala de apetito */
-.escala{display:flex;border-radius:6px;overflow:hidden;border:1px solid var(--line);margin-top:4px;}
-.op{flex:1;padding:9px 4px;text-align:center;font-size:11.5px;font-weight:700;cursor:pointer;
-  background:#fff;border-right:1px solid var(--line);color:var(--tx-2);}
-.op:last-child{border-right:none;}
-.op:hover{background:var(--bg);}
-.op.sel{color:#fff;}
-/* Cadena de calculo */
-.cadena{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin-top:14px;}
-.paso{flex:1;min-width:150px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:13px;}
-.paso .t{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--tx-3);}
-.paso .v{font-size:20px;font-weight:800;color:var(--ink);margin-top:3px;}
-.paso .s{font-size:11px;color:var(--tx-2);margin-top:2px;line-height:1.4;}
-.paso.destaca{background:var(--mist);border-color:#9FD9D1;}
-.paso.destaca .v{color:var(--acc-dk);}
-.op-flecha{display:flex;align-items:center;color:var(--tx-3);font-weight:700;font-size:17px;}
-/* Termometro */
-.term{display:flex;height:30px;border-radius:6px;overflow:hidden;border:1px solid var(--line);
-  font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.3);margin-top:14px;}
-.term div{display:flex;align-items:center;justify-content:center;padding:0 5px;white-space:nowrap;}
-.marcador{position:relative;height:26px;margin-top:2px;}
-.marcador .m{position:absolute;transform:translateX(-50%);text-align:center;}
-.marcador .m .fl{font-size:14px;line-height:1;color:var(--ink);}
-.marcador .m .tx{font-size:10.5px;font-weight:700;color:var(--ink);white-space:nowrap;}
-footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
-footer b{color:#fff;}
-footer .wrap2{max-width:1000px;margin:0 auto;}
-.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
-  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
-  transition:opacity .2s ease,border-color .2s ease;}
-.volver:hover{opacity:1;border-color:var(--acc);}
-.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+html,body{background:var(--paper);}
+body{font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--text);min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;}
+*:focus-visible{outline:3px solid var(--acc-text);outline-offset:2px;}
+.app-header *:focus-visible{outline-color:var(--acc-light);}
+.num{font-variant-numeric:tabular-nums;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* Encabezado */
+.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  min-height:58px;padding:9px 24px;background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06);}
+.marca{display:flex;align-items:center;gap:12px;min-width:0;}
+.logo{flex:none;display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 9px;border-radius:7px;
+  background:var(--acc);color:var(--ink);font-weight:700;font-size:14px;}
+.sep{flex:none;width:1px;height:28px;background:rgba(255,255,255,.18);}
+.app-name{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.2;color:#fff;}
+.app-tag{font-size:12.5px;line-height:1.3;color:#c9d2e3;}
+.volver{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:7px 12px;
+  border:1px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);white-space:nowrap;}
+.volver:hover{border-color:var(--acc-light);color:var(--acc-light);}
+
+.wrap{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:20px;}
+.wrap.angosta{max-width:1000px;}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-text);}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--acc);}
+
+/* Introducción: borde tinta, para no confundirla con un aviso */
+.intro{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--ink);border-radius:var(--radius-sm);
+  padding:14px 18px;box-shadow:var(--shadow-sm);}
+.intro p+p{margin-top:6px;font-size:14.5px;line-height:1.6;}
+.intro b{font-weight:600;color:var(--ink);}
+
+/* Tarjetas */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px 22px;min-width:0;}
+.card h2{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.3;color:var(--ink);}
+.card h2 .paso{color:var(--acc-text);}
+.hint{margin-top:4px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 18px;font:inherit;font-size:14px;
+  font-weight:600;border-radius:var(--radius-sm);border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease;}
+.btn.sec{background:#fff;color:var(--ink);}
+@media (hover:hover){
+  .btn:hover:not([disabled]){background:var(--ink-2);border-color:var(--ink-2);}
+  .btn.sec:hover:not([disabled]){background:var(--paper);color:var(--ink);border-color:var(--ink);}
+}
+.btn[disabled]{opacity:.6;cursor:default;}
+.enlace{font:inherit;font-size:13.5px;font-weight:600;color:var(--acc-text);background:none;border:0;padding:6px 0;cursor:pointer;
+  text-decoration:underline;text-decoration-color:rgba(154,100,18,.4);text-underline-offset:3px;}
+.quitar{flex:none;width:32px;height:32px;display:inline-grid;place-items:center;font:inherit;font-size:14px;line-height:1;color:var(--faint);
+  background:none;border:1px solid transparent;border-radius:var(--radius-sm);cursor:pointer;}
+@media (hover:hover){.quitar:hover{color:var(--bad);border-color:var(--line);background:#fff;}}
+
+/* Campos */
+label,.lab-campo{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600;color:var(--text);}
+input,select{width:100%;min-height:42px;padding:0 12px;font:inherit;font-size:14px;color:var(--text);background:#fff;
+  border:1px solid var(--field);border-radius:var(--radius-sm);}
+input:focus-visible,select:focus-visible{outline:3px solid var(--acc-text);outline-offset:1px;border-color:var(--ink);}
+.ayuda-campo{margin-top:5px;font-size:12px;line-height:1.45;color:var(--faint);}
+
+/* Tablas */
+.tabla-wrap{position:relative;overflow-x:auto;}   /* posicionado: así lo oculto para lectores de pantalla no se escapa del desplazamiento */
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th{padding:10px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:var(--paper);border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:0;}
+
+/* Píldoras de nivel: punto de color y texto en tinta (el color nunca va solo en el texto) */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 7px;border-radius:999px;font-size:12px;font-weight:600;
+  white-space:nowrap;background:color-mix(in srgb, var(--c) 18%, #fff);color:var(--ink);}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;background:var(--paper);
+  border:1px solid var(--line);color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+/* Mensajes: el color acompaña a la palabra, nunca la reemplaza */
+.msg{padding:12px 14px;border-radius:var(--radius-sm);font-size:13.5px;line-height:1.55;border-left:3px solid currentColor;}
+.msg.ok{background:var(--ok-soft);color:var(--ok);}
+.msg.warn{background:var(--warn-soft);color:var(--warn-text);}
+.msg.bad{background:var(--bad-soft);color:var(--bad);}
+.msg .det{display:block;margin-top:2px;color:var(--text);}
+
+/* Aviso flotante */
+.toast{position:fixed;top:72px;right:20px;z-index:99;max-width:min(360px, calc(100vw - 32px));padding:11px 16px;border-radius:var(--radius-sm);
+  background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);transition:opacity .3s;}
+.toast[hidden]{display:none;}
+
+/* Pie */
+footer{border-top:1px solid var(--line);}
+.pie{max-width:1180px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;
+  font-size:12.5px;color:var(--faint);}
+.pie b{font-weight:600;color:var(--text);}
+@media (max-width:640px){
+  .wrap{padding:16px;gap:16px;}
+  .app-header{padding:8px 16px;}
+  .app-tag{display:none;}
+  .volver .lbl{display:none;}
+  .card{padding:16px;}
+  .pie{padding:16px;}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important;}}
+
+/* ---- Propio de esta herramienta ---- */
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px;}
+/* Postura del comité: cinco botones; las líneas entre ellos salen del espacio de la rejilla, así se ordenan bien en dos filas */
+.escala{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--field);
+  border-radius:var(--radius-sm);overflow:hidden;}
+.escala button{min-height:54px;padding:6px 4px;font:inherit;font-size:13px;font-weight:600;line-height:1.25;color:var(--text);
+  background:#fff;border:0;cursor:pointer;}
+.escala button small{display:block;font-size:11.5px;font-weight:500;color:var(--faint);font-variant-numeric:tabular-nums;}
+.escala button[aria-pressed="true"]{background:var(--ink);color:#fff;}
+.escala button[aria-pressed="true"] small{color:#c9d2e3;}
+@media (hover:hover){.escala button:hover:not([aria-pressed="true"]){background:var(--paper);}}
+.desc{margin-top:10px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+.desc b{color:var(--ink);}
+.cadena{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:stretch;margin-top:16px;}
+.paso-c{padding:14px 16px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);}
+.paso-c .t{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.paso-c .v{margin-top:2px;font-family:var(--serif);font-weight:600;font-size:26px;line-height:1.2;color:var(--ink);font-variant-numeric:tabular-nums;}
+.paso-c .s{font-size:12.5px;color:var(--muted);}
+.paso-c.destaca{background:var(--ink-soft);border:1.5px solid var(--ink);}
+.op-flecha{display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--faint);}
+/* Barra de umbrales a escala: va de 0 al 125 % del apetito */
+.term{display:flex;height:34px;margin-top:20px;border-radius:var(--radius-sm);overflow:hidden;font-size:12px;font-weight:700;}
+.term div{display:flex;align-items:center;justify-content:center;min-width:0;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.term .v{background:var(--r-bajo);color:var(--ink);}
+.term .a{background:var(--r-mod);color:var(--ink);}
+.term .r{background:var(--r-ext);color:#fff;}
+.marcador{position:relative;height:34px;margin-top:4px;}
+.marcador .m{position:absolute;top:0;transform:translateX(-50%);text-align:center;white-space:nowrap;}
+.marcador .fl{font-size:13px;line-height:1;color:var(--ink);}
+.marcador .tx{font-size:12px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;}
+@media (max-width:760px){
+  .cadena{grid-template-columns:minmax(0,1fr);}
+  .op-flecha{height:16px;transform:rotate(90deg);}
+}
+@media (max-width:640px){.g2{grid-template-columns:minmax(0,1fr);}}
+@media (max-width:480px){
+  .escala{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .escala button:last-child{grid-column:span 2;}   /* tres arriba y dos abajo, sin huecos */
+  .term{font-size:11px;}
+  .term .lg{display:none;}   /* en celular la barra muestra solo los umbrales; la frase de abajo da el detalle */
+}
 </style>
+</head>
+<body>
 
-<div class="app-header">
-  <span class="logo">MM</span>
-  <div class="sep"></div>
-  <div>
-    <div class="app-name">Apetito y Tolerancia al Riesgo</div>
-    <div class="app-tag">De la declaración cualitativa a la cifra</div>
-  </div>
-</div>
-
-<div class="wrap">
-  <div class="banner banner-info">
-    <b>Cómo funciona.</b> El comité declara que la organización «es conservadora»,
-    pero cuando llega una exposición concreta a la mesa nadie sabe si cabe dentro de lo aprobado.
-    Esto convierte la postura en una cifra: <b>capacidad → apetito → escalones de escalamiento</b>.
-  </div>
-
-  <div class="card">
-    <h3>1 · Parámetros</h3>
-    <div class="g2" style="margin-top:12px">
-      <div><label>EBITDA anual (millones)</label>
-        <input type="number" id="ebitda" class="mono" value="120000" min="0" step="any" oninput="calcular()"></div>
-      <div><label>Porcentaje de capacidad <span class="hint">— lo máximo absorbible sin comprometer la viabilidad</span></label>
-        <input type="number" id="cap" class="mono" value="25" min="1" max="100" oninput="calcular()"></div>
-    </div>
-    <div style="margin-top:14px">
-      <label>Postura del comité frente al riesgo</label>
-      <div class="escala" id="escala"></div>
-      <p class="hint" id="descNivel" style="margin-top:8px"></p>
+<header class="app-header">
+  <div class="marca">
+    <span class="logo" aria-hidden="true">MM</span>
+    <span class="sep" aria-hidden="true"></span>
+    <div>
+      <h1 class="app-name">Apetito y Tolerancia al Riesgo</h1>
+      <p class="app-tag">De la declaración cualitativa a la cifra</p>
     </div>
   </div>
+</header>
 
-  <div class="card">
-    <h3>2 · Umbrales resultantes</h3>
-    <p class="hint">La capacidad es lo que se podría absorber. El apetito es la porción que se decide asumir, y siempre es menor.</p>
+<main class="wrap angosta">
+  <section class="intro" aria-label="Cómo funciona">
+    <p class="eyebrow">Cómo funciona</p>
+    <p>El comité declara que la organización «es conservadora», pero cuando llega una exposición concreta nadie sabe si cabe dentro de lo aprobado. Aquí la postura se convierte en una cifra: <b>capacidad → apetito → umbrales de escalamiento</b>.</p>
+  </section>
+
+  <section class="card" aria-labelledby="t1">
+    <h2 id="t1"><span class="paso">1 ·</span> Parámetros</h2>
+    <div class="g2">
+      <div><label for="ebitda">EBITDA anual (millones)</label>
+        <input type="number" id="ebitda" class="num" inputmode="decimal" value="120000" min="0" step="any"></div>
+      <div><label for="cap">Capacidad de absorción (% del EBITDA)</label>
+        <input type="number" id="cap" class="num" inputmode="decimal" value="25" min="1" max="100" step="any" aria-describedby="cap-ayuda">
+        <p class="ayuda-campo" id="cap-ayuda">Lo máximo que la organización podría absorber sin comprometer su viabilidad.</p></div>
+    </div>
+    <div style="margin-top:16px">
+      <p class="lab-campo" id="lab-postura">Postura del comité frente al riesgo</p>
+      <div class="escala" id="escala" role="group" aria-labelledby="lab-postura"></div>
+      <p class="desc" id="descNivel" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="t2">
+    <h2 id="t2"><span class="paso">2 ·</span> Umbrales resultantes</h2>
+    <p class="hint">La capacidad es lo que se podría absorber; el apetito es la parte que se decide asumir, y siempre es menor.</p>
     <div class="cadena" id="cadena"></div>
-    <div class="term" id="term"></div>
-    <div class="marcador" id="marcador"></div>
-  </div>
+    <div class="term" id="term" aria-hidden="true"></div>
+    <div class="marcador" id="marcador" aria-hidden="true"></div>
+    <p class="hint" id="lectura"></p>
+  </section>
 
-  <div class="card">
-    <h3>3 · ¿Esta exposición cabe dentro del apetito?</h3>
-    <p class="hint">Ingrese una exposición estimada y compárela contra el límite aprobado.</p>
-    <div class="g2" style="margin-top:12px">
-      <div><label>Exposición estimada (millones)</label>
-        <input type="number" id="expo" class="mono" value="5000" min="0" step="any" oninput="calcular()"></div>
+  <section class="card" aria-labelledby="t3">
+    <h2 id="t3"><span class="paso">3 ·</span> ¿Esta exposición cabe dentro del apetito?</h2>
+    <p class="hint">Ingrese una exposición estimada y compárela con el límite aprobado.</p>
+    <div class="g2">
+      <div><label for="expo">Exposición estimada (millones)</label>
+        <input type="number" id="expo" class="num" inputmode="decimal" value="5000" min="0" step="any"></div>
     </div>
-    <div id="veredicto" style="margin-top:14px"></div>
-  </div>
-  </div>
+    <div id="veredicto" style="margin-top:16px" aria-live="polite"></div>
+  </section>
+</main>
 
-<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+<div class="toast" id="aviso" role="status" aria-live="polite" hidden></div>
+
+<footer>
+  <div class="pie"><span><b>Mateo Meléndez</b> · Consultor de Riesgos Empresariales</span><span>Cifras de ejemplo, en millones.</span></div>
+</footer>
 
 <script>
-/* Herramienta enfocada en un solo flujo de trabajo. */
-var NIVELES=[
-  {id:'averso',  nombre:'Averso',   f:0.05, color:'#15803D', desc:'No se acepta exposición. Se evita la actividad o se transfiere en su totalidad.'},
-  {id:'cauto',   nombre:'Cauto',    f:0.10, color:'#22C55E', desc:'Exposición mínima, solo con controles robustos y vigilancia estrecha.'},
-  {id:'moderado',nombre:'Moderado', f:0.20, color:'#FFBF00', desc:'Exposición razonable cuando el retorno lo justifica y los controles son efectivos.'},
-  {id:'flexible',nombre:'Flexible', f:0.30, color:'#F97316', desc:'Exposición significativa a cambio de oportunidades de crecimiento.'},
-  {id:'abierto', nombre:'Abierto',  f:0.45, color:'#DB0000', desc:'Se busca deliberadamente la exposición como parte de la estrategia competitiva.'}
-];
-var VERDE=60, AMBAR=100;   /* porcentajes del límite de apetito */
-var sel='moderado';
-
 function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
-function fmt(v){
-  if(v===null||v===undefined||isNaN(v)) return '—';
-  return Number(v).toLocaleString('es-CO',{maximumFractionDigits:0});
+function $(id){ return document.getElementById(id); }
+/* Aviso flotante: se anuncia a los lectores de pantalla y desaparece solo */
+var avisoT = null;
+function aviso(msg){
+  var t = $('aviso'); t.textContent = msg; t.hidden = false; t.style.opacity = '1';
+  clearTimeout(avisoT);
+  avisoT = setTimeout(function(){ t.style.opacity = '0'; avisoT = setTimeout(function(){ t.hidden = true; }, 320); }, 2600);
 }
+/* Abierta por su URL directa, la herramienta ofrece volver al portafolio; dentro del visor del portafolio sobra */
+(function(){
+  if (window.self !== window.top) return;
+  var a = document.createElement('a');
+  a.className = 'volver'; a.href = '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
+  a.innerHTML = '\u2190<span class="lbl"> Portafolio</span>';
+  document.querySelector('.app-header').appendChild(a);
+})();
+
+var NIVELES = [
+  {id:'averso',   nombre:'Averso',   f:0.05, desc:'No se acepta exposición: se evita la actividad o se transfiere en su totalidad.'},
+  {id:'cauto',    nombre:'Cauto',    f:0.10, desc:'Exposición mínima, solo con controles robustos y vigilancia estrecha.'},
+  {id:'moderado', nombre:'Moderado', f:0.20, desc:'Exposición razonable cuando el retorno lo justifica y los controles son efectivos.'},
+  {id:'flexible', nombre:'Flexible', f:0.30, desc:'Exposición significativa a cambio de oportunidades de crecimiento.'},
+  {id:'abierto',  nombre:'Abierto',  f:0.45, desc:'Se busca deliberadamente la exposición como parte de la estrategia competitiva.'}
+];
+var VERDE = 60, AMBAR = 100, TOPE = 125;   /* porcentajes del apetito; la barra se dibuja hasta el 125 % */
+var sel = 'moderado';
+
+function fmt(v){ return (v===null || v===undefined || isNaN(v)) ? '—' : Number(v).toLocaleString('es-CO', {maximumFractionDigits:0}); }
+function pct(v){ return Number(v).toLocaleString('es-CO', {maximumFractionDigits:1})+' %'; }
 function nivel(){ for(var i=0;i<NIVELES.length;i++){ if(NIVELES[i].id===sel) return NIVELES[i]; } return NIVELES[2]; }
-function setNivel(id){ sel=id; calcular(); }
+
 function pintarEscala(){
-  document.getElementById('escala').innerHTML=NIVELES.map(function(n){
-    var s=n.id===sel;
-    return '<div class="op '+(s?'sel':'')+'" style="'+(s?'background:'+n.color:'')+'" '+
-      'onclick="setNivel(\''+n.id+'\')" title="'+escH(n.desc)+'">'+escH(n.nombre)+
-      '<br><span style="font-size:9.5px;font-weight:600;opacity:.85">'+Math.round(n.f*100)+'%</span></div>';
+  $('escala').innerHTML = NIVELES.map(function(n){
+    return '<button type="button" data-id="'+n.id+'" aria-pressed="'+(n.id===sel)+'">'+escH(n.nombre)+'<small>'+Math.round(n.f*100)+' %</small></button>';
   }).join('');
-  var n=nivel();
-  document.getElementById('descNivel').innerHTML='<b>'+escH(n.nombre)+'</b> — '+escH(n.desc)+
-    ' Se asume el <b>'+Math.round(n.f*100)+'%</b> de la capacidad.';
+  var n = nivel();
+  $('descNivel').innerHTML = '<b>'+escH(n.nombre)+':</b> '+escH(n.desc)+' Se asume el <b>'+Math.round(n.f*100)+' %</b> de la capacidad.';
 }
 function calcular(){
-  pintarEscala();
-  var base=Number(document.getElementById('ebitda').value)||0;
-  var capPct=Number(document.getElementById('cap').value)||0;
-  var n=nivel();
-  var capacidad=base*capPct/100;
-  var apetito=capacidad*n.f;
-  var verde=apetito*VERDE/100;
-  var ambar=apetito*AMBAR/100;
+  var base = Number($('ebitda').value) || 0;
+  var capPct = Number($('cap').value) || 0;
+  var n = nivel();
+  var capacidad = base*capPct/100, apetito = capacidad*n.f;
+  var verde = apetito*VERDE/100, ambar = apetito*AMBAR/100;
 
-  document.getElementById('cadena').innerHTML=
-    '<div class="paso"><div class="t">Base</div><div class="v mono">'+fmt(base)+'</div><div class="s">EBITDA anual</div></div>'+
-    '<div class="op-flecha">→</div>'+
-    '<div class="paso"><div class="t">Capacidad</div><div class="v mono">'+fmt(capacidad)+'</div><div class="s">'+capPct+'% de la base</div></div>'+
-    '<div class="op-flecha">→</div>'+
-    '<div class="paso destaca"><div class="t">Apetito</div><div class="v mono">'+fmt(apetito)+'</div><div class="s">'+Math.round(n.f*100)+'% de la capacidad · '+escH(n.nombre)+'</div></div>';
+  $('cadena').innerHTML =
+    '<div class="paso-c"><div class="t">Base</div><div class="v">'+fmt(base)+'</div><div class="s">EBITDA anual</div></div>'+
+    '<div class="op-flecha" aria-hidden="true">→</div>'+
+    '<div class="paso-c"><div class="t">Capacidad</div><div class="v">'+fmt(capacidad)+'</div><div class="s">'+pct(capPct)+' de la base</div></div>'+
+    '<div class="op-flecha" aria-hidden="true">→</div>'+
+    '<div class="paso-c destaca"><div class="t">Apetito</div><div class="v">'+fmt(apetito)+'</div><div class="s">'+Math.round(n.f*100)+' % de la capacidad · '+escH(n.nombre)+'</div></div>';
 
-  document.getElementById('term').innerHTML=
-    '<div style="background:var(--verde);width:'+VERDE+'%">Verde · hasta '+fmt(verde)+'</div>'+
-    '<div style="background:var(--ambar);color:#5C4300;width:'+(AMBAR-VERDE)+'%">Ámbar</div>'+
-    '<div style="background:var(--rojo);flex:1">Rojo · sobre '+fmt(ambar)+'</div>';
+  $('term').innerHTML =
+    '<div class="v" style="width:'+(VERDE/TOPE*100)+'%"><span class="lg">Verde </span>≤ '+fmt(verde)+'</div>'+
+    '<div class="a" style="width:'+((AMBAR-VERDE)/TOPE*100)+'%"><span class="lg">Ámbar </span>≤ '+fmt(ambar)+'</div>'+
+    '<div class="r" style="flex:1"><span class="lg">Rojo </span>&gt; '+fmt(ambar)+'</div>';
+  $('lectura').textContent = 'Verde hasta '+fmt(verde)+' (el 60 % del apetito), ámbar hasta '+fmt(ambar)+' (el apetito completo) y rojo por encima.';
 
-  var expo=Number(document.getElementById('expo').value);
-  var mk=document.getElementById('marcador');
-  if(apetito>0 && !isNaN(expo) && document.getElementById('expo').value!==''){
-    var pct=Math.min(100, expo/apetito*100);
-    mk.innerHTML='<div class="m" style="left:'+pct+'%"><div class="fl">▲</div><div class="tx">'+fmt(expo)+'</div></div>';
-  } else mk.innerHTML='';
+  var campo = $('expo'), expo = Number(campo.value), mk = $('marcador'), v = $('veredicto');
+  var hayExpo = campo.value!=='' && !isNaN(expo);
+  if(apetito>0 && hayExpo){
+    var pos = Math.min(expo/apetito*100, TOPE)/TOPE*100;
+    pos = Math.max(4, Math.min(96, pos));   /* el rótulo no se sale de la barra */
+    mk.innerHTML = '<div class="m" style="left:'+pos+'%"><div class="fl">▲</div><div class="tx">'+fmt(expo)+'</div></div>';
+  } else mk.innerHTML = '';
 
-  var v=document.getElementById('veredicto');
-  if(isNaN(expo)||document.getElementById('expo').value===''){ v.innerHTML='<p class="hint">Ingrese la exposición.</p>'; return; }
-  if(apetito<=0){ v.innerHTML='<div class="banner banner-warn">Ingrese una base financiera mayor que cero.</div>'; return; }
-  var p=expo/apetito*100, cls, est, acc;
+  if(!hayExpo){ v.innerHTML = '<p class="hint">Ingrese la exposición para compararla.</p>'; return; }
+  if(apetito<=0){ v.innerHTML = '<div class="msg warn"><b>Faltan datos.</b><span class="det">Ingrese un EBITDA y una capacidad mayores que cero.</span></div>'; return; }
+  var p = expo/apetito*100, cls, est, acc;
   if(expo<=verde){ cls='ok'; est='Dentro del apetito'; acc='Se gestiona en la operación normal, con el monitoreo periódico habitual.'; }
   else if(expo<=ambar){ cls='warn'; est='En zona de alerta'; acc='Exige reporte al responsable del riesgo y seguimiento reforzado. Debe informarse en el siguiente comité.'; }
-  else { cls='err'; est='Fuera del apetito'; acc='Escala al comité, que debe decidir entre reducir, transferir o aceptar formalmente la exposición dejando constancia.'; }
-  v.innerHTML='<div class="banner banner-'+cls+'"><b>'+est+'</b> — representa el <b>'+
-    (Math.round(p*10)/10)+'%</b> del límite aprobado.<br><span style="font-weight:400">'+escH(acc)+'</span></div>';
+  else { cls='bad'; est='Fuera del apetito'; acc='Escala al comité, que debe decidir entre reducir, transferir o aceptar formalmente la exposición dejando constancia.'; }
+  v.innerHTML = '<div class="msg '+cls+'"><b>'+est+'</b> · representa el <b>'+pct(p)+'</b> del límite aprobado.<span class="det">'+escH(acc)+'</span></div>';
 }
-calcular();
+function todo(){ pintarEscala(); calcular(); }
+
+$('escala').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  sel = b.dataset.id; todo();
+  $('escala').querySelector('[data-id="'+sel+'"]').focus();
+});
+['ebitda','cap','expo'].forEach(function(id){ $(id).addEventListener('input', calcular); });
+todo();
 </script>
-<script>
-/* Enlace de regreso al portafolio. Solo aparece si la herramienta se abrio
-   por su URL directa: dentro del visor modal del portafolio sobraria. */
-(function () {
-  if (window.self !== window.top) return;
-  var h = document.querySelector('.app-header');
-  if (!h) return;
-  var a = document.createElement('a');
-  a.className = 'volver';
-  a.href = '../index.html';
-  a.textContent = '\u2190 Portafolio';
-  h.appendChild(a);
-})();
-</script>
+</body>
+</html>

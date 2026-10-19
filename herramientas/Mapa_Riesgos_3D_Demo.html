@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Mapa de Riesgos 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: encabezado de marca, introducción, cuatro indicadores, escena 3D con panel lateral y tabla 2D de respaldo */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  /* Tinta y ámbar: la misma paleta del portafolio */
+  --ink:#14213d; --ink-2:#1c2b4d; --ink-3:#0e1730;
+  --acc:#e9a23b; --acc-light:#f2b84b; --acc-text:#9a6412; --acc-soft:#fdf3e1;
+  --paper:#faf8f3; --card:#ffffff;
+  --text:#1b2436; --muted:#4f5b70; --faint:#667085; --line:#e8e2d6;
+  /* Niveles de riesgo: los mismos de la matriz de la portada */
+  --r-bajo:#2f9e6e; --r-mod:#d9b23a; --r-alto:#df7c3a; --r-ext:#cf4538;
+  --radius:14px; --radius-sm:8px;
+  --shadow-sm:0 1px 2px rgba(20,33,61,.05), 0 6px 16px -8px rgba(20,33,61,.12);
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:light;
+}
+html,body{background:var(--paper);}
+body{font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--text);min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;}
+*:focus-visible{outline:3px solid var(--acc-text);outline-offset:2px;}
+.app-header *:focus-visible{outline-color:var(--acc-light);}
+.num{font-variant-numeric:tabular-nums;}
+
+/* Encabezado */
+.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  min-height:58px;padding:9px 24px;background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06);}
+.marca{display:flex;align-items:center;gap:12px;min-width:0;}
+.logo{flex:none;display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 9px;border-radius:7px;
+  background:var(--acc);color:var(--ink);font-weight:700;font-size:14px;}
+.sep{flex:none;width:1px;height:28px;background:rgba(255,255,255,.18);}
+.app-name{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.2;color:#fff;}
+.app-tag{font-size:12.5px;line-height:1.3;color:#c9d2e3;}
+.volver{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:7px 12px;
+  border:1px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);white-space:nowrap;}
+.volver:hover{border-color:var(--acc-light);color:var(--acc-light);}
+
+.wrap{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:20px;}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-text);}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--acc);}
+
+/* Introducción */
+.intro{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--ink);border-radius:var(--radius-sm);
+  padding:14px 18px;box-shadow:var(--shadow-sm);}
+.intro p+p{margin-top:6px;font-size:14.5px;line-height:1.6;}
+.intro b{font-weight:600;color:var(--ink);}
+
+/* Indicadores */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.kpi{display:flex;flex-direction:column;gap:4px;padding:16px 18px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow-sm);text-align:left;font:inherit;color:inherit;min-width:0;}
+.kpi .k{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.kpi b{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums;}
+.kpi b small{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--faint);}
+.kpi .sub{font-size:12.5px;line-height:1.45;color:var(--muted);}
+/* El cuarto indicador es un botón: resalta en la escena y en la tabla los riesgos rápidos y sin resolver */
+button.kpi{cursor:pointer;border-color:#ecd3a6;background:linear-gradient(180deg,#fffaf0,#fff);transition:border-color .2s ease, box-shadow .2s ease;}
+button.kpi .accion{margin-top:auto;padding-top:6px;font-size:13px;font-weight:600;color:var(--acc-text);}
+button.kpi[aria-pressed="true"]{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc), var(--shadow-sm);}
+@media (hover:hover){button.kpi:hover{border-color:var(--acc);}}
+
+/* Zona principal */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px 20px;min-width:0;}
+.card h2{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.3;color:var(--ink);margin-bottom:10px;}
+.scene-card{padding:0;overflow:hidden;}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);}
+.grupo{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.grupo .lab{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;background:#fff;}
+.seg button{font:inherit;font-size:13px;font-weight:500;min-height:36px;padding:0 12px;border:0;border-right:1px solid var(--line);
+  background:transparent;color:var(--text);cursor:pointer;white-space:nowrap;}
+.seg button:last-child{border-right:0;}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff;font-weight:600;}
+@media (hover:hover){.seg button:hover:not([aria-pressed="true"]){background:var(--paper);}}
+.btn-girar{font:inherit;font-size:13px;font-weight:600;min-height:36px;padding:0 12px;border-radius:var(--radius-sm);border:1.5px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap;}
+.btn-girar[aria-pressed="true"]{background:var(--ink);color:#fff;}
+
+/* Escena: fondo tinta con un resplandor ámbar, como la portada del portafolio */
+.stage{position:relative;height:560px;touch-action:pan-y;cursor:grab;
+  background:radial-gradient(700px 360px at 82% 0%, rgba(233,162,59,.16), transparent 62%), linear-gradient(165deg, #14213d 0%, #0e1730 100%);}
+.stage.drag{cursor:grabbing;}
+.stage canvas{display:block;width:100%;height:100%;}
+.ley3d{position:absolute;left:14px;bottom:12px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:#c9d2e3;pointer-events:none;}
+.ley3d span{display:inline-flex;align-items:center;gap:6px;}
+.ley3d i{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);}
+.hint3d{position:absolute;right:14px;bottom:12px;font-size:12px;color:#aab5c8;pointer-events:none;text-align:right;}
+.tip{position:absolute;z-index:5;max-width:270px;padding:9px 11px;pointer-events:none;border-radius:var(--radius-sm);background:#fff;
+  border:1px solid var(--line);box-shadow:0 12px 28px -10px rgba(0,0,0,.5);font-size:12.5px;line-height:1.5;color:var(--text);}
+.tip b{display:block;font-size:13px;margin-bottom:3px;color:var(--ink);}
+.nojs{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-size:14px;color:#c9d2e3;}
+
+/* Panel lateral */
+.side{display:flex;flex-direction:column;gap:16px;}
+.detail .empty{margin-top:8px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;margin-top:12px;font:inherit;font-size:13.5px;font-weight:600;
+  border-radius:var(--radius-sm);border:1.5px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;}
+@media (hover:hover){.btn:hover{background:var(--ink);color:#fff;}}
+.det-top{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.det-cerrar{flex:none;width:32px;height:32px;font:inherit;font-size:18px;line-height:1;border-radius:var(--radius-sm);border:1px solid var(--line);
+  background:#fff;color:var(--muted);cursor:pointer;}
+.detail h3{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.3;color:var(--ink);margin:8px 0 4px;text-wrap:balance;}
+.detail .meta{font-size:12.5px;line-height:1.55;color:var(--muted);margin-bottom:12px;}
+.cmp{display:grid;grid-template-columns:1fr auto auto;gap:7px 14px;align-items:center;font-size:13px;}
+.cmp .h{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.cmp .v{text-align:right;font-variant-numeric:tabular-nums;}
+.block{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;line-height:1.55;}
+.block .k{display:block;margin-bottom:3px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.kri-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap;font-variant-numeric:tabular-nums;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;}
+/* Categoría activa: contorno tinta con una marca; apagada: gris y tachada */
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;font:inherit;font-size:12.5px;font-weight:500;
+  border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--faint);cursor:pointer;text-decoration:line-through;}
+.chip .n{color:var(--faint);font-variant-numeric:tabular-nums;}
+.chip[aria-pressed="true"]{background:#fff;border:1.5px solid var(--ink);color:var(--ink);font-weight:600;text-decoration:none;}
+.chip[aria-pressed="true"]::before{content:"✓";font-size:11px;color:var(--acc-text);}
+.ayuda{margin-top:10px;font-size:12.5px;color:var(--faint);}
+.legend{display:grid;grid-template-columns:auto 1fr auto;gap:7px 10px;align-items:center;font-size:13px;}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--c);}
+.legend .rng{color:var(--faint);font-variant-numeric:tabular-nums;}
+.vel{display:grid;grid-template-columns:auto 1fr;gap:5px 10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);}
+.vel .k{grid-column:1/-1;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.vel b{color:var(--ink);font-variant-numeric:tabular-nums;}
+.vel .rapida{color:var(--acc-text);font-weight:600;}
+
+/* Píldoras de nivel y de estado: punto de color y texto en tinta (el color nunca va solo en el texto) */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 7px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;
+  background:color-mix(in srgb, var(--c) 18%, #fff);color:var(--ink);}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);}
+
+/* Tabla */
+.tbl-head{display:flex;justify-content:space-between;align-items:baseline;gap:4px 16px;flex-wrap:wrap;margin-bottom:10px;}
+.tbl-head h2{margin:0;}
+.tbl-head p{font-size:13px;color:var(--muted);}
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{padding:10px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:var(--paper);border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:0;}
+.rbtn{padding:3px 0;font:inherit;font-size:13.5px;font-weight:600;text-align:left;color:var(--ink);background:none;border:0;cursor:pointer;}
+.rcat{display:block;font-size:12px;color:var(--faint);}
+.idc{color:var(--faint);font-variant-numeric:tabular-nums;}
+.velc{white-space:nowrap;font-variant-numeric:tabular-nums;}
+.velc small{margin-left:6px;font-size:12px;color:var(--faint);}
+.trend{white-space:nowrap;color:var(--muted);}
+tbody tr{cursor:pointer;transition:background-color .15s ease, opacity .2s ease;}
+@media (hover:hover){tbody tr:hover{background:var(--paper);}}
+tbody tr.sel{background:var(--acc-soft);box-shadow:inset 3px 0 0 var(--acc);}
+tbody tr.apagada{opacity:.42;}
+
+footer{border-top:1px solid var(--line);}
+.pie{max-width:1180px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;font-size:12.5px;color:var(--faint);}
+.pie b{font-weight:600;color:var(--text);}
+.corto{display:none;}
+abbr.corto{text-decoration:none;}
+
+@media (max-width:1000px){
+  .main{grid-template-columns:minmax(0,1fr);}
+  .side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+  .side .detail{grid-column:1/-1;}
+}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media (max-width:640px){
+  .wrap{padding:16px;gap:16px;}
+  .app-header{padding:8px 16px;}
+  .app-tag{display:none;}
+  .volver .lbl{display:none;}
+  .stage{height:430px;}
+  .side{grid-template-columns:minmax(0,1fr);}
+  .ley3d{right:14px;}
+  .hint3d{top:10px;bottom:auto;left:14px;text-align:left;}
+  .kpi{padding:14px;}
+  .kpi b{font-size:26px;}
+  /* En la tabla quedan riesgo, velocidad (solo el número) y residual */
+  .col-opc,.velc small,.largo{display:none;}
+  .corto{display:inline;}
+}
+@media (max-width:420px){.grupo .lab{display:none;} .seg button{padding:0 9px;font-size:12.5px;}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="marca">
+    <span class="logo" aria-hidden="true">MM</span>
+    <span class="sep" aria-hidden="true"></span>
+    <div>
+      <h1 class="app-name">Mapa de Riesgos 3D</h1>
+      <p class="app-tag">Probabilidad · impacto · velocidad de materialización</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro" aria-label="Cómo funciona">
+    <p class="eyebrow">Cómo funciona</p>
+    <p>La matriz clásica cruza probabilidad e impacto. Aquí la <b>altura</b> agrega un tercer eje, la <b>velocidad</b>: cuánto tarda el
+      riesgo en golpear una vez que ocurre. Por eso dos riesgos con la misma severidad no tienen la misma urgencia.</p>
+  </section>
+
+  <section class="kpis" aria-label="Indicadores del portafolio de riesgos">
+    <div class="kpi"><span class="k">Riesgos en vista</span><b id="kTotal">20</b><span class="sub" id="kTotalSub">de 20 evaluados</span></div>
+    <div class="kpi"><span class="k">Extremos</span><b id="kExt">7 <small>→ 0</small></b><span class="sub">antes y después de los controles</span></div>
+    <div class="kpi"><span class="k">Reducción por controles</span><b id="kRed">43 %</b><span class="sub">de la severidad, en promedio</span></div>
+    <button type="button" class="kpi" id="kFastBtn" aria-pressed="false">
+      <span class="k">Rápidos y sin resolver</span><b id="kFast">7</b>
+      <span class="sub">Golpean en días o semanas y siguen en Moderado o más.</span>
+      <span class="accion" id="kFastAcc">Resaltarlos en la escena →</span>
+    </button>
+  </section>
+
+  <div class="main">
+    <section class="card scene-card" aria-label="Escena 3D">
+      <div class="toolbar">
+        <div class="grupo" role="group" aria-label="Valoración">
+          <span class="lab" aria-hidden="true">Valoración</span>
+          <div class="seg">
+            <button type="button" id="mInh" aria-pressed="false">Inherente</button>
+            <button type="button" id="mRes" aria-pressed="true">Residual</button>
+            <button type="button" id="mBoth" aria-pressed="false" title="Cada riesgo, de su posición inherente a la residual">Inherente → residual</button>
+          </div>
+        </div>
+        <div class="grupo" role="group" aria-label="Vista">
+          <span class="lab" aria-hidden="true">Vista</span>
+          <div class="seg">
+            <button type="button" id="v3d" aria-pressed="true">3D</button>
+            <button type="button" id="vTop" aria-pressed="false" title="La matriz clásica, vista desde arriba">Desde arriba</button>
+            <button type="button" id="vFront" aria-pressed="false" title="Probabilidad frente a velocidad">De frente</button>
+          </div>
+          <button type="button" class="btn-girar" id="vSpin" aria-pressed="true">Girar</button>
+        </div>
+      </div>
+      <div class="stage" id="stage" aria-label="Escena 3D: cada esfera es un riesgo. La tabla «Ranking de riesgos» tiene la misma información.">
+        <div class="nojs" id="nojs">Cargando la escena 3D…</div>
+        <div class="tip" id="tip" hidden></div>
+        <div class="ley3d" aria-hidden="true">
+          <span><i style="--c:var(--r-ext)"></i>Extremo</span><span><i style="--c:var(--r-alto)"></i>Alto</span>
+          <span><i style="--c:var(--r-mod)"></i>Moderado</span><span><i style="--c:var(--r-bajo)"></i>Bajo</span>
+        </div>
+        <span class="hint3d" id="hint3d"></span>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="card detail" id="detail" aria-live="polite"></div>
+      <div class="card">
+        <h2>Filtrar por categoría</h2>
+        <div class="chips" id="chips"></div>
+        <p class="ayuda">Al apagar una categoría, sale de la escena, de la tabla y de los indicadores.</p>
+      </div>
+      <div class="card">
+        <h2>Cómo leer la escena</h2>
+        <div class="legend">
+          <span class="dot" style="--c:var(--r-ext)"></span><span>Extremo</span><span class="rng">15–25</span>
+          <span class="dot" style="--c:var(--r-alto)"></span><span>Alto</span><span class="rng">10–14</span>
+          <span class="dot" style="--c:var(--r-mod)"></span><span>Moderado</span><span class="rng">5–9</span>
+          <span class="dot" style="--c:var(--r-bajo)"></span><span>Bajo</span><span class="rng">1–4</span>
+        </div>
+        <div class="vel">
+          <span class="k">Velocidad (altura)</span>
+          <b>5</b><span class="rapida">Días</span><b>4</b><span class="rapida">Semanas</span><b>3</b><span>1 a 6 meses</span>
+          <b>2</b><span>6 a 12 meses</span><b>1</b><span>Más de un año</span>
+        </div>
+        <p class="ayuda">El color es la severidad (probabilidad × impacto) y el tamaño de la esfera crece con ella. La franja ámbar marca la
+          zona rápida: días o semanas.</p>
+      </div>
+    </aside>
+  </div>
+
+  <section class="card" aria-labelledby="titulo-tabla">
+    <div class="tbl-head">
+      <h2 id="titulo-tabla">Ranking de riesgos</h2>
+      <p>Ordenado por severidad residual y, a igualdad, por velocidad. Es la misma información de la escena, en 2D.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th class="col-opc">ID</th><th>Riesgo</th><th><span class="largo">Velocidad</span><abbr class="corto" title="Velocidad">Vel.</abbr></th><th class="col-opc">Inherente</th><th>Residual</th><th class="col-opc">Tendencia</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="pie"><span><b>Mateo Meléndez</b> · Consultor de Riesgos Empresariales</span>
+    <span>Datos de ejemplo de una empresa ficticia: Grupo Industrial Altamira.</span></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* Abierta por su URL directa, la herramienta ofrece volver al portafolio; dentro del visor del portafolio sobra */
+(function(){
+  if (window.self !== window.top) return;
+  const a = document.createElement('a');
+  a.className = 'volver'; a.href = '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
+  a.innerHTML = '←<span class="lbl"> Portafolio</span>';
+  document.querySelector('.app-header').appendChild(a);
+})();
+
+/* ---------- Datos ficticios: Grupo Industrial Altamira ----------
+   pi/ii = probabilidad e impacto inherentes · pr/ir = residuales · v = velocidad (1-5)
+   kri = [indicador, valor actual, umbral, estado] */
+const R = [
+ {id:'R01',n:'Ransomware en los sistemas de planta',c:'Tecnológico',p:'Tecnología',d:'Dirección de TI',pi:4,ii:5,v:5,pr:3,ir:4,t:1,ctl:'Respaldos inmutables y EDR en servidores de planta',kri:['Parches críticos aplicados en menos de 30 días','68 %','≥ 90 %','rojo']},
+ {id:'R02',n:'Interrupción del suministro de materia prima crítica',c:'Operativo',p:'Abastecimiento',d:'Gerencia de Compras',pi:4,ii:4,v:4,pr:3,ir:3,t:0,ctl:'Segundo proveedor homologado y stock de seguridad',kri:['Días de inventario de seguridad','12 días','≥ 15 días','ambar']},
+ {id:'R03',n:'Devaluación del peso frente al dólar',c:'Financiero',p:'Tesorería',d:'Dirección Financiera',pi:5,ii:4,v:3,pr:4,ir:3,t:1,ctl:'Coberturas con forwards sobre el 60 % de la exposición',kri:['Deuda en USD sin cobertura','38 %','≤ 40 %','ambar']},
+ {id:'R04',n:'Accidente laboral grave en línea de producción',c:'Operativo',p:'Seguridad y Salud en el Trabajo',d:'Jefatura de SST',pi:3,ii:5,v:5,pr:2,ir:4,t:0,ctl:'Permisos de trabajo en alturas y bloqueo de energías',kri:['Índice de frecuencia de accidentes','1,8','≤ 2,0','verde']},
+ {id:'R05',n:'Sanción por incumplir la licencia ambiental',c:'Cumplimiento',p:'Gestión Ambiental',d:'Coordinación Ambiental',pi:3,ii:4,v:2,pr:2,ir:3,t:-1,ctl:'Matriz de requisitos legales con revisión trimestral',kri:['Requisitos legales vencidos','0','0','verde']},
+ {id:'R06',n:'Pérdida de clientes clave frente a producto importado',c:'Estratégico',p:'Comercial',d:'Vicepresidencia Comercial',pi:4,ii:4,v:2,pr:3,ir:4,t:1,ctl:'Contratos marco y programa de fidelización',kri:['Ventas concentradas en los 5 mayores clientes','47 %','≤ 40 %','rojo']},
+ {id:'R07',n:'Fraude en el proceso de compras',c:'Cumplimiento',p:'Compras',d:'Oficial de Cumplimiento',pi:3,ii:3,v:3,pr:2,ir:2,t:-1,ctl:'Segregación de funciones y doble aprobación',kri:['Órdenes de compra sin cotización','3 %','≤ 5 %','verde']},
+ {id:'R08',n:'Falla crítica del horno principal',c:'Operativo',p:'Mantenimiento',d:'Gerencia de Planta',pi:3,ii:5,v:5,pr:2,ir:4,t:0,ctl:'Mantenimiento predictivo con sensores de vibración',kri:['Disponibilidad del horno','96 %','≥ 95 %','verde']},
+ {id:'R09',n:'Rotación de personal técnico especializado',c:'Estratégico',p:'Talento Humano',d:'Gerencia de Talento Humano',pi:4,ii:3,v:2,pr:3,ir:3,t:1,ctl:'Plan de carrera y bonos de retención',kri:['Rotación voluntaria anual','14 %','≤ 10 %','rojo']},
+ {id:'R10',n:'Fuga de datos personales de clientes',c:'Tecnológico',p:'Tecnología',d:'Oficial de Protección de Datos',pi:3,ii:4,v:4,pr:2,ir:3,t:0,ctl:'Cifrado de bases de datos y prevención de fuga de información',kri:['Incidentes con datos personales en el trimestre','1','0','ambar']},
+ {id:'R11',n:'Retraso del proyecto de ampliación de planta',c:'Estratégico',p:'Proyectos',d:'Oficina de Proyectos (PMO)',pi:4,ii:4,v:1,pr:3,ir:3,t:1,ctl:'Comité de seguimiento quincenal con curva S',kri:['Índice de desempeño del cronograma (SPI)','0,88','≥ 0,95','rojo']},
+ {id:'R12',n:'Alza sostenida en el costo de la energía',c:'Financiero',p:'Operaciones',d:'Gerencia de Planta',pi:4,ii:3,v:2,pr:4,ir:2,t:1,ctl:'Contrato de energía a precio fijo por 3 años',kri:['Variación del costo de energía por tonelada','+9 %','≤ +5 %','ambar']},
+ {id:'R13',n:'Inundación del centro de distribución',c:'Socioambiental',p:'Logística',d:'Gerencia de Logística',pi:2,ii:5,v:5,pr:2,ir:3,t:0,ctl:'Plan de continuidad y póliza de daños materiales',kri:['Pruebas del plan de continuidad realizadas en el año','1 de 2','2 de 2','ambar']},
+ {id:'R14',n:'Crisis reputacional en redes sociales',c:'Estratégico',p:'Comunicaciones',d:'Dirección de Comunicaciones',pi:3,ii:4,v:5,pr:2,ir:3,t:0,ctl:'Protocolo de crisis y monitoreo de menciones',kri:['Menciones negativas por semana','22','≤ 30','verde']},
+ {id:'R15',n:'Deterioro de la cartera de distribuidores',c:'Financiero',p:'Crédito y Cartera',d:'Jefatura de Cartera',pi:4,ii:3,v:2,pr:3,ir:2,t:-1,ctl:'Cupos por scoring y seguro de crédito',kri:['Cartera vencida a más de 90 días','6,5 %','≤ 5 %','ambar']},
+ {id:'R16',n:'Incumplimiento de los transportadores',c:'Operativo',p:'Logística',d:'Gerencia de Logística',pi:3,ii:3,v:3,pr:2,ir:2,t:0,ctl:'Contratos con niveles de servicio y penalidades',kri:['Entregas completas y a tiempo (OTIF)','93 %','≥ 92 %','verde']},
+ {id:'R17',n:'Cambios en la regulación tributaria',c:'Cumplimiento',p:'Impuestos',d:'Gerencia Tributaria',pi:3,ii:3,v:1,pr:3,ir:2,t:0,ctl:'Monitoreo normativo con asesor externo',kri:['Contingencias tributarias abiertas','2','≤ 3','verde']},
+ {id:'R18',n:'Obsolescencia del ERP',c:'Tecnológico',p:'Tecnología',d:'Dirección de TI',pi:3,ii:3,v:1,pr:2,ir:3,t:-1,ctl:'Hoja de ruta de migración aprobada por la junta',kri:['Módulos sin soporte del fabricante','3','0','ambar']},
+ {id:'R19',n:'Contaminación por vertimientos industriales',c:'Socioambiental',p:'Gestión Ambiental',d:'Coordinación Ambiental',pi:2,ii:5,v:3,pr:1,ir:4,t:-1,ctl:'Planta de tratamiento con monitoreo en línea',kri:['Muestras fuera de norma (últimas 12)','0','0','verde']},
+ {id:'R20',n:'Baja adopción de la nueva línea de producto',c:'Estratégico',p:'Mercadeo',d:'Gerencia de Mercadeo',pi:3,ii:3,v:2,pr:2,ir:3,t:0,ctl:'Pilotos con distribuidores antes del lanzamiento',kri:['Ventas frente a la meta del trimestre','81 %','≥ 90 %','ambar']}
+];
+const CATS = ['Estratégico','Operativo','Financiero','Cumplimiento','Tecnológico','Socioambiental'];
+const VEL = ['','Más de un año','6 a 12 meses','1 a 6 meses','Semanas','Días'];
+const VEL_FRASE = ['','tarda más de un año en golpear','tarda de 6 a 12 meses en golpear','tarda de 1 a 6 meses en golpear','golpea en semanas','golpea en días'];
+const TREND = {'1':'↑ Al alza','0':'→ Estable','-1':'↓ A la baja'};
+const KRI_EST = {verde:['En meta','--r-bajo'],ambar:['En alerta','--r-mod'],rojo:['Fuera de umbral','--r-ext']};
+
+const nivel = s => s>=15?'Extremo':s>=10?'Alto':s>=5?'Moderado':'Bajo';
+const lvVar = {Extremo:'--r-ext',Alto:'--r-alto',Moderado:'--r-mod',Bajo:'--r-bajo'};
+R.forEach(r=>{ r.si=r.pi*r.ii; r.sr=r.pr*r.ir; });
+// Rápido y sin resolver: golpea en días o semanas y su residual sigue en Moderado o más
+const rapido = r => r.v>=4 && r.sr>=5;
+// Ranking: severidad residual, luego velocidad, luego severidad inherente
+const orden = (a,b) => b.sr-a.sr || b.v-a.v || b.si-a.si;
+
+/* ---------- Estado ---------- */
+const st = {mode:'res', cats:new Set(CATS), sel:null, resaltar:false};
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const visibles = () => R.filter(r=>st.cats.has(r.c));
+
+/* ---------- Panel: categorías, indicadores, tabla y ficha ---------- */
+function renderChips(){
+  $('chips').innerHTML = CATS.map(c=>{
+    const n = R.filter(r=>r.c===c).length;
+    return `<button type="button" class="chip" data-c="${c}" aria-pressed="${st.cats.has(c)}">${c}<span class="n">${n}</span></button>`;
+  }).join('');
+}
+$('chips').addEventListener('click',e=>{
+  const b = e.target.closest('.chip'); if(!b) return;
+  const c = b.dataset.c;
+  if(st.cats.has(c)) st.cats.delete(c); else st.cats.add(c);
+  if(st.cats.size===0) CATS.forEach(x=>st.cats.add(x));   // nunca queda la escena vacía
+  if(st.sel && !st.cats.has(R.find(r=>r.id===st.sel).c)) st.sel = null;
+  refresh();
+  const nuevo = $('chips').querySelector(`[data-c="${c}"]`); if(nuevo) nuevo.focus();
+});
+
+function renderKPIs(){
+  const V = visibles();
+  $('kTotal').textContent = V.length;
+  $('kTotalSub').textContent = `de ${R.length} evaluados`;
+  const ei = V.filter(r=>r.si>=15).length, er = V.filter(r=>r.sr>=15).length;
+  $('kExt').innerHTML = `${ei} <small>→ ${er}</small>`;
+  const red = V.length ? V.reduce((a,r)=>a+(1-r.sr/r.si),0)/V.length : 0;
+  $('kRed').textContent = Math.round(red*100)+' %';
+  $('kFast').textContent = V.filter(rapido).length;
+}
+const pill = s => { const l = nivel(s); return `<span class="pill" style="--c:var(${lvVar[l]})"><span class="num">${s}</span> ${l}</span>`; };
+
+function renderTable(){
+  const V = visibles().slice().sort(orden);
+  $('tbody').innerHTML = V.map(r=>`<tr data-id="${r.id}" class="${r.id===st.sel?'sel':''}${st.resaltar && !rapido(r)?' apagada':''}">
+    <td class="idc col-opc">${r.id}</td>
+    <td><button type="button" class="rbtn" aria-pressed="${r.id===st.sel}">${r.n}</button><span class="rcat">${r.c}</span></td>
+    <td class="velc"><b>${r.v}</b><small>${VEL[r.v]}</small></td>
+    <td class="col-opc">${pill(r.si)}</td><td>${pill(r.sr)}</td><td class="trend col-opc">${TREND[r.t]}</td></tr>`).join('');
+}
+$('tbody').addEventListener('click',e=>{
+  const tr = e.target.closest('tr'); if(!tr) return;
+  select(tr.dataset.id===st.sel ? null : tr.dataset.id, true);
+});
+
+function renderDetail(){
+  const box = $('detail');
+  const r = R.find(x=>x.id===st.sel);
+  if(!r){
+    box.innerHTML = `<p class="eyebrow">Ficha del riesgo</p>
+      <p class="empty">Seleccione una esfera en la escena o un riesgo de la tabla para ver su valoración, el control principal y su indicador clave (KRI).</p>
+      <button type="button" class="btn" id="verUrgente">Ver el más urgente <span aria-hidden="true">→</span></button>`;
+    return;
+  }
+  const [kn,kv,ku,ke] = r.kri, [kt,kc] = KRI_EST[ke];
+  box.innerHTML = `<div class="det-top"><p class="eyebrow">${r.id} · ${r.c}</p>
+      <button type="button" class="det-cerrar" id="cerrarFicha" aria-label="Cerrar la ficha">×</button></div>
+    <h3>${r.n}</h3>
+    <p class="meta">${r.p} · Dueño: ${r.d} · ${TREND[r.t]}</p>
+    <div class="cmp">
+      <span class="h"></span><span class="h v">Inherente</span><span class="h v">Residual</span>
+      <span>Probabilidad</span><span class="v">${r.pi}</span><span class="v">${r.pr}</span>
+      <span>Impacto</span><span class="v">${r.ii}</span><span class="v">${r.ir}</span>
+      <span>Severidad</span><span class="v">${pill(r.si)}</span><span class="v">${pill(r.sr)}</span>
+    </div>
+    <div class="block"><span class="k">Velocidad</span><b class="num">${r.v}</b> · ${VEL[r.v]}: ${VEL_FRASE[r.v]} una vez que ocurre.${rapido(r)?' <b>Es rápido y sigue sin resolver.</b>':''}</div>
+    <div class="block"><span class="k">Control principal</span>${r.ctl}</div>
+    <div class="block"><span class="k">Indicador clave (KRI)</span>${kn}
+      <div class="kri-row"><span>Actual <b>${kv}</b> · Umbral ${ku}</span><span class="pill" style="--c:var(${kc})">${kt}</span></div></div>`;
+}
+$('detail').addEventListener('click',e=>{
+  if(e.target.closest('#verUrgente')){ const top = visibles().slice().sort(orden)[0]; if(top) select(top.id, false, true); }
+  if(e.target.closest('#cerrarFicha')){ select(null); }
+});
+
+function refresh(){ renderChips(); renderKPIs(); renderTable(); renderDetail(); if(window.scene3d) scene3d.update(); }
+
+function select(id, fromTable, enfocarFicha){
+  st.sel = id;
+  renderTable(); renderDetail();
+  if(window.scene3d) scene3d.update();
+  if(fromTable && id && window.innerWidth<=1000) $('stage').scrollIntoView({behavior:'smooth', block:'center'});
+  if(enfocarFicha && id) $('cerrarFicha').focus();
+}
+
+function setPressed(ids, on){ ids.forEach(i=>$(i).setAttribute('aria-pressed', i===on)); }
+['mInh','mRes','mBoth'].forEach(id=>$(id).addEventListener('click',()=>{
+  st.mode = {mInh:'inh', mRes:'res', mBoth:'both'}[id];
+  setPressed(['mInh','mRes','mBoth'], id);
+  if(window.scene3d) scene3d.update();
+}));
+$('kFastBtn').addEventListener('click',()=>{
+  st.resaltar = !st.resaltar;
+  $('kFastBtn').setAttribute('aria-pressed', st.resaltar);
+  $('kFastAcc').textContent = st.resaltar ? 'Mostrar todos los riesgos' : 'Resaltarlos en la escena →';
+  renderTable();
+  if(window.scene3d) scene3d.update();
+});
+
+refresh();
+
+/* ---------- Escena 3D ---------- */
+(function(){
+  const stage = $('stage'), tip = $('tip');
+  const tactil = matchMedia('(hover: none)').matches;
+  $('hint3d').textContent = tactil ? 'Deslice para girar · toque una esfera para ver su ficha'
+                                   : 'Arrastre para girar · rueda para acercar · clic en una esfera para ver su ficha';
+  if(typeof THREE==='undefined'){
+    $('nojs').textContent = 'No se pudo cargar la librería 3D. Revise la conexión a internet: la tabla de abajo tiene la misma información.';
+    $('vSpin').setAttribute('aria-pressed','false');
+    return;
+  }
+  $('nojs').remove();
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.domElement.setAttribute('aria-hidden','true');
+  stage.prepend(renderer.domElement);
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0e1730, 14, 30);   // lo lejano se funde un poco con el fondo: da profundidad
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x1c2b4d, 0.85));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(5, 9, 7); scene.add(sun);
+
+  // Ejes: x = probabilidad, z = impacto (el alto queda al fondo, como en la matriz), y = velocidad
+  const X = p => p-3, Z = i => -(i-3), Y = v => v*0.72;
+  const rad = s => 0.08 + 0.045*Math.sqrt(s);
+  const CLARO = '#c9d2e3', TENUE = '#94a3b8';
+
+  /* Decorado: piso de calor, paredes de referencia, zona rápida y rótulos */
+  let decor = null, velG = null, zona = null, zonaBorde = null;
+  function label(text, {size=0.3, color=CLARO, weight=600, align='center'}={}){
+    const c = document.createElement('canvas'), g = c.getContext('2d'), fs = 64;
+    const fuente = `${weight} ${fs}px Inter, system-ui, 'Segoe UI', Arial, sans-serif`;
+    g.font = fuente;
+    const w = Math.ceil(g.measureText(text).width) + 16; c.width = w; c.height = fs + 24;
+    g.font = fuente; g.fillStyle = color; g.textBaseline = 'middle'; g.textAlign = align==='left' ? 'left' : 'center';
+    g.fillText(text, align==='left' ? 8 : w/2, c.height/2);
+    const tex = new THREE.CanvasTexture(c); tex.anisotropy = 4;
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false, fog:false}));
+    sp.scale.set(size*w/c.height, size, 1);
+    if(align==='left') sp.center.set(0, 0.5);
+    return sp;
+  }
+  function line(pts, color, opacity=1){
+    const g = new THREE.BufferGeometry().setFromPoints(pts.map(p=>new THREE.Vector3(...p)));
+    return new THREE.Line(g, new THREE.LineBasicMaterial({color, transparent:opacity<1, opacity}));
+  }
+  function buildDecor(){
+    if(decor){ scene.remove(decor); decor.traverse(o=>{ o.geometry && o.geometry.dispose(); if(o.material){ o.material.map && o.material.map.dispose(); o.material.dispose(); } }); }
+    decor = new THREE.Group();
+    // Piso: la matriz 5×5 coloreada por nivel
+    for(let p=1; p<=5; p++) for(let i=1; i<=5; i++){
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.96),
+        new THREE.MeshBasicMaterial({color:css(lvVar[nivel(p*i)]), transparent:true, opacity:0.55, depthWrite:false, side:THREE.DoubleSide}));
+      m.rotation.x = -Math.PI/2; m.position.set(X(p), 0.002, Z(i)); decor.add(m);
+    }
+    // Paredes de referencia (izquierda y fondo), con una línea por nivel de velocidad
+    const top = Y(5) + 0.35;
+    velG = new THREE.Group(); decor.add(velG);   // se oculta en la vista desde arriba, donde los rótulos se apilan
+    for(let v=1; v<=5; v++){
+      decor.add(line([[-2.5,Y(v),2.5],[-2.5,Y(v),-2.5],[2.5,Y(v),-2.5]], 0xffffff, 0.12));
+      const l = label(String(v), {size:0.26, color:TENUE}); l.position.set(-2.78, Y(v), 2.5); velG.add(l);
+    }
+    decor.add(line([[-2.5,0,2.5],[-2.5,top,2.5]], 0xffffff, 0.35));
+    decor.add(line([[-2.5,0,-2.5],[-2.5,top,-2.5]], 0xffffff, 0.18));
+    decor.add(line([[2.5,0,-2.5],[2.5,top,-2.5]], 0xffffff, 0.18));
+    decor.add(line([[-2.5,0,2.5],[2.5,0,2.5],[2.5,0,-2.5],[-2.5,0,-2.5],[-2.5,0,2.5]], 0xffffff, 0.35));
+    // Zona rápida: un plano ámbar entre la velocidad 3 y la 4; lo que está por encima golpea en días o semanas
+    const yz = Y(3.5), acc = css('--acc');
+    zona = new THREE.Mesh(new THREE.PlaneGeometry(5, 5),
+      new THREE.MeshBasicMaterial({color:acc, transparent:true, opacity:0.07, depthWrite:false, side:THREE.DoubleSide}));
+    zona.rotation.x = -Math.PI/2; zona.position.y = yz; decor.add(zona);
+    zonaBorde = line([[-2.5,yz,2.5],[2.5,yz,2.5],[2.5,yz,-2.5],[-2.5,yz,-2.5],[-2.5,yz,2.5]], acc, 0.45); decor.add(zonaBorde);
+    const lz = label('Zona rápida: días o semanas', {size:0.3, color:css('--acc-light'), align:'left'});
+    lz.position.set(-2.45, yz + 0.2, -2.45); velG.add(lz);
+    // Rótulos de los ejes
+    for(let k=1; k<=5; k++){
+      const a = label(String(k), {size:0.26, color:TENUE}); a.position.set(X(k), 0, 2.85); decor.add(a);
+      const b = label(String(k), {size:0.26, color:TENUE}); b.position.set(2.85, 0, Z(k)); decor.add(b);
+    }
+    const lp = label('Probabilidad →', {size:0.3, color:CLARO, weight:700}); lp.position.set(0, -0.05, 3.3); decor.add(lp);
+    const li = label('Impacto →', {size:0.3, color:CLARO, weight:700}); li.position.set(3.4, -0.05, 0); decor.add(li);
+    const lv = label('Velocidad ↑', {size:0.3, color:CLARO, weight:700}); lv.position.set(-2.5, top + 0.3, 2.5); velG.add(lv);
+    scene.add(decor);
+    if(window.scene3d) update();
+  }
+
+  /* Cada riesgo: esfera, tallo y marca en el piso; en «Inherente → residual», además la esfera fantasma y la flecha */
+  const objs = R.map(r=>{
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 20),
+      new THREE.MeshStandardMaterial({roughness:0.35, metalness:0.1, transparent:true, opacity:1}));
+    mesh.userData.id = r.id;
+    const stem = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]),
+      new THREE.LineBasicMaterial({transparent:true, opacity:0.6}));
+    const base = new THREE.Mesh(new THREE.CircleGeometry(0.07, 24),
+      new THREE.MeshBasicMaterial({transparent:true, opacity:0.9, depthWrite:false, side:THREE.DoubleSide}));
+    base.rotation.x = -Math.PI/2;
+    const ghost = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 14),
+      new THREE.MeshBasicMaterial({wireframe:true, transparent:true, opacity:0.45}));
+    const arrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(), 1, 0xc9d2e3, 0.18, 0.12);
+    scene.add(mesh, stem, base, ghost, arrow);
+    return {r, mesh, stem, base, ghost, arrow, pos:new THREE.Vector3(), tpos:new THREE.Vector3(),
+            col:new THREE.Color(), tcol:new THREE.Color(), s:0.2, ts:0.2, op:1, top:1, first:true};
+  });
+
+  // Riesgos que caen en la misma celda: se reparten en un círculo pequeño para que no se tapen
+  function layout(key){
+    const groups = {}, out = {};
+    R.forEach(r=>{ const p = key==='i'?r.pi:r.pr, i = key==='i'?r.ii:r.ir; (groups[p+','+i] ||= []).push(r); });
+    Object.values(groups).forEach(g=>g.forEach((r,k)=>{
+      const p = key==='i'?r.pi:r.pr, i = key==='i'?r.ii:r.ir, n = g.length, a = 2*Math.PI*k/n + 0.6, o = n>1 ? 0.27 : 0;
+      out[r.id] = new THREE.Vector3(X(p) + o*Math.cos(a), Y(r.v), Z(i) + o*Math.sin(a));
+    }));
+    return out;
+  }
+  const posI = layout('i'), posR = layout('r');
+  const ACENTO = new THREE.Color(css('--acc'));
+
+  function update(){
+    objs.forEach(o=>{
+      const r = o.r, useI = st.mode==='inh', s = useI ? r.si : r.sr, vis = st.cats.has(r.c);
+      o.tpos.copy(useI ? posI[r.id] : posR[r.id]);
+      o.tcol.set(css(lvVar[nivel(s)]));
+      o.ts = rad(s) * (st.sel===r.id ? 1.3 : 1);
+      o.top = st.resaltar && !rapido(r) ? 0.16 : 1;   // en modo «resaltar», lo que no es rápido queda tenue
+      o.mesh.visible = o.stem.visible = o.base.visible = vis;
+      const both = st.mode==='both' && vis && o.top===1 && (r.si!==r.sr || r.pi!==r.pr);
+      o.ghost.visible = o.arrow.visible = both;
+      if(both){
+        const a = posI[r.id], b = posR[r.id], dir = b.clone().sub(a), len = dir.length();
+        o.ghost.position.copy(a); o.ghost.scale.setScalar(rad(r.si));
+        o.ghost.material.color.set(css(lvVar[nivel(r.si)]));
+        const start = a.clone().add(dir.clone().normalize().multiplyScalar(rad(r.si)));
+        const L = Math.max(len - rad(r.si) - rad(r.sr), 0.05);
+        o.arrow.position.copy(start); o.arrow.setDirection(dir.normalize());
+        o.arrow.setLength(L, Math.min(0.18, L*0.5), 0.11);
+      }
+      if(o.first || reduce){ o.pos.copy(o.tpos); o.col.copy(o.tcol); o.s = o.ts; o.op = o.top; o.first = false; }
+    });
+    if(zona){ zona.material.opacity = st.resaltar ? 0.16 : 0.07; zonaBorde.material.opacity = st.resaltar ? 0.95 : 0.45; }
+  }
+
+  /* Cámara orbital propia: arrastrar gira, la rueda acerca */
+  const VIEWS = {
+    '3d':   {th:0.72, ph:1.02, r:12.5, ty:1.3},
+    'top':  {th:0.0001, ph:0.001, r:13, ty:0},
+    'front':{th:0.0001, ph:Math.PI/2-0.02, r:12.5, ty:1.9}
+  };
+  const cam = {...VIEWS['3d']}, tgt = {...VIEWS['3d']};
+  let spin = !reduce, view = '3d';
+  if(reduce) $('vSpin').setAttribute('aria-pressed','false');
+  function setView(v, btn){
+    view = v; Object.assign(tgt, VIEWS[v]);
+    if(v!=='3d'){ spin = false; $('vSpin').setAttribute('aria-pressed','false'); }
+    // Llegar al ángulo pedido por el camino corto, aunque la escena haya dado muchas vueltas
+    const T = 2*Math.PI; tgt.th = cam.th + ((((VIEWS[v].th - cam.th) % T) + T*1.5) % T) - Math.PI;
+    setPressed(['v3d','vTop','vFront'], btn);
+    if(reduce) Object.assign(cam, tgt);
+  }
+  $('v3d').onclick = ()=>setView('3d','v3d');
+  $('vTop').onclick = ()=>setView('top','vTop');
+  $('vFront').onclick = ()=>setView('front','vFront');
+  $('vSpin').onclick = ()=>{
+    spin = !spin; $('vSpin').setAttribute('aria-pressed', spin);
+    if(spin && view!=='3d') setView('3d','v3d');
+  };
+
+  let drag = null;
+  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  function pick(ev){
+    const b = renderer.domElement.getBoundingClientRect();
+    ptr.set(((ev.clientX-b.left)/b.width)*2-1, -((ev.clientY-b.top)/b.height)*2+1);
+    ray.setFromCamera(ptr, camera);
+    const hit = ray.intersectObjects(objs.filter(o=>o.mesh.visible).map(o=>o.mesh))[0];
+    return hit ? hit.object.userData.id : null;
+  }
+  renderer.domElement.addEventListener('pointerdown', ev=>{
+    drag = {x:ev.clientX, y:ev.clientY, moved:0, type:ev.pointerType};
+    if(ev.pointerType==='mouse') renderer.domElement.setPointerCapture(ev.pointerId);
+  });
+  renderer.domElement.addEventListener('pointermove', ev=>{
+    if(drag){
+      const dx = ev.clientX-drag.x, dy = ev.clientY-drag.y;
+      drag.moved += Math.abs(dx)+Math.abs(dy); drag.x = ev.clientX; drag.y = ev.clientY;
+      if(drag.moved>4){
+        stage.classList.add('drag'); tip.hidden = true;
+        tgt.th -= dx*0.008; cam.th = tgt.th;
+        if(drag.type==='mouse'){ tgt.ph = Math.min(Math.max(tgt.ph - dy*0.008, 0.001), Math.PI/2-0.02); cam.ph = tgt.ph; }
+        if(view!=='3d') setPressed(['v3d','vTop','vFront'], null);
+      }
+      return;
+    }
+    if(ev.pointerType!=='mouse') return;
+    const id = pick(ev);
+    if(!id){ tip.hidden = true; renderer.domElement.style.cursor = ''; return; }
+    renderer.domElement.style.cursor = 'pointer';
+    const r = R.find(x=>x.id===id), s = st.mode==='inh' ? r.si : r.sr;
+    const b = stage.getBoundingClientRect();
+    tip.innerHTML = `<b>${r.id} · ${r.n}</b>${r.c} · ${st.mode==='inh'?'Inherente':'Residual'} ${pill(s)}<br>Velocidad ${r.v}: ${VEL_FRASE[r.v]}`;
+    tip.hidden = false;
+    const x = Math.min(ev.clientX-b.left+14, b.width-tip.offsetWidth-8), y = Math.min(ev.clientY-b.top+14, b.height-tip.offsetHeight-8);
+    tip.style.left = x+'px'; tip.style.top = y+'px';
+  });
+  const end = ev=>{
+    if(!drag) return;
+    const click = drag.moved<=4; drag = null; stage.classList.remove('drag');
+    if(click && ev.type==='pointerup'){ const id = pick(ev); select(id===st.sel ? null : id); }
+  };
+  renderer.domElement.addEventListener('pointerup', end);
+  renderer.domElement.addEventListener('pointercancel', end);
+  renderer.domElement.addEventListener('pointerleave', ()=>{ if(!drag) tip.hidden = true; });
+  renderer.domElement.addEventListener('wheel', ev=>{
+    ev.preventDefault();
+    tgt.r = Math.min(Math.max(tgt.r*(1+ev.deltaY*0.001), 6), 22);
+  }, {passive:false});
+
+  function resize(){
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false); camera.aspect = w/h;
+    camera.fov = w<560 ? 52 : 40; camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(stage);
+
+  // Suavizado por tiempo transcurrido, no por cuadro: igual de rápido en cualquier equipo
+  let k = 1, last = performance.now();
+  const brillo = new THREE.Color();
+  function frame(now){
+    now = now || performance.now();
+    const dt = Math.min((now - last)/1000, 0.25); last = now;
+    k = reduce ? 1 : 1 - Math.exp(-dt*7);
+    if(spin && !drag) tgt.th += dt*0.13;
+    if(velG) velG.visible = cam.ph > 0.3;
+    cam.th += (tgt.th-cam.th)*k; cam.ph += (tgt.ph-cam.ph)*k; cam.r += (tgt.r-cam.r)*k; cam.ty += (tgt.ty-cam.ty)*k;
+    if(spin && !drag) cam.th = tgt.th;
+    const sp = Math.sin(cam.ph);
+    camera.position.set(cam.r*sp*Math.sin(cam.th), cam.ty + cam.r*Math.cos(cam.ph), cam.r*sp*Math.cos(cam.th));
+    camera.lookAt(0, cam.ty, 0);
+    objs.forEach(o=>{
+      o.pos.lerp(o.tpos, k); o.col.lerp(o.tcol, k); o.s += (o.ts-o.s)*k; o.op += (o.top-o.op)*k;
+      o.mesh.position.copy(o.pos); o.mesh.scale.setScalar(o.s);
+      o.mesh.material.color.copy(o.col); o.mesh.material.opacity = o.op;
+      // Brillo propio: un poco del color del nivel; el seleccionado brilla en ámbar
+      if(st.sel===o.r.id) o.mesh.material.emissive.copy(ACENTO).multiplyScalar(0.9);
+      else o.mesh.material.emissive.copy(brillo.copy(o.col).multiplyScalar(0.16));
+      const a = o.stem.geometry.attributes.position;
+      a.setXYZ(0, o.pos.x, 0, o.pos.z); a.setXYZ(1, o.pos.x, o.pos.y - o.s, o.pos.z); a.needsUpdate = true;
+      o.stem.material.color.copy(o.col); o.stem.material.opacity = 0.6*o.op;
+      o.base.position.set(o.pos.x, 0.006, o.pos.z); o.base.material.color.copy(o.col); o.base.material.opacity = 0.9*o.op;
+    });
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+
+  window.scene3d = {update};
+  buildDecor(); update(); resize(); frame();
+  // Los rótulos se dibujan con Inter: al terminar de cargar la fuente se vuelven a dibujar
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(buildDecor);
+})();
+</script>
+</body>
+</html>

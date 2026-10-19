@@ -286,6 +286,19 @@
       .tool-card:hover, .game-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
       .tool-card:hover .vista img { transform: translate(-6px, -6px); }
     }
+    /* Instrumento destacado (Mapa 3D): toda la fila, la escena a sangre a la izquierda y el texto a la derecha */
+    .tool-card.destacada { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+    .vista-3d { aspect-ratio: 16 / 10; border-bottom: 0; border-right: 1px solid var(--line); background: linear-gradient(165deg, var(--ink) 0%, var(--ink-3) 100%); }
+    .vista-3d img { left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 0; box-shadow: none; background: none; }
+    .sello {
+      position: absolute; left: 1rem; top: 1rem; padding: 0.25rem 0.7rem; border-radius: 999px;
+      background: var(--acc); color: var(--ink); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.04em;
+    }
+    .tool-card.destacada .tool-body { justify-content: center; padding: 2rem 2.2rem; }
+    .tool-card.destacada .tool-title { font-family: var(--serif); font-size: 1.6rem; }
+    .tool-card.destacada .tool-description { flex: 0 0 auto; font-size: 1rem; }
+    @media (hover: hover) { .tool-card.destacada:hover .vista-3d img { transform: scale(1.02); } }
+
     /* La tarjeta final invita al contacto: un marco vacío para «su» instrumento */
     .tool-card.cta { background: linear-gradient(165deg, var(--ink) 0%, var(--ink-2) 100%); border-color: var(--ink); }
     .vista-cta { cursor: default; display: grid; place-items: center; border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -433,6 +446,10 @@
     @media (min-width: 901px) { .menu-movil { display: none !important; } }
     @media (max-width: 768px) {
       .wrap, .header-inner { padding: 0 1.25rem; }
+      .tool-card.destacada { grid-template-columns: minmax(0, 1fr); }
+      .vista-3d { border-right: 0; border-bottom: 1px solid var(--line); }
+      .tool-card.destacada .tool-body { padding: 1.5rem 1.6rem 1.6rem; }
+      .tool-card.destacada .tool-title { font-size: 1.35rem; }
       .hero { padding: 3.5rem 0 7rem; }
       .seccion { padding-top: 4.75rem; }
       .perfil { margin-top: 4.75rem; padding: 4.5rem 0; }
@@ -557,7 +574,7 @@
         <li class="stat"><b>5 años</b><span>de auditoría interna en Deloitte</span></li>
         <li class="stat"><b>10+</b><span>auditorías internas ejecutadas</span></li>
         <li class="stat"><b>SOX</b><span>lideré el testeo de controles</span></li>
-        <li class="stat"><b>7</b><span>instrumentos y minijuegos en vivo</span></li>
+        <li class="stat"><b>8</b><span>instrumentos y minijuegos en vivo</span></li>
       </ul>
     </div>
 
@@ -580,6 +597,7 @@
               <span class="prueba-tit">Pruébelo</span>
               <button type="button" class="enlace" onclick="openTool('matriz', this)" aria-haspopup="dialog" aria-expanded="false">Matriz de riesgos <span aria-hidden="true">→</span></button>
               <button type="button" class="enlace" onclick="openTool('apetito', this)" aria-haspopup="dialog" aria-expanded="false">Apetito y tolerancia <span aria-hidden="true">→</span></button>
+              <button type="button" class="enlace" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">Consolidador de matrices <span aria-hidden="true">→</span></button>
             </div>
           </li>
           <li class="frente reveal" style="--i:1">
@@ -588,8 +606,8 @@
             <p class="desc">Estratégicos, operativos y de proyectos. Sesiones con quienes deciden para identificar, valorar y priorizar lo que de verdad puede afectar los objetivos.</p>
             <div class="prueba">
               <span class="prueba-tit">Pruébelo</span>
+              <button type="button" class="enlace" onclick="openTool('mapa3d', this)" aria-haspopup="dialog" aria-expanded="false">Mapa de riesgos 3D <span aria-hidden="true">→</span></button>
               <button type="button" class="enlace" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">Bow Tie <span aria-hidden="true">→</span></button>
-              <button type="button" class="enlace" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">Consolidador de matrices <span aria-hidden="true">→</span></button>
             </div>
           </li>
           <li class="frente reveal" style="--i:2">
@@ -627,6 +645,22 @@
         </div>
 
         <div class="tools-grid">
+        <!-- Instrumento destacado: el único en 3D, a todo el ancho de la rejilla -->
+        <article class="tool-card destacada reveal">
+          <div class="vista vista-3d" onclick="openTool('mapa3d', this.closest('.tool-card').querySelector('.btn-open'))">
+            <img src="herramientas/capturas/mapa3d.jpg" alt="Escena 3D sobre fondo azul tinta: la matriz de calor como piso y veinte riesgos como esferas a distintas alturas según su velocidad, con la franja ámbar de la zona rápida" width="1200" height="720" loading="lazy" decoding="async">
+            <span class="sello" aria-hidden="true">3D</span>
+          </div>
+          <div class="tool-body">
+            <div class="tool-category">Visualización 3D <span class="badge-demo">Demo</span></div>
+            <h3 class="tool-title">Mapa de Riesgos 3D</h3>
+            <p class="tool-description">Dos riesgos con la misma severidad no tienen la misma urgencia. La matriz suma un tercer eje, la velocidad, y deja ver cuáles golpean en días: los que hay que atender primero.</p>
+            <ul class="game-meta"><li>20 riesgos de ejemplo</li><li>Tres vistas</li><li>Tabla 2D de respaldo</li></ul>
+            <button type="button" class="btn-open" onclick="openTool('mapa3d', this)" aria-haspopup="dialog" aria-expanded="false">
+              Abrir herramienta <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
         <article class="tool-card reveal" style="--i:0">
           <div class="vista" onclick="openTool('matriz', this.closest('.tool-card').querySelector('.btn-open'))">
             <img src="herramientas/capturas/matriz.jpg" alt="Mapa de calor de la matriz de riesgos: cinco niveles de probabilidad por cinco de impacto, con los riesgos ubicados en sus celdas" width="880" height="550" loading="lazy" decoding="async">
@@ -648,7 +682,7 @@
           <div class="tool-body">
             <div class="tool-category">Análisis Causa-Efecto <span class="badge-demo">Demo</span></div>
             <h3 class="tool-title">RiskVantage — Bow Tie</h3>
-            <p class="tool-description">Un evento se materializó: la pregunta es por dónde entró y qué barrera falló. Separe causas de consecuencias y deje ver dónde está descubierto.</p>
+            <p class="tool-description">Un mismo evento puede tener varias causas y más de una consecuencia. Ordénelas alrededor del evento y tenga el riesgo completo en una sola imagen, lista para discutir en el taller.</p>
             <button type="button" class="btn-open" onclick="openTool('bowtie', this)" aria-haspopup="dialog" aria-expanded="false">
               Abrir herramienta <span aria-hidden="true">→</span>
             </button>
@@ -703,7 +737,7 @@
           <div class="tool-body">
             <div class="tool-category">A la medida</div>
             <h3 class="tool-title">¿Su caso no está aquí?</h3>
-            <p class="tool-description">Estas cinco salieron de necesidades concretas. Si la suya es otra, probablemente se resuelve con el mismo método: escríbame y la miramos.</p>
+            <p class="tool-description">Estas seis salieron de necesidades concretas. Si la suya es otra, probablemente se resuelve con el mismo método: escríbame y la miramos.</p>
             <a class="btn-open" href="mailto:mmelendezgomez@gmail.com?subject=Contacto%20desde%20el%20portafolio">
               Escribirme <span aria-hidden="true">&rarr;</span>
             </a>
@@ -869,6 +903,7 @@
   <!-- Lógica JavaScript -->
   <script>
     const toolsData = {
+      mapa3d: { title: "Mapa de Riesgos 3D", src: "herramientas/Mapa_Riesgos_3D_Demo.html" },
       matriz: { title: "Matriz de Riesgos de Procesos", src: "herramientas/Matriz_Riesgos_Demo.html" },
       bowtie: { title: "RiskVantage — Bow Tie", src: "herramientas/RiskVantage_Demo.html" },
       consolidador: { title: "Consolidador de Matrices", src: "herramientas/Consolidador_Demo.html" },

@@ -1,226 +1,327 @@
+<!doctype html>
+<html lang="es">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, nofollow">
 <title>Muestreo de Auditoría</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
 <style>
+/* Layout: encabezado de marca, introducción y tres bloques: parámetros con el tamaño de muestra, selección aleatoria reproducible y tabla de referencia */
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --ink:#0B3A45; --ink-2:#10525F; --acc:#17A398; --acc-dk:#0C6B64;
-  --gold:#E8B84B; --mist:#D7F0EC; --amb:#E0A64B; --amb-bg:#FFF8EE;
-  --bg:#F6F8F8; --card:#FFFFFF; --line:#E1E7E7;
-  --tx:#17262B; --tx-2:#4A5A60; --tx-3:#87979C;
-  --ok:#15803D; --ok-bg:#DCFCE7; --err:#DC2626; --err-bg:#FEE2E2;
+  /* Tinta y ámbar: la misma paleta del portafolio */
+  --ink:#14213d; --ink-2:#1c2b4d; --ink-soft:#eef1f6;
+  --acc:#e9a23b; --acc-light:#f2b84b; --acc-text:#9a6412; --acc-soft:#fdf3e1;
+  --paper:#faf8f3; --card:#ffffff;
+  --text:#1b2436; --muted:#4f5b70; --faint:#667085; --line:#e8e2d6; --field:#9c9384;
+  --ok:#2f7d4f; --ok-soft:#e7f4ec; --warn-text:#7c4f0e; --warn-soft:#fdf3e1; --bad:#b4372b; --bad-soft:#fbe9e7;
+  /* Niveles de riesgo: los mismos de la matriz de la portada del portafolio */
+  --r-bajo:#2f9e6e; --r-mod:#d9b23a; --r-alto:#df7c3a; --r-ext:#cf4538;
+  --radius:14px; --radius-sm:8px;
+  --shadow-sm:0 1px 2px rgba(20,33,61,.05), 0 6px 16px -8px rgba(20,33,61,.12);
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:light;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
-  font-size:14px;color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
-.app-header{background:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;
-  gap:13px;padding:12px 22px;position:sticky;top:0;z-index:50;}
-.logo{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 11px;
-  border-radius:6px;background:#fff;color:var(--ink);font-weight:800;font-size:13px;letter-spacing:.08em;}
-.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
-.app-name{color:#fff;font-size:14px;font-weight:600;}
-.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
-.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;max-width:1000px;margin:0 auto;width:100%;}
-.card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;}
-.card h3{font-size:15px;margin-bottom:4px;}
-.hint{font-size:12.5px;color:var(--tx-2);line-height:1.55;}
-.banner{padding:11px 15px;border-radius:6px;font-size:13px;line-height:1.55;}
-.banner-info{background:var(--mist);color:var(--ink);border-left:3px solid var(--ink);}
-.banner-amb{background:var(--amb-bg);color:#7A5514;border-left:3px solid var(--amb);}
-.banner-ok{background:var(--ok-bg);color:#14532D;border-left:3px solid var(--ok);}
-input,select{font-family:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);
-  border-radius:5px;background:#fff;color:var(--tx);width:100%;}
-label{display:block;font-size:11.5px;font-weight:700;color:var(--tx-2);margin-bottom:4px;}
-button{font-family:inherit;}
-.btn{background:var(--acc-dk);color:#fff;border:none;padding:10px 18px;border-radius:5px;
-  cursor:pointer;font-size:13.5px;font-weight:700;}
-.btn:hover{background:#09524D;}
-.btn2{background:#fff;border:1px solid var(--line);color:var(--tx);padding:9px 15px;
-  border-radius:5px;cursor:pointer;font-size:13px;font-weight:600;}
-.btn2:hover{background:var(--bg);}
-.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
-.mono{font-variant-numeric:tabular-nums;}
-.resultado{background:var(--mist);border-left:3px solid var(--ink);border-radius:0 7px 7px 0;
-  padding:16px 18px;margin-top:14px;}
-.resultado .n{font-size:34px;font-weight:800;color:var(--acc-dk);line-height:1;}
-.resultado .l{font-size:12.5px;color:var(--ink);margin-top:4px;line-height:1.5;}
+html,body{background:var(--paper);}
+body{font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--text);min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;}
+*:focus-visible{outline:3px solid var(--acc-text);outline-offset:2px;}
+.app-header *:focus-visible{outline-color:var(--acc-light);}
+.num{font-variant-numeric:tabular-nums;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* Encabezado */
+.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  min-height:58px;padding:9px 24px;background:var(--ink);border-bottom:1px solid rgba(255,255,255,.06);}
+.marca{display:flex;align-items:center;gap:12px;min-width:0;}
+.logo{flex:none;display:inline-flex;align-items:center;justify-content:center;height:30px;padding:0 9px;border-radius:7px;
+  background:var(--acc);color:var(--ink);font-weight:700;font-size:14px;}
+.sep{flex:none;width:1px;height:28px;background:rgba(255,255,255,.18);}
+.app-name{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.2;color:#fff;}
+.app-tag{font-size:12.5px;line-height:1.3;color:#c9d2e3;}
+.volver{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:7px 12px;
+  border:1px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);white-space:nowrap;}
+.volver:hover{border-color:var(--acc-light);color:var(--acc-light);}
+
+.wrap{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:20px;}
+.wrap.angosta{max-width:1000px;}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-text);}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--acc);}
+
+/* Introducción: borde tinta, para no confundirla con un aviso */
+.intro{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--ink);border-radius:var(--radius-sm);
+  padding:14px 18px;box-shadow:var(--shadow-sm);}
+.intro p+p{margin-top:6px;font-size:14.5px;line-height:1.6;}
+.intro b{font-weight:600;color:var(--ink);}
+
+/* Tarjetas */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px 22px;min-width:0;}
+.card h2{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.3;color:var(--ink);}
+.card h2 .paso{color:var(--acc-text);}
+.hint{margin-top:4px;font-size:13.5px;line-height:1.55;color:var(--muted);}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 18px;font:inherit;font-size:14px;
+  font-weight:600;border-radius:var(--radius-sm);border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease;}
+.btn.sec{background:#fff;color:var(--ink);}
+@media (hover:hover){
+  .btn:hover:not([disabled]){background:var(--ink-2);border-color:var(--ink-2);}
+  .btn.sec:hover:not([disabled]){background:var(--paper);color:var(--ink);border-color:var(--ink);}
+}
+.btn[disabled]{opacity:.6;cursor:default;}
+.enlace{font:inherit;font-size:13.5px;font-weight:600;color:var(--acc-text);background:none;border:0;padding:6px 0;cursor:pointer;
+  text-decoration:underline;text-decoration-color:rgba(154,100,18,.4);text-underline-offset:3px;}
+.quitar{flex:none;width:32px;height:32px;display:inline-grid;place-items:center;font:inherit;font-size:14px;line-height:1;color:var(--faint);
+  background:none;border:1px solid transparent;border-radius:var(--radius-sm);cursor:pointer;}
+@media (hover:hover){.quitar:hover{color:var(--bad);border-color:var(--line);background:#fff;}}
+
+/* Campos */
+label,.lab-campo{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600;color:var(--text);}
+input,select{width:100%;min-height:42px;padding:0 12px;font:inherit;font-size:14px;color:var(--text);background:#fff;
+  border:1px solid var(--field);border-radius:var(--radius-sm);}
+input:focus-visible,select:focus-visible{outline:3px solid var(--acc-text);outline-offset:1px;border-color:var(--ink);}
+.ayuda-campo{margin-top:5px;font-size:12px;line-height:1.45;color:var(--faint);}
+
+/* Tablas */
+.tabla-wrap{position:relative;overflow-x:auto;}   /* posicionado: así lo oculto para lectores de pantalla no se escapa del desplazamiento */
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th{padding:10px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:var(--paper);border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:0;}
+
+/* Píldoras de nivel: punto de color y texto en tinta (el color nunca va solo en el texto) */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 7px;border-radius:999px;font-size:12px;font-weight:600;
+  white-space:nowrap;background:color-mix(in srgb, var(--c) 18%, #fff);color:var(--ink);}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;background:var(--paper);
+  border:1px solid var(--line);color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+/* Mensajes: el color acompaña a la palabra, nunca la reemplaza */
+.msg{padding:12px 14px;border-radius:var(--radius-sm);font-size:13.5px;line-height:1.55;border-left:3px solid currentColor;}
+.msg.ok{background:var(--ok-soft);color:var(--ok);}
+.msg.warn{background:var(--warn-soft);color:var(--warn-text);}
+.msg.bad{background:var(--bad-soft);color:var(--bad);}
+.msg .det{display:block;margin-top:2px;color:var(--text);}
+
+/* Aviso flotante */
+.toast{position:fixed;top:72px;right:20px;z-index:99;max-width:min(360px, calc(100vw - 32px));padding:11px 16px;border-radius:var(--radius-sm);
+  background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);transition:opacity .3s;}
+.toast[hidden]{display:none;}
+
+/* Pie */
+footer{border-top:1px solid var(--line);}
+.pie{max-width:1180px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;
+  font-size:12.5px;color:var(--faint);}
+.pie b{font-weight:600;color:var(--text);}
+@media (max-width:640px){
+  .wrap{padding:16px;gap:16px;}
+  .app-header{padding:8px 16px;}
+  .app-tag{display:none;}
+  .volver .lbl{display:none;}
+  .card{padding:16px;}
+  .pie{padding:16px;}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important;}}
+
+/* ---- Propio de esta herramienta ---- */
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px;}
+.resultado{display:flex;align-items:center;gap:18px;margin-top:18px;padding:16px 18px;background:var(--ink-soft);
+  border-left:3px solid var(--ink);border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+.resultado .n{font-family:var(--serif);font-weight:600;font-size:46px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;}
+.resultado .l{font-size:13.5px;line-height:1.6;color:var(--text);}
+.resultado .l b{color:var(--ink);}
+.botones{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+#salida .msg{margin-top:16px;}
 .muestra{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
-.num{background:#fff;border:1px solid var(--line);border-radius:5px;padding:5px 9px;
-  font-size:12px;font-weight:700;color:var(--tx-2);font-variant-numeric:tabular-nums;}
-.tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
-.tbl th{text-align:center;padding:7px 8px;background:var(--bg);color:var(--tx-2);font-weight:700;
-  border-bottom:2px solid var(--line);font-size:10.5px;text-transform:uppercase;}
-.tbl td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:center;}
-.tbl td:first-child{text-align:left;}
-.tbl tr:last-child td{border-bottom:none;}
-.tbl .marca{background:var(--mist);font-weight:800;color:var(--acc-dk);}
-footer{background:var(--ink);color:rgba(255,255,255,.72);padding:20px 24px;font-size:12.5px;line-height:1.6;}
-footer b{color:#fff;}
-footer .wrap2{max-width:1000px;margin:0 auto;}
-.volver{margin-left:auto;color:#fff;opacity:.78;text-decoration:none;font-size:12px;font-weight:600;
-  padding:5px 10px;border:1px solid rgba(255,255,255,.28);border-radius:6px;white-space:nowrap;
-  transition:opacity .2s ease,border-color .2s ease;}
-.volver:hover{opacity:1;border-color:var(--acc);}
-.volver:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+.muestra span{min-width:46px;padding:5px 8px;text-align:center;font-size:12.5px;font-weight:600;color:var(--text);background:#fff;
+  border:1px solid var(--line);border-radius:6px;font-variant-numeric:tabular-nums;}
+.muestra span.mas{background:var(--paper);color:var(--faint);}
+.ref{margin-top:12px;}
+.ref th,.ref td{text-align:center;font-variant-numeric:tabular-nums;}
+.ref th:first-child,.ref td:first-child{text-align:left;}
+.ref tbody tr:last-child th{border-bottom:0;}
+.ref tbody th{background:none;text-transform:none;letter-spacing:0;font-size:13.5px;font-weight:500;color:var(--text);}
+.ref td.marca{font-weight:700;color:var(--ink);background:var(--ink-soft);box-shadow:inset 0 0 0 2px var(--ink);}
+@media (max-width:860px){.g4{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media (max-width:420px){.g4{grid-template-columns:minmax(0,1fr);} .resultado{flex-direction:column;align-items:flex-start;gap:6px;}}
 </style>
+</head>
+<body>
 
-<div class="app-header">
-  <span class="logo">MM</span>
-  <div class="sep"></div>
-  <div>
-    <div class="app-name">Muestreo de Auditoría</div>
-    <div class="app-tag">Un tamaño de muestra que se puede defender</div>
-  </div>
-</div>
-
-<div class="wrap">
-  <div class="banner banner-info">
-    <b>Cómo funciona.</b> Cuando el cliente pregunta por qué se revisaron 30 documentos
-    y no 60, la respuesta no puede ser «me pareció suficiente». Aquí el tamaño sale de la
-    <b>tabla de muestreo por atributos</b>, y la selección es <b>reproducible</b>: con la misma semilla
-    se vuelve a generar exactamente la misma muestra ante una revisión de calidad.
-  </div>
-
-  <div class="card">
-    <h3>1 · Parámetros de la prueba</h3>
-    <div class="g4" style="margin-top:12px">
-      <div><label>Población (N)</label>
-        <input type="number" id="pob" class="mono" value="1200" min="1" oninput="calcular()"></div>
-      <div><label>Nivel de confianza</label>
-        <select id="conf" onchange="calcular()"><option value="90">90 %</option><option value="95" selected>95 %</option></select></div>
-      <div><label>Desviación tolerable</label>
-        <select id="tol" onchange="calcular()"></select></div>
-      <div><label>Semilla de selección</label>
-        <input id="sem" value="OC-2026" oninput="calcular()"></div>
+<header class="app-header">
+  <div class="marca">
+    <span class="logo" aria-hidden="true">MM</span>
+    <span class="sep" aria-hidden="true"></span>
+    <div>
+      <h1 class="app-name">Muestreo de Auditoría</h1>
+      <p class="app-tag">Un tamaño de muestra que se puede defender</p>
     </div>
-    <div class="resultado" id="res"></div>
   </div>
+</header>
 
-  <div class="card">
-    <h3>2 · Selección aleatoria</h3>
-    <p class="hint">Los números corresponden a la posición del documento dentro de la población.
-    Cambie la semilla y verá otra muestra; vuelva a la anterior y reaparece la misma.</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-      <button class="btn" onclick="generar()">🎲 Generar selección</button>
-      <button class="btn2" onclick="comprobar()">Comprobar que es reproducible</button>
+<main class="wrap angosta">
+  <section class="intro" aria-label="Cómo funciona">
+    <p class="eyebrow">Cómo funciona</p>
+    <p>Cuando alguien pregunta por qué se revisaron 30 documentos y no 60, la respuesta no puede ser «me pareció suficiente». Aquí el tamaño sale de la <b>tabla de muestreo por atributos</b> y la selección es <b>reproducible</b>: con la misma semilla se obtiene exactamente la misma muestra ante una revisión de calidad.</p>
+  </section>
+
+  <section class="card" aria-labelledby="t1">
+    <h2 id="t1"><span class="paso">1 ·</span> Parámetros de la prueba</h2>
+    <div class="g4">
+      <div><label for="pob">Población (N)</label><input type="number" id="pob" class="num" inputmode="numeric" value="1200" min="1"></div>
+      <div><label for="conf">Nivel de confianza</label>
+        <select id="conf"><option value="90">90 %</option><option value="95" selected>95 %</option></select></div>
+      <div><label for="tol">Desviación tolerable</label><select id="tol"></select></div>
+      <div><label for="sem">Semilla de selección</label><input id="sem" value="OC-2026" autocomplete="off" aria-describedby="sem-ayuda">
+        <p class="ayuda-campo" id="sem-ayuda">Cualquier texto. La misma semilla da la misma muestra.</p></div>
     </div>
-    <div id="salida"></div>
-  </div>
+    <div class="resultado" id="res" aria-live="polite"></div>
+  </section>
 
-  <div class="card">
-    <h3>Tabla de referencia</h3>
-    <p class="hint">Tamaño de muestra para una desviación esperada de 0 %. Se resalta la celda aplicada.</p>
-    <div style="overflow-x:auto"><table class="tbl" id="tabla"></table></div>
-  </div>
-  </div>
+  <section class="card" aria-labelledby="t2">
+    <h2 id="t2"><span class="paso">2 ·</span> Selección aleatoria</h2>
+    <p class="hint">Los números son la posición de cada documento dentro de la población. Cambie la semilla y verá otra muestra; vuelva a la
+      anterior y reaparece la misma.</p>
+    <div class="botones">
+      <button type="button" class="btn" id="generar">Generar la selección</button>
+      <button type="button" class="btn sec" id="comprobar">Comprobar que es reproducible</button>
+    </div>
+    <div id="salida" aria-live="polite"></div>
+  </section>
 
-<footer><div class="wrap2">Mateo Meléndez · Consultor de Riesgos Empresariales</div></footer>
+  <section class="card" aria-labelledby="t3">
+    <h2 id="t3">Tabla de referencia</h2>
+    <p class="hint">Tamaño de muestra para una desviación esperada de 0 %. Se resalta la celda que se está aplicando.</p>
+    <div class="tabla-wrap"><table class="ref" id="tabla"></table></div>
+  </section>
+</main>
+
+<div class="toast" id="aviso" role="status" aria-live="polite" hidden></div>
+
+<footer>
+  <div class="pie"><span><b>Mateo Meléndez</b> · Consultor de Riesgos Empresariales</span><span>Parámetros de ejemplo.</span></div>
+</footer>
 
 <script>
-/* Herramienta enfocada en un solo flujo de trabajo. */
-var TABLA={
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function $(id){ return document.getElementById(id); }
+/* Aviso flotante: se anuncia a los lectores de pantalla y desaparece solo */
+var avisoT = null;
+function aviso(msg){
+  var t = $('aviso'); t.textContent = msg; t.hidden = false; t.style.opacity = '1';
+  clearTimeout(avisoT);
+  avisoT = setTimeout(function(){ t.style.opacity = '0'; avisoT = setTimeout(function(){ t.hidden = true; }, 320); }, 2600);
+}
+/* Abierta por su URL directa, la herramienta ofrece volver al portafolio; dentro del visor del portafolio sobra */
+(function(){
+  if (window.self !== window.top) return;
+  var a = document.createElement('a');
+  a.className = 'volver'; a.href = '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
+  a.innerHTML = '\u2190<span class="lbl"> Portafolio</span>';
+  document.querySelector('.app-header').appendChild(a);
+})();
+
+/* Tabla de muestreo por atributos (desviación esperada de 0 %) */
+var TABLA = {
   90:{2:114,3:76,4:57,5:45,6:38,7:32,8:28,9:25,10:22,15:15,20:11},
   95:{2:149,3:99,4:74,5:59,6:49,7:42,8:36,9:32,10:29,15:19,20:14}
 };
-var TOLERABLES=[2,3,4,5,6,7,8,9,10,15,20];
+var TOLERABLES = [2,3,4,5,6,7,8,9,10,15,20];
 
-function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function miles(v){ return Number(v).toLocaleString('es-CO'); }
 function tamano(conf,tol,N){
-  var n=TABLA[conf][tol];
+  var n = TABLA[conf][tol];
   /* Corrección por población finita */
   if(N>0){
-    n=Math.round(n/(1+n/N));
-    if(n>N) n=N;
-    if(N<=25) n=N;          /* población pequeña: se revisa el 100 % */
+    n = Math.round(n/(1+n/N));
+    if(n>N) n = N;
+    if(N<=25) n = N;   /* población pequeña: se revisa el 100 % */
   }
   return Math.max(1,n);
 }
 /* Generador con semilla: la misma semilla produce siempre la misma secuencia */
 function rng(sem){
-  var s=0; for(var i=0;i<String(sem).length;i++) s=(s*31+String(sem).charCodeAt(i))>>>0;
-  if(s===0) s=123456789;
-  return function(){ s^=s<<13; s>>>=0; s^=s>>17; s^=s<<5; s>>>=0; return s/4294967296; };
+  var s = 0; for(var i=0;i<String(sem).length;i++) s = (s*31 + String(sem).charCodeAt(i))>>>0;
+  if(s===0) s = 123456789;
+  return function(){ s ^= s<<13; s >>>= 0; s ^= s>>17; s ^= s<<5; s >>>= 0; return s/4294967296; };
 }
 function seleccion(N,n,sem){
-  var r=rng(sem), vistos={}, out=[], intentos=0;
+  var r = rng(sem), vistos = {}, out = [], intentos = 0;
   if(n>=N){ for(var i=1;i<=N;i++) out.push(i); return out; }
   while(out.length<n && intentos<n*40){
-    var v=Math.floor(r()*N)+1;
-    if(!vistos[v]){ vistos[v]=1; out.push(v); }
+    var v = Math.floor(r()*N)+1;
+    if(!vistos[v]){ vistos[v] = 1; out.push(v); }
     intentos++;
   }
-  return out.sort(function(a,b){return a-b;});
+  return out.sort(function(a,b){ return a-b; });
 }
 function llenarTol(){
-  document.getElementById('tol').innerHTML=TOLERABLES.map(function(t){
-    return '<option value="'+t+'" '+(t===5?'selected':'')+'>'+t+' %</option>'; }).join('');
+  $('tol').innerHTML = TOLERABLES.map(function(t){ return '<option value="'+t+'"'+(t===5?' selected':'')+'>'+t+' %</option>'; }).join('');
 }
 function params(){
-  return { N:Math.max(1,parseInt(document.getElementById('pob').value)||1),
-           conf:parseInt(document.getElementById('conf').value),
-           tol:parseInt(document.getElementById('tol').value),
-           sem:document.getElementById('sem').value||'demo' };
+  return { N: Math.max(1, parseInt($('pob').value,10) || 1),
+           conf: parseInt($('conf').value,10),
+           tol: parseInt($('tol').value,10),
+           sem: $('sem').value || 'muestra' };
+}
+function chips(lista, max){
+  var corto = max ? lista.slice(0,max) : lista;
+  return '<div class="muestra">'+corto.map(function(v){ return '<span>'+v+'</span>'; }).join('')+
+    (max && lista.length>max ? '<span class="mas">+'+(lista.length-max)+'</span>' : '')+'</div>';
 }
 function calcular(){
-  var p=params();
-  var base=TABLA[p.conf][p.tol];
-  var n=tamano(p.conf,p.tol,p.N);
-  var cob=Math.round(n/p.N*1000)/10;
-  document.getElementById('res').innerHTML=
-    '<div class="n mono">'+n+'</div>'+
-    '<div class="l">ítems a revisar de una población de <b>'+p.N.toLocaleString('es-CO')+'</b> · cobertura del '+cob+' %<br>'+
+  var p = params(), base = TABLA[p.conf][p.tol], n = tamano(p.conf,p.tol,p.N);
+  var cob = (n/p.N*100).toLocaleString('es-CO', {maximumFractionDigits:1});
+  $('res').innerHTML =
+    '<div class="n">'+n+'</div>'+
+    '<div class="l">ítems a revisar de una población de <b>'+miles(p.N)+'</b> · cobertura del '+cob+' %<br>'+
     'Tabla: <b>'+base+'</b> para '+p.conf+' % de confianza y '+p.tol+' % de desviación tolerable'+
-    (p.N<=25? ' · población pequeña, se revisa el 100 %' :
-     (n!==base? ' · ajustado por población finita' : ''))+'</div>';
+    (p.N<=25 ? ' · población pequeña: se revisa el 100 %' : (n!==base ? ' · ajustado por población finita' : ''))+'</div>';
   pintarTabla();
-  document.getElementById('salida').innerHTML='';
+  $('salida').innerHTML = '';
 }
 function generar(){
-  var p=params(), n=tamano(p.conf,p.tol,p.N);
-  var sel=seleccion(p.N,n,p.sem);
-  document.getElementById('salida').innerHTML=
-    '<div class="banner banner-ok" style="margin-top:14px"><b>'+sel.length+' ítems seleccionados</b> '+
-    'con la semilla «'+escH(p.sem)+'». Esta selección queda registrada en los papeles de trabajo.</div>'+
-    '<div class="muestra">'+sel.map(function(v){return '<span class="num">'+v+'</span>';}).join('')+'</div>';
+  var p = params(), n = tamano(p.conf,p.tol,p.N), sel = seleccion(p.N,n,p.sem);
+  $('salida').innerHTML =
+    '<div class="msg ok"><b>'+sel.length+' ítems seleccionados</b> con la semilla «'+escH(p.sem)+'».'+
+    '<span class="det">Registre la semilla en los papeles de trabajo: con ella cualquiera puede reproducir la muestra.</span></div>'+chips(sel);
 }
 function comprobar(){
-  var p=params(), n=tamano(p.conf,p.tol,p.N);
-  var a=seleccion(p.N,n,p.sem), b=seleccion(p.N,n,p.sem), c=seleccion(p.N,n,p.sem+'-otra');
-  var iguales=JSON.stringify(a)===JSON.stringify(b);
-  var distintas=JSON.stringify(a)!==JSON.stringify(c);
-  document.getElementById('salida').innerHTML=
-    '<div class="banner banner-ok" style="margin-top:14px">'+
-    '<b>'+(iguales?'✓':'✕')+' Misma semilla, misma muestra.</b> Se generó dos veces con «'+escH(p.sem)+
-    '» y el resultado fue '+(iguales?'idéntico':'distinto')+'.<br>'+
-    '<b>'+(distintas?'✓':'✕')+' Otra semilla, otra muestra.</b> Con «'+escH(p.sem)+'-otra» la selección '+
-    (distintas?'cambió por completo':'no cambió')+'.<br>'+
-    '<span style="font-weight:400">Por eso la muestra es defendible: cualquiera puede reproducirla partiendo de la semilla registrada.</span></div>'+
-    '<div class="muestra">'+a.slice(0,20).map(function(v){return '<span class="num">'+v+'</span>';}).join('')+
-    (a.length>20? '<span class="num" style="background:var(--bg)">+'+(a.length-20)+'</span>':'')+'</div>';
+  var p = params(), n = tamano(p.conf,p.tol,p.N);
+  var a = seleccion(p.N,n,p.sem), b = seleccion(p.N,n,p.sem), c = seleccion(p.N,n,p.sem+'-otra');
+  var iguales = JSON.stringify(a)===JSON.stringify(b), distintas = JSON.stringify(a)!==JSON.stringify(c);
+  $('salida').innerHTML =
+    '<div class="msg '+(iguales && distintas ? 'ok' : 'bad')+'">'+
+    '<b>'+(iguales ? 'Misma semilla, misma muestra.' : 'Atención: la misma semilla dio muestras distintas.')+'</b> '+
+    'Se generó dos veces con «'+escH(p.sem)+'» y el resultado fue '+(iguales ? 'idéntico' : 'distinto')+'.<br>'+
+    '<b>'+(distintas ? 'Otra semilla, otra muestra.' : 'Atención: otra semilla dio la misma muestra.')+'</b> '+
+    'Con «'+escH(p.sem)+'-otra» la selección '+(distintas ? 'cambió por completo' : 'no cambió')+'.'+
+    '<span class="det">Por eso la muestra es defendible: cualquiera puede reproducirla partiendo de la semilla registrada.</span></div>'+chips(a, 20);
 }
 function pintarTabla(){
-  var p=params();
-  var h='<thead><tr><th>Desviación tolerable</th><th>90 % confianza</th><th>95 % confianza</th></tr></thead><tbody>';
+  var p = params();
+  var h = '<thead><tr><th scope="col">Desviación tolerable</th><th scope="col">90 % de confianza</th><th scope="col">95 % de confianza</th></tr></thead><tbody>';
   TOLERABLES.forEach(function(t){
-    h+='<tr><td>'+t+' %</td>'+
-       '<td class="'+(p.conf===90&&p.tol===t?'marca':'')+'">'+TABLA[90][t]+'</td>'+
-       '<td class="'+(p.conf===95&&p.tol===t?'marca':'')+'">'+TABLA[95][t]+'</td></tr>';
+    h += '<tr><th scope="row">'+t+' %</th>'+
+      '<td'+(p.conf===90 && p.tol===t ? ' class="marca" aria-current="true"' : '')+'>'+TABLA[90][t]+'</td>'+
+      '<td'+(p.conf===95 && p.tol===t ? ' class="marca" aria-current="true"' : '')+'>'+TABLA[95][t]+'</td></tr>';
   });
-  document.getElementById('tabla').innerHTML=h+'</tbody>';
+  $('tabla').innerHTML = h+'</tbody>';
 }
+
+$('pob').addEventListener('input', calcular);
+$('sem').addEventListener('input', calcular);
+$('conf').addEventListener('change', calcular);
+$('tol').addEventListener('change', calcular);
+$('generar').addEventListener('click', generar);
+$('comprobar').addEventListener('click', comprobar);
 llenarTol(); calcular();
 </script>
-<script>
-/* Enlace de regreso al portafolio. Solo aparece si la herramienta se abrio
-   por su URL directa: dentro del visor modal del portafolio sobraria. */
-(function () {
-  if (window.self !== window.top) return;
-  var h = document.querySelector('.app-header');
-  if (!h) return;
-  var a = document.createElement('a');
-  a.className = 'volver';
-  a.href = '../index.html';
-  a.textContent = '\u2190 Portafolio';
-  h.appendChild(a);
-})();
-</script>
+</body>
+</html>
