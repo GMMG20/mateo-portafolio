@@ -59,7 +59,8 @@
       --shadow: 0 2px 4px rgba(20, 33, 61, 0.04), 0 18px 40px -16px rgba(20, 33, 61, 0.22);
       --radius: 14px;
       --header-h: 68px;
-      --wrap: 1180px;
+      /* El ancho crece con la ventana: 1180 px en portátiles y hasta 1520 px en monitores grandes */
+      --wrap: clamp(1180px, 84vw, 1520px);
       --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
       --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     }
@@ -339,6 +340,12 @@
     .perfil { margin-top: 6.5rem; padding: 6rem 0; background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .perfil-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 4rem; align-items: start; }
     .perfil-texto > p { margin-top: 1.25rem; color: var(--muted); font-size: 1.05rem; line-height: 1.75; max-width: 40em; }
+    /* Foto junto al título: muestra a la persona detrás del sitio */
+    .perfil-cabeza { display: flex; align-items: center; gap: 1.6rem; }
+    .perfil-foto {
+      flex: none; width: 152px; height: 152px; object-fit: cover; border-radius: 18px; background: var(--paper-2);
+      box-shadow: 0 0 0 4px var(--card), 0 0 0 5px var(--line), var(--shadow-sm);
+    }
     .perfil-texto > p.remate {
       margin-top: 1.9rem; padding-left: 1.2rem; border-left: 3px solid var(--acc);
       font-family: var(--serif); font-style: italic; font-size: 1.3rem; line-height: 1.45; color: var(--ink);
@@ -428,6 +435,23 @@
     @keyframes girar { to { transform: rotate(360deg); } }
     .modal-body iframe { position: relative; z-index: 2; width: 100%; height: 100%; border: none; background: transparent; }
 
+    /* ---- Pantallas grandes: la portada, la matriz y las cifras crecen con el ancho ---- */
+    @media (min-width: 1600px) {
+      .hero { padding: 6.5rem 0 9.5rem; }
+      .hero-inner { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: 5rem; }
+      .hero h1 { font-size: clamp(4.05rem, 3.5vw, 4.75rem); }
+      .hero-lead { font-size: 1.24rem; }
+      .hm { width: min(100%, 430px); }
+      .hm figcaption { font-size: 0.86rem; }
+      .stat { padding: 1.9rem 2.2rem; }
+      .stat b { font-size: 2.5rem; }
+      .stat span { font-size: 0.95rem; }
+      .frentes { gap: 3rem; }
+      .tools-grid, .games-grid { gap: 2.25rem; }
+      .perfil-grid { gap: 6rem; }
+      .perfil-foto { width: 176px; height: 176px; }
+    }
+
     /* ---- Pantallas medianas y pequeñas ---- */
     @media (max-width: 1100px) {
       .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -466,6 +490,8 @@
       .frentes { row-gap: 2.25rem; }
     }
     @media (max-width: 480px) {
+      .perfil-cabeza { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+      .perfil-foto { width: 120px; height: 120px; border-radius: 16px; }
       :root { --header-h: 60px; }
       .wrap, .header-inner { padding: 0 1rem; }
       .header-inner, .header-right { gap: 0.6rem; }
@@ -807,15 +833,21 @@
     <section class="perfil" id="perfil" aria-labelledby="titulo-perfil">
       <div class="wrap perfil-grid">
         <div class="perfil-texto reveal">
-          <p class="eyebrow">Perfil</p>
-          <h2 id="titulo-perfil">Una trayectoria en riesgo y control</h2>
-          <p>Soy consultor de riesgos empresariales en una firma global de consultoría y corretaje de riesgos. Diseño sistemas de gestión de riesgos —política, metodología e indicadores clave— para empresas de varios sectores y tamaños, y facilito los talleres donde esos riesgos se discuten con los comités directivos. Mi experiencia incluye cinco años como auditor interno senior en Deloitte, con más de diez auditorías ejecutadas y el liderazgo del testeo de controles bajo la Ley Sarbanes-Oxley.</p>
-          <p class="remate">Las herramientas de esta página salieron de ese trabajo: las construí porque las necesitaba.</p>
+          <!-- La persona detrás del sitio: foto junto al título -->
+          <div class="perfil-cabeza">
+            <img class="perfil-foto" src="mateo-melendez.jpg" alt="Mateo Meléndez en una terraza de Bogotá, con los cerros orientales al fondo" width="352" height="352" loading="lazy">
+            <div>
+              <p class="eyebrow">Perfil</p>
+              <h2 id="titulo-perfil">Una trayectoria en riesgo y control</h2>
+            </div>
+          </div>
+          <p>Soy consultor de riesgos empresariales en Marsh, firma global de consultoría y corretaje de riesgos. Diseño sistemas de gestión de riesgos —política, metodología e indicadores clave— para empresas de varios sectores y tamaños, y facilito los talleres donde esos riesgos se discuten con los comités directivos. Mi experiencia incluye cinco años como auditor interno senior en Deloitte, con más de diez auditorías ejecutadas y el liderazgo del testeo de controles bajo la Ley Sarbanes-Oxley.</p>
+          <p class="remate">Mi trabajo es que la gestión de riesgos sirva para decidir, no para cumplir.</p>
         </div>
         <aside class="creds reveal" style="--i:1">
           <h3>Trayectoria</h3>
           <ul>
-            <li><b>Firma global de consultoría y corretaje de riesgos</b> &middot; Consultor de Riesgos Empresariales &mdash; 2024 a hoy</li>
+            <li><b>Marsh</b> &middot; Consultor de Riesgos Empresariales &mdash; 2024 a hoy</li>
             <li><b>Deloitte</b> &middot; Auditor Interno Senior, Risk Advisory &mdash; 2019 a 2024</li>
           </ul>
           <h3>Formación</h3>
