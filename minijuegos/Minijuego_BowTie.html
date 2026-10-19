@@ -403,7 +403,7 @@ function estrellasTxt(n){ return '★★★'.slice(0, n) + '☆☆☆'.slice(0, 
 (function(){
   Sonido.cargar(); pintarBotonSonido(); $('sonido').onclick = ()=>Sonido.alternar();
   if(window.self !== window.top) return;
-  const a = document.createElement('a'); a.className = 'volver'; a.href = '../index.html'; a.innerHTML = '← <span class="lbl">Portafolio</span>'; a.setAttribute('aria-label', 'Volver al portafolio');
+  const a = document.createElement('a'); a.className = 'volver'; a.href = location.protocol === 'file:' ? '../Portafolio_Demo.html' : '../index.html'; a.innerHTML = '← <span class="lbl">Portafolio</span>'; a.setAttribute('aria-label', 'Volver al portafolio');
   document.querySelector('.top').appendChild(a);
 })();
 

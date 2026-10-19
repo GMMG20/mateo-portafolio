@@ -404,7 +404,8 @@
       background-color: var(--ink); color: #ffffff; padding: 0.75rem 1.1rem;
       display: flex; justify-content: space-between; align-items: center; gap: 1rem;
     }
-    .modal-title { font-weight: 600; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* El título no hereda la serif ni el color tinta de los h2: sobre la cabecera tinta va en blanco */
+    .modal-title { font-family: var(--sans); font-weight: 600; font-size: 1.05rem; letter-spacing: 0; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .modal-tools { display: flex; align-items: center; gap: 0.5rem; flex: none; }
     .btn-newtab, .btn-close {
       font-family: inherit; font-weight: 600; font-size: 0.88rem; padding: 0.5rem 0.95rem; border-radius: 6px; cursor: pointer;
@@ -419,6 +420,7 @@
       position: absolute; inset: 0; display: flex; flex-direction: column; gap: 0.9rem; align-items: center; justify-content: center;
       color: var(--muted); font-weight: 500;
     }
+    .iframe-loader[hidden] { display: none; }
     .iframe-loader::before {
       content: ""; width: 34px; height: 34px; border-radius: 50%;
       border: 3px solid var(--line); border-top-color: var(--acc); animation: girar 0.9s linear infinite;
@@ -571,9 +573,9 @@
   <main id="contenido">
     <div class="wrap">
       <ul class="stats reveal" aria-label="Track record in figures">
-        <li class="stat"><b>5 years</b><span>in internal audit at Deloitte</span></li>
-        <li class="stat"><b>10+</b><span>internal audits carried out</span></li>
-        <li class="stat"><b>SOX</b><span>led control testing</span></li>
+        <li class="stat"><b>7 years</b><span>in risk management, control and internal audit</span></li>
+        <li class="stat"><b>6</b><span>sectors served</span></li>
+        <li class="stat"><b>ISO · COSO</b><span>frameworks I apply</span></li>
         <li class="stat"><b>8</b><span>live tools and mini-games</span></li>
       </ul>
     </div>
@@ -806,8 +808,8 @@
       <div class="wrap perfil-grid">
         <div class="perfil-texto reveal">
           <p class="eyebrow">Profile</p>
-          <h2 id="titulo-perfil">From internal audit to risk management</h2>
-          <p>I am an enterprise risk consultant at a global risk advisory and insurance broking firm. Before that I spent five years at Deloitte as a senior internal auditor, where I ran more than ten internal audits and led control testing under the Sarbanes-Oxley Act. Today I design risk methodologies, policies and key risk indicators for companies across sectors and sizes, and I facilitate the workshops where those risks are discussed with executive committees.</p>
+          <h2 id="titulo-perfil">A career in risk and control</h2>
+          <p>I am an enterprise risk consultant at a global risk advisory and insurance broking firm. I design risk management systems — policy, methodology and key risk indicators — for companies across sectors and sizes, and I facilitate the workshops where those risks are discussed with executive committees. My experience includes five years as a senior internal auditor at Deloitte, with more than ten internal audits carried out and leadership of control testing under the Sarbanes-Oxley Act.</p>
           <p class="remate">The tools on this page came out of that work: I built them because I needed them.</p>
         </div>
         <aside class="creds reveal" style="--i:1">

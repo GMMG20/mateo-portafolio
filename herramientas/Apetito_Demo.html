@@ -247,7 +247,7 @@ function aviso(msg){
 (function(){
   if (window.self !== window.top) return;
   var a = document.createElement('a');
-  a.className = 'volver'; a.href = '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
+  a.className = 'volver'; a.href = location.protocol === 'file:' ? '../Portafolio_Demo.html' : '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
   a.innerHTML = '\u2190<span class="lbl"> Portafolio</span>';
   document.querySelector('.app-header').appendChild(a);
 })();

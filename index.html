@@ -404,7 +404,8 @@
       background-color: var(--ink); color: #ffffff; padding: 0.75rem 1.1rem;
       display: flex; justify-content: space-between; align-items: center; gap: 1rem;
     }
-    .modal-title { font-weight: 600; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* El título no hereda la serif ni el color tinta de los h2: sobre la cabecera tinta va en blanco */
+    .modal-title { font-family: var(--sans); font-weight: 600; font-size: 1.05rem; letter-spacing: 0; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .modal-tools { display: flex; align-items: center; gap: 0.5rem; flex: none; }
     .btn-newtab, .btn-close {
       font-family: inherit; font-weight: 600; font-size: 0.88rem; padding: 0.5rem 0.95rem; border-radius: 6px; cursor: pointer;
@@ -419,6 +420,7 @@
       position: absolute; inset: 0; display: flex; flex-direction: column; gap: 0.9rem; align-items: center; justify-content: center;
       color: var(--muted); font-weight: 500;
     }
+    .iframe-loader[hidden] { display: none; }
     .iframe-loader::before {
       content: ""; width: 34px; height: 34px; border-radius: 50%;
       border: 3px solid var(--line); border-top-color: var(--acc); animation: girar 0.9s linear infinite;
@@ -571,9 +573,9 @@
   <main id="contenido">
     <div class="wrap">
       <ul class="stats reveal" aria-label="Trayectoria en cifras">
-        <li class="stat"><b>5 años</b><span>de auditoría interna en Deloitte</span></li>
-        <li class="stat"><b>10+</b><span>auditorías internas ejecutadas</span></li>
-        <li class="stat"><b>SOX</b><span>lideré el testeo de controles</span></li>
+        <li class="stat"><b>7 años</b><span>en gestión de riesgos, control y auditoría interna</span></li>
+        <li class="stat"><b>6</b><span>sectores atendidos</span></li>
+        <li class="stat"><b>ISO · COSO</b><span>marcos de referencia que aplico</span></li>
         <li class="stat"><b>8</b><span>instrumentos y minijuegos en vivo</span></li>
       </ul>
     </div>
@@ -806,8 +808,8 @@
       <div class="wrap perfil-grid">
         <div class="perfil-texto reveal">
           <p class="eyebrow">Perfil</p>
-          <h2 id="titulo-perfil">De la auditoría interna a la gestión de riesgos</h2>
-          <p>Soy consultor de riesgos empresariales en una firma global de consultoría y corretaje de riesgos. Antes pasé cinco años en Deloitte como auditor interno senior, donde ejecuté más de diez auditorías y lideré el testeo de controles bajo la Ley Sarbanes-Oxley. Hoy diseño metodologías, políticas e indicadores clave de riesgo para empresas de varios sectores y tamaños, y facilito los talleres donde esos riesgos se discuten con los comités directivos.</p>
+          <h2 id="titulo-perfil">Una trayectoria en riesgo y control</h2>
+          <p>Soy consultor de riesgos empresariales en una firma global de consultoría y corretaje de riesgos. Diseño sistemas de gestión de riesgos —política, metodología e indicadores clave— para empresas de varios sectores y tamaños, y facilito los talleres donde esos riesgos se discuten con los comités directivos. Mi experiencia incluye cinco años como auditor interno senior en Deloitte, con más de diez auditorías ejecutadas y el liderazgo del testeo de controles bajo la Ley Sarbanes-Oxley.</p>
           <p class="remate">Las herramientas de esta página salieron de ese trabajo: las construí porque las necesitaba.</p>
         </div>
         <aside class="creds reveal" style="--i:1">
