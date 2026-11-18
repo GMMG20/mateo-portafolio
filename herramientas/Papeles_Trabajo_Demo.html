@@ -18,9 +18,8 @@
   --top-h:112px;
 }
 html[data-identidad="neutro"]{
-  --pf-navy:#1F2126; --pf-blue:#4A5160; --pf-red:#D81E5B; --pf-red-dk:#B3164A; --pf-sky:#FCE6EE;
+  --pf-navy:#1E293B; --pf-blue:#334155; --pf-red:#0F766E; --pf-red-dk:#115E59; --pf-sky:#CCFBF1;
 }
-html[data-identidad="neutro"][data-tema="oscuro"]{--pf-sky:#3A1A27;}
 html[data-tema="oscuro"]{
   --surface-0:#0F172A; --surface-1:#1E293B; --border:#334155;
   --text-primary:#F1F5F9; --text-secondary:#CBD5E1; --text-muted:#64748B;
@@ -48,7 +47,7 @@ html[data-tema="oscuro"] .modal-overlay{background:rgba(0,0,0,.7);}
 html[data-tema="oscuro"] .prog>span{background:#60A5FA;}
 html[data-tema="oscuro"] tbody tr:hover td{color:var(--text-primary);}
 html[data-identidad="neutro"] .logo,html[data-identidad="neutro"] .logo+.sep{display:none;}
-.logo-personal{display:none;align-items:center;justify-content:center;height:24px;padding:0 10px;border-radius:5px;background:#D81E5B;color:#fff;font-weight:800;font-size:12px;letter-spacing:.08em;flex:none;}
+.logo-personal{display:none;align-items:center;justify-content:center;height:24px;padding:0 10px;border-radius:5px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;font-weight:800;font-size:12px;letter-spacing:.08em;flex:none;}
 html[data-identidad="neutro"] .logo-personal{display:inline-flex;}
 .persist-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap;}
 .persist-ok{background:rgba(52,211,153,.2);color:#A7F3D0;border:1px solid rgba(52,211,153,.45);}
@@ -2196,7 +2195,7 @@ function construirXlsx(hojas){
     hojas.map(function(h,i){return '<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';}).join('')+
     '<Relationship Id="rId'+(hojas.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>')});
   /* El encabezado y el título del Excel siguen la identidad visual activa */
-  a.push({name:'xl/styles.xml',data:strBytes(ESTILOS_XML.replace(/FF000F47/g,prefs.identidad==='neutro'?'FF1F2126':'FF002C77'))});
+  a.push({name:'xl/styles.xml',data:strBytes(ESTILOS_XML.replace(/FF000F47/g,prefs.identidad==='neutro'?'FF1E293B':'FF002C77'))});
   hojas.forEach(function(h,i){ a.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:strBytes(hojaXml(h))}); });
   return zipStore(a);
 }
