@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Papeles de Trabajo y Pruebas de Control · Versión beta</title>
+<title>Papeles de Trabajo y Pruebas de Control · Versión demo</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -70,7 +70,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Ar
 .sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
 .hdr-titles{min-width:0;}
 .app-name{color:#fff;font-size:14px;font-weight:600;}
-.badge-beta{display:inline-block;margin-left:6px;background:var(--pf-yellow);color:var(--pf-navy);font-size:10px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.05em;text-transform:uppercase;vertical-align:2px;}
+.badge-demo{display:inline-block;margin-left:6px;background:var(--pf-yellow);color:var(--pf-navy);font-size:10px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.05em;text-transform:uppercase;vertical-align:2px;}
 .app-tag{color:rgba(255,255,255,.72);font-size:11.5px;margin-top:2px;}
 .pt-estado{display:inline-block;padding:0 7px;border-radius:10px;font-weight:700;font-size:10.5px;background:rgba(255,255,255,.16);color:#fff;}
 .pt-estado.e-revision{background:var(--pf-yellow);color:var(--pf-navy);}
@@ -260,7 +260,7 @@ tr.fila-reemp td:first-child{box-shadow:inset 3px 0 0 var(--info);}
 <div class="top-sticky" id="topSticky">
 <div class="app-header">
   <div class="hdr-titles">
-    <div class="app-name">Papeles de Trabajo y Pruebas de Control <span class="badge-beta">Versión beta</span></div>
+    <div class="app-name">Papeles de Trabajo y Pruebas de Control <span class="badge-demo">Versión demo</span></div>
     <div class="app-tag" id="hdrMeta">Diseño de la prueba, muestreo, ejecución y hallazgos</div>
   </div>
   <div class="header-actions">
@@ -310,16 +310,16 @@ tr.fila-reemp td:first-child{box-shadow:inset 3px 0 0 var(--info);}
 var HTML_FUENTE='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
 /* ============================================================
    ESTADO Y ALMACENAMIENTO (multi-compromiso)
-   Versión beta: claves propias, nunca toca los datos de la
+   Versión demo: claves propias, nunca toca los datos de la
    versión original (que usaba 'papeles_original_v1').
    ============================================================ */
-var KEY='pt_auditoria_beta_v1';          /* datos de todos los compromisos: {id: db} */
-var KEY_IDX='pt_auditoria_beta_idx_v1';  /* índice: {activo, lista:[{id,nombre,creado,actualizado}]} */
+var KEY='pt_auditoria_demo_v1';          /* datos de todos los compromisos: {id: db} */
+var KEY_IDX='pt_auditoria_demo_idx_v1';  /* índice: {activo, lista:[{id,nombre,creado,actualizado}]} */
 var KEY_ORIGINAL='papeles_original_v1';        /* versión original: solo se LEE para importar, nunca se escribe */
 var KEY_ESTANDAR='pt_auditoria_v1';         /* versión estándar local: solo se LEE para importar, nunca se escribe */
-var KEY_PREFS='pt_auditoria_beta_prefs_v1';
+var KEY_PREFS='pt_auditoria_demo_prefs_v1';
 var INJECTED_DB=/*__INJECTED_DB_START__*/null/*__INJECTED_DB_END__*/;
-var APP_ID='Papeles_Trabajo_Beta', APP_VER=2;
+var APP_ID='Papeles_Trabajo_Demo', APP_VER=2;
 var MAX_MUESTRA=5000;            /* tope visible del tamaño de muestra (no de la población) */
 var MAX_LISTA_GUARDADA=100000;   /* listados de población más largos se aplican pero no se guardan completos */
 var NOTA_REEMPLAZO='[Reemplazo por ítem NA]';
@@ -619,7 +619,7 @@ function aplicarPrefsDom(){
   var si=document.getElementById('selIdentidad'); if(si) si.value=prefs.identidad;
   var bt=document.getElementById('btnTema'); if(bt) bt.textContent=prefs.tema==='oscuro'?'☀ Claro':'☾ Oscuro';
   /* Con la identidad neutra, la marca no aparece ni en la pestaña del navegador */
-  document.title='Papeles de Trabajo y Pruebas de Control · Versión beta';
+  document.title='Papeles de Trabajo y Pruebas de Control · Versión demo';
 }
 function cambiarIdentidad(v){
   prefs.identidad='neutro';
@@ -2212,7 +2212,7 @@ var ETQ_PORTADA={compromiso:'Compromiso',cliente:'Cliente',proceso:'Proceso',per
   fechaRevision:'Fecha de revisión',estadoPT:'Estado del papel de trabajo',fechaIni:'Fecha de inicio',fechaFin:'Fecha de cierre',objetivo:'Objetivo',alcance:'Alcance'};
 function exportar(){
   var t=db.trabajo, e=entradaActiva(), c=conteos();
-  var portada=[['Papeles de trabajo — auditoría interna · Versión beta'],[],
+  var portada=[['Papeles de trabajo — auditoría interna · Versión demo'],[],
     [ETQ_PORTADA.compromiso,e?e.nombre:''],[ETQ_PORTADA.cliente,t.cliente],[ETQ_PORTADA.proceso,t.proceso],[ETQ_PORTADA.periodo,t.periodo],
     [ETQ_PORTADA.auditor,t.auditor],[ETQ_PORTADA.revisor,t.revisor],[ETQ_PORTADA.fechaRevision,t.fechaRevision],[ETQ_PORTADA.estadoPT,t.estadoPT],
     [ETQ_PORTADA.fechaIni,t.fechaIni],[ETQ_PORTADA.fechaFin,t.fechaFin],[],
@@ -2276,7 +2276,7 @@ function exportarHtmlAutocontenido(){
     return;
   }
   var htmlOut=raw.replace(re,function(){ return '/*__INJECTED_DB_START__*/'+jsonStr+'/*__INJECTED_DB_END__*/'; });
-  var nombreArchivo='Papeles_Trabajo_Beta_'+nombreBase()+'_'+hoyIso()+'.html';
+  var nombreArchivo='Papeles_Trabajo_Demo_'+nombreBase()+'_'+hoyIso()+'.html';
   descargar(strBytes(htmlOut),nombreArchivo,'text/html;charset=utf-8');
   toast('HTML autocontenido exportado con el compromiso actual incrustado ('+nombreArchivo+')','ok');
 }

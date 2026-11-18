@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Consolidador de Matrices de Riesgos · Versión beta</title>
+<title>Consolidador de Matrices de Riesgos · Versión demo</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -130,8 +130,8 @@ html[data-tema="oscuro"] .kpi .v{color:#93C5FD;}
 .chk-row{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--text-primary);margin:0;}
 .chk-row input{width:auto;}
 .pill{display:inline-block;background:var(--surface-0);border:1px solid var(--border);border-radius:12px;padding:2px 9px;font-size:11px;margin:2px 3px 2px 0;}
-/* ===== Versión beta: estilos agregados ===== */
-.beta-tag{display:inline-block;background:var(--pf-yellow);color:#000F47;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+/* ===== Versión demo: estilos agregados ===== */
+.demo-tag{display:inline-block;background:var(--pf-yellow);color:#000F47;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;}
 .header-actions{flex-wrap:wrap;justify-content:flex-end;align-items:center;}
 .save-state{color:rgba(255,255,255,.7);font-size:11px;margin-right:4px;}
 .demo-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;}
@@ -257,7 +257,7 @@ html[data-tema="oscuro"] .bridge h4{color:#93C5FD;}
   <span class="logo-personal">PORTAFOLIO ERM</span>
   <div class="sep"></div>
   <div>
-    <div class="app-name">Consolidador de Matrices de Riesgos <span class="beta-tag">Versión beta</span></div>
+    <div class="app-name">Consolidador de Matrices de Riesgos <span class="demo-tag">Versión demo</span></div>
     <div class="app-tag">Unifica matrices en distintos formatos en una sola estructura</div>
   </div>
   <div class="header-actions">
@@ -288,11 +288,11 @@ html[data-tema="oscuro"] .bridge h4{color:#93C5FD;}
 
 <script>
 /* ============================================================
-   CONSOLIDADOR DE MATRICES DE RIESGOS · VERSIÓN BETA
+   CONSOLIDADOR DE MATRICES DE RIESGOS · VERSIÓN DEMO
    Todo ocurre en el navegador: no hay servidores, librerías
    externas ni conexión a internet.
    ============================================================ */
-var CLAVE_LS='consolidador_matrices_beta_v1';
+var CLAVE_LS='consolidador_matrices_demo_v1';
 var PASOS=['Cargar archivos','Mapear columnas','Normalizar valores','Revisar consolidado','Exportar'];
 
 /* ============================================================
@@ -2265,7 +2265,7 @@ function renderPaso5(){
 function tablaDiccionario(){
   var aoa=[], S=function(t){ return {v:t, s:ST.seccion}; }, C=function(t){ return {v:t, s:ST.cab}; }, T=function(t){ return {v:t===undefined||t===null?'':t, s:ST.txt}; };
   aoa.push([{v:'Diccionario de homologación — pista de auditoría de la consolidación', s:ST.titulo}]);
-  aoa.push([T('Generado: '+new Date().toLocaleString('es-CO')+' · Consolidador de Matrices de Riesgos, Versión beta'+(state.empresa?' · '+state.empresa:''))]);
+  aoa.push([T('Generado: '+new Date().toLocaleString('es-CO')+' · Consolidador de Matrices de Riesgos, Versión demo'+(state.empresa?' · '+state.empresa:''))]);
   aoa.push([]);
   aoa.push([S('1. Archivos y hojas cargados')]);
   aoa.push(['Archivo','Hoja','Fila de encabezado','Registros leídos','Codificación / descompresión','Celdas combinadas completadas','Rellenar hacia abajo','Proceso por defecto'].map(C));
@@ -2397,7 +2397,7 @@ function exportarJsonRiskFocus(){
       notas:[]});
   });
   if(!riesgos.length){ toast('Ningún registro tiene probabilidad e impacto de 1 a 5','err'); return; }
-  descargarJson({app:'Risk Focus 3D', exportado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión beta',
+  descargarJson({app:'Risk Focus 3D', exportado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión demo',
     datos:{schemaVersion:1, config:{titulo:'Risk Focus', matriz:matrizBandas()}, riesgos:riesgos, origen:'Consolidador de Matrices · '+nombreOrg()},
     bitacora:[]}, 'RiskFocus_desde_consolidador_'+hoyISO()+'.json');
   toast(riesgos.length+' riesgos exportados para Risk Focus 3D'+(omit?' · '+omit+' omitidos por no tener P e I de 1 a 5':''), omit?'warn':'ok');
@@ -2435,7 +2435,7 @@ function exportarJsonDashboard(){
   });
   if(!riesgos.length){ toast('Ningún registro tiene probabilidad e impacto de 1 a 5','err'); return; }
   var apetito={}; Object.keys(cats).forEach(function(c){ apetito[c]=[9,12]; });
-  descargarJson({app:'Tablero de Riesgos', exportado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión beta',
+  descargarJson({app:'Tablero de Riesgos', exportado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión demo',
     datos:{schemaVersion:1, empresa:nombreOrg(), corte:hoy, apetitoGeneral:9, apetito:apetito, riesgos:riesgos, controles:controles, kris:[], planes:planes, relaciones:[]},
     bitacora:[]}, 'Tablero_desde_consolidador_'+hoyISO()+'.json');
   toast(riesgos.length+' riesgos, '+controles.length+' controles y '+planes.length+' planes exportados'+(omit?' · '+omit+' omitidos por no tener P e I':''), omit?'warn':'ok');
@@ -2456,7 +2456,7 @@ function exportarJsonMapa(){
     if(ev.ok){ crits.push({rskId:id, tipo:'residual', prob:ev.pr, impMax:ev.ir}); crits.push({rskId:id, tipo:'inherente', prob:ev.pi, impMax:ev.ii}); }
   });
   if(!riesgos.length){ toast('No hay riesgos para exportar','err'); return; }
-  descargarJson({formato:'mapa_interdependencia', generado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión beta',
+  descargarJson({formato:'mapa_interdependencia', generado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión demo',
     umbral:0, categorias:Object.keys(cats), riesgos:riesgos, relaciones:[],
     clientes:[{id:'cons', nombre:nombreOrg(), cfg:{matriz:matriz, zonas:zonas}}], crits:crits}, 'Mapa_desde_consolidador_'+hoyISO()+'.json');
   toast(riesgos.length+' riesgos exportados para el Mapa de Interdependencia'+(rep?' · '+rep+' con nombre repetido se omitieron':''),'ok');
@@ -2556,7 +2556,7 @@ function serializar(){
       mapeo:a.mapeo, autoMapeo:a.autoMapeo, codificacion:a.codificacion, delimitador:a.delimitador, motor:a.motor, combinadas:a.combinadas,
       rellenarAbajo:a.rellenarAbajo, procesoDefecto:a.procesoDefecto, procesoTexto:a.procesoTexto, desglosado:a.desglosado, libro:a.libro};
   });
-  return {app:'Consolidador de Matrices de Riesgos', edicion:'Beta', formato:1, guardado:new Date().toISOString(), state:s};
+  return {app:'Consolidador de Matrices de Riesgos', edicion:'Demo', formato:1, guardado:new Date().toISOString(), state:s};
 }
 function aplicarProyecto(obj){
   var s=obj && obj.state;
@@ -2636,7 +2636,7 @@ document.getElementById('projPick').addEventListener('change',function(e){
 function aplicarPreferenciasVisuales(){
   var id=state.identidad='personal', tm=state.tema||'claro';
   /* Con la identidad personal la marca tampoco aparece en el título de la pestaña ni del PDF */
-  document.title='Consolidador de Matrices de Riesgos · Versión beta';
+  document.title='Consolidador de Matrices de Riesgos · Versión demo';
   document.documentElement.setAttribute('data-identidad',id);
   document.documentElement.setAttribute('data-tema',tm);
   var sel=document.getElementById('selIdentidad'); if(sel) sel.value=id;
