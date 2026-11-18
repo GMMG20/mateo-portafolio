@@ -29,7 +29,7 @@
   <meta name="theme-color" content="#14213d">
 
   <!-- Favicon en línea (SVG) -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2314213d'/><text x='50%' y='50%' font-family='sans-serif' font-size='45' font-weight='bold' fill='%23e9a23b' text-anchor='middle' dominant-baseline='central'>MM</text></svg>" type="image/svg+xml">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2314213d'/><text x='50%' y='50%' font-family='sans-serif' font-size='27' font-weight='bold' fill='%23e9a23b' text-anchor='middle' dominant-baseline='central'>GMMG</text></svg>" type="image/svg+xml">
 
   <!-- Con JavaScript activo se habilitan las animaciones; sin él, todo se ve desde el principio -->
   <script>document.documentElement.classList.add('js');</script>
@@ -509,12 +509,14 @@
       .modal-title { font-size: 0.95rem; }
       .btn-newtab { display: none; }
     }
-    /* Teléfonos de 320 px: el encabezado se compacta para que marca, idioma y menú quepan en una línea */
-    @media (max-width: 360px) {
+    /* Teléfonos de 320 a 380 px: el encabezado se compacta para que marca, idioma y menú quepan en una línea
+       (la insignia «GMMG» tiene cuatro letras: se reduce más que el nombre) */
+    @media (max-width: 380px) {
       .wrap, .header-inner { padding: 0 0.75rem; }
       .header-inner, .header-right { gap: 0.4rem; }
-      .logo-badge { font-size: 0.92rem; padding: 0.3rem 0.5rem; }
-      .brand-title { font-size: 0.94rem; }
+      .brand { gap: 0.45rem; }
+      .logo-badge { font-size: 0.78rem; padding: 0.3rem 0.38rem; }
+      .brand-title { font-size: 0.9rem; }
       .lang-switch a { padding: 0.35rem 0.45rem; }
       .menu-btn { padding: 0 0.55rem; }
     }
@@ -534,7 +536,7 @@
   <header>
     <div class="header-inner">
       <a href="./" class="brand" aria-label="Mateo Meléndez - Inicio">
-        <div class="logo-badge" aria-hidden="true">MM</div>
+        <div class="logo-badge" aria-hidden="true">GMMG</div>
         <div class="brand-title">Mateo Meléndez</div>
       </a>
       <div class="header-right">

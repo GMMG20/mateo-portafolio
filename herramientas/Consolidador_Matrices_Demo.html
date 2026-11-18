@@ -18,8 +18,9 @@
   --info:#2563EB; --info-bg:#DBEAFE;
 }
 html[data-identidad="personal"]{
-  --pf-navy:#0F172A; --pf-navy-md:#1E293B; --pf-red:#0077c8; --pf-red-dk:#002c77; --pf-sky:#E0F2FE;
+  --pf-navy:#1F2126; --pf-navy-md:#30333B; --pf-red:#D81E5B; --pf-red-dk:#B3164A; --pf-sky:#FCE6EE; --pf-blue:#30333B; --pf-cyan:#D81E5B;
 }
+html[data-identidad="personal"][data-tema="oscuro"]{--pf-sky:#3A1A27;}
 html[data-tema="oscuro"]{
   --surface-0:#0B1120; --surface-1:#111827; --surface-2:#1F2937; --border:#374151;
   --text-primary:#F3F4F6; --text-secondary:#D1D5DB; --text-muted:#9CA3AF;
@@ -30,7 +31,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Ar
 .app-header{background:var(--pf-navy);border-bottom:3px solid var(--pf-red);display:flex;align-items:center;gap:14px;padding:12px 22px;position:sticky;top:0;z-index:50;}
 .logo{height:28px;width:auto;}
 html[data-identidad="personal"] .logo{display:none;}
-.logo-personal{display:none;color:#fff;font-weight:800;letter-spacing:.08em;font-size:15px;background:rgba(255,255,255,.14);padding:4px 10px;border-radius:5px;border:1px solid rgba(255,255,255,.28);}
+.logo-personal{display:none;color:#fff;font-weight:800;letter-spacing:.08em;font-size:13px;background:#D81E5B;padding:4px 10px;border-radius:5px;}
 html[data-identidad="personal"] .logo-personal{display:inline-block;}
 .logo-txt{color:#fff;font-weight:700;letter-spacing:.18em;font-size:17px;}
 .sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
@@ -254,7 +255,7 @@ html[data-tema="oscuro"] .bridge h4{color:#93C5FD;}
 <body>
 
 <div class="app-header">
-  <span class="logo-personal">PORTAFOLIO ERM</span>
+  <span class="logo-personal" role="img" aria-label="GMMG">GMMG</span>
   <div class="sep"></div>
   <div>
     <div class="app-name">Consolidador de Matrices de Riesgos <span class="demo-tag">Versión demo</span></div>
@@ -2248,7 +2249,7 @@ function renderPaso5(){
     '<div class="inline-field"><label for="empresa" style="margin:0">Organización o cliente</label><input id="empresa" value="'+escAttr(state.empresa)+'" placeholder="Ej.: Empresa Ejemplo S.A." onchange="state.empresa=this.value.trim();autoguardar();renderPaso5()"></div>'+
     '<div class="bridge-grid">'+
       '<div class="bridge"><h4>Risk Focus 3D</h4><p class="hint">Riesgos con probabilidad e impacto (1–5), efectividad del control como Débil / Moderado / Fuerte y los planes como recomendaciones. Se abre en el Editor con «Importar respaldo (JSON)»; reemplaza los datos cargados allí.</p><button class="btn-secondary" onclick="exportarJsonRiskFocus()">📤 Exportar JSON para Risk Focus 3D</button></div>'+
-      '<div class="bridge"><h4>Dashboard de Riesgos ERM</h4><p class="hint">Valoración inherente y residual, controles con tipo y efectividad, y planes de acción. Se abre con «Importar respaldo (JSON)»; reemplaza los datos actuales.</p><button class="btn-secondary" onclick="exportarJsonDashboard()">📤 Exportar JSON para Dashboard de Riesgos ERM</button></div>'+
+      '<div class="bridge"><h4>Dashboard de Riesgos</h4><p class="hint">Valoración inherente y residual, controles con tipo y efectividad, y planes de acción. Se abre con «Importar respaldo (JSON)»; reemplaza los datos actuales.</p><button class="btn-secondary" onclick="exportarJsonDashboard()">📤 Exportar JSON para Dashboard de Riesgos</button></div>'+
       '<div class="bridge"><h4>Mapa de Interdependencia</h4><p class="hint">Cada riesgo como nodo, con su proceso, categoría y magnitud (1–4, según el nivel). Las relaciones entre riesgos se dibujan después en el mapa. Se pega en el cajón «Matriz de riesgos» del mapa.</p><button class="btn-secondary" onclick="exportarJsonMapa()">📤 Exportar JSON para Mapa de Interdependencia</button></div>'+
     '</div></div>';
 
