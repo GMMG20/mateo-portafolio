@@ -1,0 +1,2755 @@
+<!DOCTYPE html>
+<html lang="es" data-identidad="personal">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consolidador de Matrices de Riesgos · Versión beta</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --pf-red:#DB0000; --pf-red-dk:#A80000; --pf-navy:#000F47;
+  --pf-blue:#002c77; --pf-cyan:#0077c8;
+  --pf-yellow:#FFBF00; --pf-sky:#CEECFF; --pf-navy-md:#252540;
+  --surface-0:#F0F2F5; --surface-1:#FFFFFF; --surface-2:#FAFBFC; --border:#D1D5DB;
+  --text-primary:#1F2937; --text-secondary:#4B5563; --text-muted:#9CA3AF;
+  --ok:#059669; --ok-bg:#D1FAE5; --success:#15803D;
+  --warn:#D97706; --warn-bg:#FEF3C7;
+  --danger:#DC2626; --danger-bg:#FEE2E2;
+  --info:#2563EB; --info-bg:#DBEAFE;
+}
+html[data-identidad="personal"]{
+  --pf-navy:#0F172A; --pf-navy-md:#1E293B; --pf-red:#0077c8; --pf-red-dk:#002c77; --pf-sky:#E0F2FE;
+}
+html[data-tema="oscuro"]{
+  --surface-0:#0B1120; --surface-1:#111827; --surface-2:#1F2937; --border:#374151;
+  --text-primary:#F3F4F6; --text-secondary:#D1D5DB; --text-muted:#9CA3AF;
+  --pf-sky:#1E3A8A; --ok-bg:#064E3B; --success:#6EE7B7;
+  --warn-bg:#451A03; --danger-bg:#450A0A; --info-bg:#1E3A8A;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-size:14px;color:var(--text-primary);background:var(--surface-0);min-height:100vh;display:flex;flex-direction:column;}
+.app-header{background:var(--pf-navy);border-bottom:3px solid var(--pf-red);display:flex;align-items:center;gap:14px;padding:12px 22px;position:sticky;top:0;z-index:50;}
+.logo{height:28px;width:auto;}
+html[data-identidad="personal"] .logo{display:none;}
+.logo-personal{display:none;color:#fff;font-weight:800;letter-spacing:.08em;font-size:15px;background:rgba(255,255,255,.14);padding:4px 10px;border-radius:5px;border:1px solid rgba(255,255,255,.28);}
+html[data-identidad="personal"] .logo-personal{display:inline-block;}
+.logo-txt{color:#fff;font-weight:700;letter-spacing:.18em;font-size:17px;}
+.sep{width:1px;height:22px;background:rgba(255,255,255,.35);}
+.app-name{color:#fff;font-size:14px;font-weight:600;}
+.app-tag{color:rgba(255,255,255,.6);font-size:11.5px;}
+.header-actions{margin-left:auto;display:flex;gap:8px;}
+.header-actions button,.header-actions select{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.35);color:#fff;padding:7px 12px;border-radius:4px;cursor:pointer;font-size:12px;font-weight:600;width:auto;}
+.header-actions select option{background:#1F2937;color:#fff;}
+.header-actions button:hover,.header-actions select:hover{background:rgba(255,255,255,.22);}
+.wrap{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px;min-width:0;}
+/* Pasos */
+.steps{display:flex;gap:0;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.step{flex:1;padding:12px 10px;text-align:center;font-size:12.5px;font-weight:600;color:var(--text-muted);border-right:1px solid var(--border);cursor:pointer;position:relative;background:var(--surface-1);}
+.step:last-child{border-right:none;}
+.step .n{display:inline-flex;width:20px;height:20px;border-radius:50%;background:var(--surface-0);color:var(--text-muted);align-items:center;justify-content:center;font-size:11px;margin-right:6px;}
+.step.done{color:var(--success);}
+.step.done .n{background:var(--ok-bg);color:var(--success);}
+.step.active{color:var(--pf-navy);background:var(--pf-sky);}
+html[data-tema="oscuro"] .step.active{color:#fff;}
+.step.active .n{background:var(--pf-navy);color:#fff;}
+.step:disabled,.step.lock{opacity:.45;cursor:not-allowed;}
+.card{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:18px;min-width:0;}
+.card h3{font-size:15px;margin-bottom:4px;}
+.hint{font-size:12.5px;color:var(--text-secondary);line-height:1.5;}
+.section-title{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-secondary);margin:16px 0 8px;}
+button{font-family:inherit;}
+.btn-primary{background:var(--pf-red);color:#fff;border:none;padding:9px 16px;border-radius:5px;cursor:pointer;font-size:13px;font-weight:600;}
+.btn-primary:hover{background:var(--pf-red-dk);}
+.btn-primary:disabled{background:var(--text-muted);cursor:not-allowed;}
+.btn-secondary{background:var(--surface-1);border:1px solid var(--border);color:var(--text-primary);padding:8px 14px;border-radius:5px;cursor:pointer;font-size:13px;}
+.btn-secondary:hover{background:var(--surface-0);}
+.btn-secondary:disabled{opacity:.45;cursor:not-allowed;}
+.btn-sm{padding:5px 10px;font-size:12px;}
+.btn-danger{background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px;}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+input,select,textarea{font-family:inherit;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:5px;background:var(--surface-1);color:var(--text-primary);width:100%;}
+select{cursor:pointer;}
+label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;}
+:focus-visible{outline:2px solid var(--pf-cyan);outline-offset:2px;border-radius:3px;}
+/* Dropzone */
+.drop{border:2px dashed var(--border);border-radius:10px;padding:34px 20px;text-align:center;background:var(--surface-1);transition:.15s;cursor:pointer;}
+.drop:hover,.drop.over{border-color:var(--pf-red);background:var(--surface-2);}
+.drop .ic{font-size:34px;margin-bottom:8px;}
+.drop .t{font-weight:700;margin-bottom:4px;}
+/* Tablas */
+.tbl-scroll{overflow-x:auto;min-width:0;max-height:460px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--surface-1);}
+th{text-align:left;padding:8px 10px;background:var(--surface-0);color:var(--text-secondary);font-weight:700;border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.03em;position:sticky;top:0;z-index:3;white-space:nowrap;}
+td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+tbody tr:hover td{background:var(--surface-2);}
+td.num{text-align:center;}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+.badge-ok{background:var(--ok-bg);color:var(--success);}
+.badge-warn{background:var(--warn-bg);color:var(--warn);}
+.badge-danger{background:var(--danger-bg);color:var(--danger);}
+.badge-info{background:var(--info-bg);color:var(--info);}
+.badge-neutral{background:#E5E7EB;color:#374151;}
+.banner{padding:11px 15px;border-radius:6px;font-size:13px;font-weight:600;margin:10px 0;}
+.banner-warn{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;}
+.banner-danger{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5;}
+.banner-info{background:#DBEAFE;color:#1E40AF;border:1px solid #93C5FD;}
+.banner-ok{background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7;}
+/* Archivos cargados */
+.file-row{display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid var(--border);border-radius:7px;margin-bottom:9px;background:var(--surface-1);flex-wrap:wrap;}
+.file-ic{font-size:20px;}
+.file-meta{flex:1;min-width:180px;}
+.file-name{font-weight:700;font-size:13px;word-break:break-all;}
+.file-sub{font-size:11.5px;color:var(--text-muted);}
+.file-row select{width:auto;min-width:150px;}
+/* Mapeo */
+.map-grid{display:grid;grid-template-columns:1fr 34px 1fr;gap:8px 10px;align-items:center;}
+.map-src{background:var(--surface-0);border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.map-arrow{text-align:center;color:var(--text-muted);font-weight:700;}
+.map-sample{font-size:11px;color:var(--text-muted);font-weight:400;display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.auto-tag{font-size:10px;background:#CEECFF;color:#000F47;padding:1px 6px;border-radius:8px;margin-left:6px;font-weight:700;}
+/* Normalización de valores */
+.val-map{display:grid;grid-template-columns:1fr 34px 150px 70px;gap:6px 10px;align-items:center;margin-bottom:6px;}
+.val-src{background:var(--surface-0);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-size:12.5px;}
+.val-count{font-size:11px;color:var(--text-muted);text-align:right;}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+.kpi{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;}
+.kpi .v{font-size:24px;font-weight:700;color:var(--pf-navy);}
+html[data-tema="oscuro"] .kpi .v{color:#93C5FD;}
+.kpi .l{font-size:11.5px;color:var(--text-secondary);margin-top:2px;}
+.empty{padding:36px 20px;text-align:center;color:var(--text-secondary);}
+.empty .ic{font-size:32px;margin-bottom:6px;}
+.empty .t{font-weight:700;color:var(--text-primary);margin-bottom:4px;}
+.toast-container{position:fixed;top:70px;right:20px;z-index:2000;display:flex;flex-direction:column;gap:8px;max-width:340px;}
+.toast{padding:11px 16px;border-radius:6px;color:#fff;font-size:13px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.2);transition:opacity .3s,transform .3s;}
+.toast-ok{background:var(--ok);} .toast-warn{background:var(--warn);} .toast-err{background:var(--danger);}
+.toast-out{opacity:0;transform:translateX(20px);}
+.nav-btns{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;}
+.nav-top{background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:9px 14px;margin-top:0;}
+.nav-kbd{font-size:11.5px;color:var(--text-secondary);}
+.nav-kbd kbd{background:var(--surface-0);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:inherit;font-size:11px;font-weight:600;}
+.dup{background:#FFFBEB!important;color:#1F2937;}
+.chk-row{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--text-primary);margin:0;}
+.chk-row input{width:auto;}
+.pill{display:inline-block;background:var(--surface-0);border:1px solid var(--border);border-radius:12px;padding:2px 9px;font-size:11px;margin:2px 3px 2px 0;}
+/* ===== Versión beta: estilos agregados ===== */
+.beta-tag{display:inline-block;background:var(--pf-yellow);color:#000F47;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+.header-actions{flex-wrap:wrap;justify-content:flex-end;align-items:center;}
+.save-state{color:rgba(255,255,255,.7);font-size:11px;margin-right:4px;}
+.demo-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;}
+.btn-demo{background:var(--pf-blue);color:#fff;border:none;padding:9px 16px;border-radius:5px;cursor:pointer;font-size:13px;font-weight:600;}
+.btn-demo:hover{background:var(--pf-navy-md);}
+.btn-link{background:none;border:none;color:var(--info);cursor:pointer;font-size:12px;font-weight:600;padding:2px 4px;text-decoration:underline;}
+.file-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+.file-box{border:1px solid var(--border);border-radius:7px;margin-bottom:9px;background:var(--surface-1);}
+.file-box .file-row{border:none;margin:0;}
+.file-extra{border-top:1px dashed var(--border);padding:10px 13px;background:var(--surface-2);border-radius:0 0 7px 7px;}
+.file-row select.hdr-sel{min-width:230px;max-width:320px;}
+.prev-tbl{width:auto;min-width:100%;font-size:11px;}
+.prev-tbl td{padding:4px 7px;white-space:nowrap;max-width:170px;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}
+.prev-tbl td.rn{color:var(--text-muted);font-weight:700;text-align:right;background:var(--surface-0);}
+.prev-tbl tr.hdr td{background:#CEECFF;font-weight:700;color:#000F47;}
+.prev-tbl tr:hover td{background:#FFF8E1;color:#1F2937;}
+.desg-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 14px;margin:8px 0;}
+.opt-box{display:flex;flex-direction:column;gap:8px;background:var(--surface-0);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin:10px 0;}
+.opt-box .chk-row{align-items:flex-start;}
+.opt-box input[type=text]{width:auto;min-width:200px;padding:4px 8px;font-size:12.5px;}
+.map-multi{display:flex;flex-direction:column;gap:5px;}
+.map-multi .mm{display:flex;gap:6px;align-items:center;}
+.map-multi .mm select{flex:1;}
+.btn-x{background:var(--surface-1);border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--danger);font-weight:700;padding:4px 8px;font-size:12px;}
+.concat-note{font-size:10.5px;color:var(--info);font-weight:600;display:block;margin-top:2px;}
+.val-map.incierto .val-src{border:2px solid var(--warn);background:#FEF3C7;color:#1F2937;}
+.val-map.incierto select{border:2px solid var(--warn);}
+.incierto-note{grid-column:1 / -1;font-size:11px;color:#D97706;margin:-3px 0 4px;}
+.src-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 6px;padding-top:10px;border-top:1px solid var(--border);}
+.src-head:first-of-type{border-top:none;padding-top:0;}
+.src-head .nm{font-weight:700;font-size:12.5px;}
+.src-head select{width:auto;padding:4px 8px;font-size:12px;}
+.src-head select.sel-incierto{border:2px solid var(--warn);background:#FEF3C7;color:#1F2937;}
+.heat-wrap{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:10px;}
+.heat{display:grid;grid-template-columns:26px repeat(5,38px);gap:3px;font-size:11px;}
+.heat .h{display:flex;align-items:center;justify-content:center;height:30px;border-radius:4px;font-weight:700;color:#1F2937;}
+.heat .ax{color:var(--text-secondary);font-weight:700;display:flex;align-items:center;justify-content:center;}
+.heat-cap{font-size:11px;color:var(--text-secondary);margin-top:4px;}
+.leg{display:flex;flex-direction:column;gap:5px;font-size:12px;}
+.leg span.sw{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:-2px;}
+.lvb-1{background:#BBF7D0;} .lvb-2{background:#FEF08A;} .lvb-3{background:#FDBA74;} .lvb-4{background:#FCA5A5;}
+td.lv1{background:#DCFCE7!important;color:#166534!important;} td.lv2{background:#FEF9C3!important;color:#854D0E!important;} td.lv3{background:#FFEDD5!important;color:#9A3412!important;} td.lv4{background:#FEE2E2!important;color:#991B1B!important;}
+td.calc{font-style:italic;box-shadow:inset 3px 0 0 var(--info);}
+.badge-lv1{background:#DCFCE7;color:#166534;} .badge-lv2{background:#FEF9C3;color:#854D0E;} .badge-lv3{background:#FFEDD5;color:#9A3412;} .badge-lv4{background:#FEE2E2;color:#991B1B;}
+.homo-sug{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border:1px solid #FCD34D;background:#FFFBEB;color:#1F2937;border-radius:6px;margin-bottom:6px;font-size:12.5px;}
+.homo-sug input{width:auto;min-width:170px;padding:4px 8px;font-size:12.5px;}
+.homo-grid{display:grid;grid-template-columns:1fr 34px 1fr 60px;gap:6px 10px;align-items:center;margin-bottom:6px;}
+.cols-pop{position:relative;}
+.cols-pop summary{list-style:none;cursor:pointer;background:var(--surface-1);border:1px solid var(--border);border-radius:5px;padding:7px 12px;font-size:12.5px;font-weight:600;white-space:nowrap;}
+.cols-pop summary::-webkit-details-marker{display:none;}
+.cols-pop[open] summary{border-color:var(--pf-cyan);}
+.cols-panel{position:absolute;z-index:20;top:38px;left:0;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;box-shadow:0 10px 26px rgba(0,0,0,.16);padding:10px 12px;width:290px;max-height:360px;overflow:auto;}
+.cols-panel .chk-row{margin:4px 0;}
+th.sortable{cursor:pointer;user-select:none;}
+th.sortable:hover{color:var(--pf-cyan);}
+th .arr{font-size:9px;margin-left:3px;color:var(--pf-red);}
+tr.grp-row td{background:#FEF3C7!important;color:#1F2937!important;font-weight:600;font-size:12px;border-top:2px solid #FCD34D;}
+tr.grp-row button{margin-left:6px;}
+.btn-row-x{background:none;border:1px solid transparent;border-radius:4px;cursor:pointer;font-size:13px;padding:2px 5px;}
+.btn-row-x:hover{border-color:var(--danger);background:var(--danger-bg);}
+td.acc{white-space:nowrap;text-align:center;}
+td[contenteditable="true"]:focus{outline:2px solid var(--pf-cyan);background:var(--surface-1)!important;color:var(--text-primary)!important;}
+tr.manual td{background:#F0F9FF;color:#1F2937;}
+/* Filas resaltadas: el texto oscuro se mantiene legible al pasar el mouse, también en tema oscuro */
+tbody tr.dup:hover td,tbody tr.manual:hover td{background:#FDE68A;color:#1F2937;}
+/* Leyendas de las visualizaciones: visibles también al imprimir */
+.leg-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px;font-size:11.5px;}
+.mini{font-size:10.5px;color:var(--text-muted);}
+.bridge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:10px;}
+.bridge{border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface-1);}
+.bridge h4{font-size:13px;color:var(--pf-blue);}
+html[data-tema="oscuro"] .bridge h4{color:#93C5FD;}
+.bridge .hint{flex:1;}
+.inline-field{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0;}
+.inline-field input{max-width:320px;}
+/* Fase 2: Visualizaciones ejecutivas, recodificación, resumen ejecutivo e impresión */
+.viz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(390px,1fr));gap:18px;margin-top:10px;}
+.viz-box{border:1px solid var(--border);border-radius:8px;padding:14px;background:var(--surface-2);display:flex;flex-direction:column;gap:10px;}
+.viz-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+.viz-head h4{font-size:13.5px;color:var(--text-primary);}
+.seg-toggle{display:inline-flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--surface-1);}
+.seg-toggle button{border:none;background:transparent;color:var(--text-secondary);padding:5px 11px;font-size:11.5px;font-weight:600;cursor:pointer;}
+.seg-toggle button.active{background:var(--pf-blue);color:#fff;}
+.heat5-svg{width:100%;max-width:430px;height:auto;display:block;margin:0 auto;}
+.heat5-cell{cursor:pointer;transition:opacity .15s;}
+.heat5-cell:hover{opacity:.86;}
+.heat5-sel rect{stroke:#000F47!important;stroke-width:3px!important;}
+.heat-detail{border-top:1px dashed var(--border);padding-top:10px;margin-top:4px;font-size:12px;}
+.bar-row{display:grid;grid-template-columns:150px 1fr 48px;gap:8px;align-items:center;font-size:12px;margin-bottom:6px;}
+.bar-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
+.bar-track{height:20px;background:var(--surface-0);border:1px solid var(--border);border-radius:4px;overflow:hidden;display:flex;}
+.bar-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1F2937;overflow:hidden;}
+.exec-summary{background:var(--surface-0);border:1px solid var(--border);border-left:4px solid var(--pf-blue);border-radius:6px;padding:12px 14px;font-size:12.5px;line-height:1.6;white-space:pre-wrap;font-family:inherit;color:var(--text-primary);}
+.recod-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface-0);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin:8px 0;}
+.recod-bar input[type=text]{width:95px;padding:4px 8px;font-size:12px;}
+.print-only,.print-head{display:none;}
+@media print{
+  .app-header,.steps,.nav-btns,.toolbar,.no-print,.toast-container{display:none!important;}
+  /* Sin esto el navegador omite los fondos: barras, semáforo y etiquetas saldrían sin color */
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  html[data-tema="oscuro"]{--surface-0:#F0F2F5;--surface-1:#FFFFFF;--surface-2:#FAFBFC;--border:#D1D5DB;--text-primary:#1F2937;--text-secondary:#4B5563;}
+  .print-head{display:block!important;border-bottom:2px solid #000F47;padding-bottom:6px;margin-bottom:4px;}
+  .print-head h2{font-size:16px;color:#000F47;}
+  body{background:#fff!important;color:#111!important;font-size:11.5px;}
+  .wrap{padding:0!important;gap:10px!important;}
+  .card{border:1px solid #9CA3AF!important;box-shadow:none!important;page-break-inside:avoid;padding:12px!important;background:#fff!important;}
+  .print-only{display:block!important;}
+  .tbl-scroll{max-height:none!important;overflow:visible!important;border:1px solid #9CA3AF!important;}
+  table{font-size:10.5px!important;}
+  th,td{padding:4px 6px!important;}
+}
+
+/* Enlace de regreso al portafolio: solo al abrir la herramienta por su URL, fuera del visor */
+.volver-portafolio{flex:none;color:#fff;text-decoration:none;font-weight:600;font-size:12.5px;padding:6px 11px;border:1px solid rgba(255,255,255,.35);border-radius:6px;white-space:nowrap;}
+.volver-portafolio:hover{border-color:#fff;}
+@media (max-width:640px){.volver-portafolio .lbl{display:none;}}
+@media print{.volver-portafolio{display:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <span class="logo-personal">PORTAFOLIO ERM</span>
+  <div class="sep"></div>
+  <div>
+    <div class="app-name">Consolidador de Matrices de Riesgos <span class="beta-tag">Versión beta</span></div>
+    <div class="app-tag">Unifica matrices en distintos formatos en una sola estructura</div>
+  </div>
+  <div class="header-actions">
+    <span class="save-state" id="saveState"></span>
+    <button id="btnTema" onclick="toggleTema()" title="Alternar Tema Claro / Oscuro (☀ / ☾)">☀ Claro</button>
+    <button onclick="guardarProyecto()" title="Descarga un archivo con todo el trabajo hecho: archivos leídos, columnas relacionadas, equivalencias y ediciones">💾 Guardar proyecto (.json)</button>
+    <button onclick="document.getElementById('projPick').click()" title="Abre un proyecto guardado antes, en este u otro computador">📂 Abrir proyecto (.json)</button>
+    <button onclick="reiniciar()">↺ Reiniciar</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="steps" id="steps"></div>
+  <div class="nav-btns nav-top">
+    <button class="btn-secondary btn-sm" id="btnPrevTop" onclick="irPaso(state.paso-1)">← Paso anterior</button>
+    <span class="nav-kbd">Atajos: <kbd>Alt + ←</kbd> / <kbd>Alt + →</kbd> cambiar de paso · <kbd>Esc</kbd> limpiar filtros o cerrar vistas</span>
+    <button class="btn-primary btn-sm" id="btnNextTop" onclick="irPaso(state.paso+1)">Siguiente paso →</button>
+  </div>
+  <div id="body"></div>
+  <div class="nav-btns">
+    <button class="btn-secondary" id="btnPrev" onclick="irPaso(state.paso-1)">← Paso anterior</button>
+    <button class="btn-primary" id="btnNext" onclick="irPaso(state.paso+1)">Siguiente paso →</button>
+  </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+<input type="file" id="filePick" multiple accept=".xlsx,.xlsm,.csv,.txt,.tsv" style="display:none">
+<input type="file" id="projPick" accept=".json,application/json" style="display:none">
+
+<script>
+/* ============================================================
+   CONSOLIDADOR DE MATRICES DE RIESGOS · VERSIÓN BETA
+   Todo ocurre en el navegador: no hay servidores, librerías
+   externas ni conexión a internet.
+   ============================================================ */
+var CLAVE_LS='consolidador_matrices_beta_v1';
+var PASOS=['Cargar archivos','Mapear columnas','Normalizar valores','Revisar consolidado','Exportar'];
+
+/* ============================================================
+   ESTADO
+   Las intervenciones del usuario (ediciones, exclusiones, filas
+   nuevas y fusiones) viven aparte de los datos leídos y se
+   aplican al final de consolidar(): así nunca se pierden al
+   cambiar de paso ni al volver a normalizar las escalas.
+   ============================================================ */
+function estadoInicial(){
+  return {
+    paso:0, archivos:[], consolidado:[], soloDuplicados:false, busqueda:'',
+    normalizacion:{},      /* campo → archivoId → valor original → valor unificado */
+    escalaOrigen:{},       /* campo → archivoId → 3 | 4 | 5 | 10 */
+    inciertos:{},          /* campo → archivoId → valor → true (asignado al valor medio) */
+    homologacion:{categoria:{}, proceso:{}},   /* valor original → nombre estándar */
+    edicionesManuales:{},  /* _uid → {campo: valor} */
+    filasExcluidas:{},     /* _uid → motivo */
+    filasManuales:[],      /* filas agregadas en el paso 4 */
+    fusiones:{},           /* _uid conservado → {absorbidos, previo, diferencias} */
+    opciones:{recalcularNivel:false, criterioDup:'riesgo_proceso', columnas:null, orden:{campo:'', dir:1}, conservarNoMapeadas:false, recodificar:false, prefijoCodigo:''},
+    empresa:'',
+    identidad:'personal',
+    tema:'claro'
+  };
+}
+var state=estadoInicial();
+/* Estado de pantalla que no se guarda (vistas previas abiertas, etc.) */
+var UI={previa:{}, desglose:{}, regValores:[], regHomo:[], vistaHeat5:'residual', celdaHeat5:null};
+
+/* Esquema canónico de destino.
+   escala: 'p5' (1–5), 'nivel' (Bajo…Crítico), 'efect' (Débil/Moderado/Fuerte), 'libre' (texto)
+   concat: admite varias columnas del mismo archivo, unidas con « | » */
+var CAMPOS=[
+  {id:'proceso',        label:'Proceso',               claves:['proceso','process','area','área','macroproceso','subproceso','unidad']},
+  {id:'codigo',         label:'Código',                claves:['codigo','código','cod','id','consecutivo','no','num','numero','número','ref']},
+  {id:'riesgo',         label:'Riesgo',                claves:['nombre del riesgo','nombre riesgo','riesgo','risk','evento de riesgo','evento','titulo','título']},
+  {id:'descripcion',    label:'Descripción',           claves:['descripcion','descripción','detalle','escenario','description','descripcion del riesgo']},
+  {id:'categoria',      label:'Categoría',             claves:['categoria','categoría','tipo','clasificacion','clasificación','tipologia','tipología','naturaleza','tipo de riesgo']},
+  {id:'origen_riesgo',  label:'Origen',                claves:['origen','fuente','interno','externo','source']},
+  {id:'causas',         label:'Causas',                claves:['causa','causas','cause','factor','origen del riesgo'], concat:true},
+  {id:'consecuencias',  label:'Consecuencias',         claves:['consecuencia','consecuencias','impacto potencial','efecto','efectos','consequence'], concat:true},
+  {id:'prob_inherente', label:'Probabilidad inherente',claves:['probabilidad inherente','prob inherente','probabilidad riesgo inherente','probabilidad del riesgo inherente','p inherente','probabilidad antes de controles'], escala:'p5', vocab:'probabilidad'},
+  {id:'imp_inherente',  label:'Impacto inherente',     claves:['impacto inherente','imp inherente','impacto riesgo inherente','impacto del riesgo inherente','i inherente','impacto antes de controles'], escala:'p5', vocab:'impacto'},
+  {id:'nivel_inherente',label:'Nivel inherente',       claves:['nivel inherente','nivel de riesgo inherente','riesgo inherente','zona inherente','calificacion inherente','severidad inherente','nivel riesgo inherente'], escala:'nivel'},
+  {id:'control',        label:'Control',               claves:['control','controles','medida','mitigacion','mitigación','tratamiento actual'], concat:true},
+  {id:'tipo_control',   label:'Tipo de control',       claves:['tipo de control','tipo control','naturaleza del control','clase de control'], escala:'libre'},
+  {id:'efectividad_control',label:'Efectividad del control',claves:['efectividad','efectividad del control','calificacion del control','calificación del control','eficacia','eficacia del control','solidez del control','evaluacion del control','evaluación del control','calificacion control'], escala:'efect'},
+  {id:'probabilidad',   label:'Probabilidad residual', claves:['probabilidad residual','prob residual','probabilidad','probability','prob','frecuencia','ocurrencia','likelihood','posibilidad'], escala:'p5', vocab:'probabilidad'},
+  {id:'impacto',        label:'Impacto residual',      claves:['impacto residual','imp residual','impacto','impact','severidad','consecuencia economica','magnitud'], escala:'p5', vocab:'impacto'},
+  {id:'nivel',          label:'Nivel residual',        claves:['nivel residual','nivel de riesgo residual','riesgo residual','zona residual','nivel','zona','severidad total','nivel de riesgo','calificacion','calificación','valoracion','valoración'], escala:'nivel'},
+  {id:'responsable',    label:'Responsable',           claves:['responsable','owner','dueño','dueno','encargado','lider','líder','gestor']},
+  {id:'estado',         label:'Estado',                claves:['estado','status','vigencia','situacion','situación'], escala:'libre'},
+  {id:'plan',           label:'Plan de acción',        claves:['plan','accion','acción','plan de accion','plan de acción','tratamiento','actividad'], concat:true},
+  {id:'fecha',          label:'Fecha',                 claves:['fecha','date','vencimiento','plazo','fecha objetivo','fecha limite','fecha límite']}
+];
+function campoById(id){ for(var i=0;i<CAMPOS.length;i++){ if(CAMPOS[i].id===id) return CAMPOS[i]; } return null; }
+var NIVELES=['Bajo','Medio','Alto','Crítico'];
+var EFECTIVIDADES=['Débil','Moderado','Fuerte'];
+/* Bandas del nivel por puntaje P × I (escala 1–5 × 1–5) */
+function nivelDePuntaje(s){ return s<=4?'Bajo':(s<=9?'Medio':(s<=15?'Alto':'Crítico')); }
+function claseNivel(v){ var i=NIVELES.indexOf(v); return i>=0? 'lv'+(i+1) : ''; }
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+function escAttr(s){ return escH(s); }
+function norm(s){
+  return String(s==null?'':s).toLowerCase().trim()
+    .replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e').replace(/[íìïî]/g,'i')
+    .replace(/[óòöô]/g,'o').replace(/[úùüû]/g,'u').replace(/ñ/g,'n')
+    .replace(/\s+/g,' ');
+}
+/* Versión sin signos de puntuación, para comparar nombres */
+function normClave(s){ return norm(s).replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim(); }
+function toast(msg,tipo){
+  tipo=tipo||'ok';
+  var el=document.createElement('div');
+  el.className='toast toast-'+tipo; el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(function(){ el.classList.add('toast-out'); setTimeout(function(){ el.remove(); },320); },3600);
+}
+function uid(){ return '_'+Math.random().toString(36).slice(2,9)+Date.now().toString(36); }
+function pad2(n){ n=String(n); return n.length<2?'0'+n:n; }
+function hoyISO(){ var d=new Date(); return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
+function unicos(arr){ var out=[]; arr.forEach(function(x){ if(out.indexOf(x)<0) out.push(x); }); return out; }
+/* Similitud léxica de Sørensen–Dice sobre pares de letras (0 a 1) */
+function bigramas(s){ var m={}, t=' '+normClave(s)+' '; for(var i=0;i<t.length-1;i++){ var b=t.substr(i,2); m[b]=(m[b]||0)+1; } return m; }
+function similitud(a,b){
+  var A=typeof a==='string'?bigramas(a):a, B=typeof b==='string'?bigramas(b):b, inter=0, na=0, nb=0, k;
+  for(k in A){ na+=A[k]; if(B[k]) inter+=Math.min(A[k],B[k]); }
+  for(k in B) nb+=B[k];
+  return (na+nb)? 2*inter/(na+nb) : 0;
+}
+/* Número a partir de texto: acepta «3», «3,5», «80 %» */
+function numeroDe(v){
+  var s=String(v==null?'':v).trim().replace(',','.'), pct=/%$/.test(s);
+  if(pct) s=s.slice(0,-1).trim();
+  if(!/^-?\d+(\.\d+)?$/.test(s)) return null;
+  return {n:parseFloat(s), pct:pct};
+}
+function entero15(v){ var x=numeroDe(v); if(!x||x.pct) return 0; var n=Math.round(x.n); return (Math.abs(x.n-n)<1e-9 && n>=1 && n<=5)? n : 0; }
+/* Fechas: número serial de Excel → AAAA-MM-DD */
+function serialAFecha(n,base1904){
+  var d=new Date(Date.UTC(1899,11,30)+Math.round((n+(base1904?1462:0))*86400000));
+  return d.getUTCFullYear()+'-'+pad2(d.getUTCMonth()+1)+'-'+pad2(d.getUTCDate());
+}
+function fechaASerial(iso){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso); if(!m) return null; return Math.round((Date.UTC(+m[1],+m[2]-1,+m[3])-Date.UTC(1899,11,30))/86400000); }
+/* La fecha se unifica a AAAA-MM-DD. Las fechas con barras se leen día/mes/año (uso en español). */
+function normalizarFecha(v){
+  var s=String(v==null?'':v).trim(), m;
+  if(!s) return '';
+  if(/^\d{5}(\.\d+)?$/.test(s)){ var n=parseFloat(s); if(n>=35000&&n<=60000) return serialAFecha(n); }
+  if((m=/^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s))) return m[1]+'-'+pad2(m[2])+'-'+pad2(m[3]);
+  if((m=/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2}|\d{4})$/.exec(s))){
+    var d=+m[1], mo=+m[2], y=+m[3]; if(y<100) y+=2000;
+    if(mo>12&&d<=12){ var t=d; d=mo; mo=t; }
+    if(mo>=1&&mo<=12&&d>=1&&d<=31) return y+'-'+pad2(mo)+'-'+pad2(d);
+  }
+  return s;
+}
+function colsDe(a,campo){
+  var m=a.mapeo[campo]; if(m===undefined||m===null) return [];
+  if(!Array.isArray(m)) m=[m];
+  return m.filter(function(x){ return typeof x==='number' && x>=0 && x<a.cabeceras.length; });
+}
+function colName(n){ var s=''; n++; while(n>0){ var m=(n-1)%26; s=String.fromCharCode(65+m)+s; n=Math.floor((n-1)/26); } return s; }
+
+/* ============================================================
+   DESCOMPRESIÓN DEFLATE (RFC 1951)
+   Primero se usa la descompresión nativa del navegador; si no
+   existe o falla, entra este descompresor en JavaScript puro,
+   para que cualquier .xlsx abra en navegadores corporativos
+   antiguos y sin internet.
+   ============================================================ */
+var INF_LBASE=[3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258];
+var INF_LEXT=[0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0];
+var INF_DBASE=[1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577];
+var INF_DEXT=[0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
+var INF_ORDEN=[16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];
+var INF_FIJA=null;
+function inflarJS(src){
+  var out=new Uint8Array(Math.max(1024,src.length*4)), op=0, pos=0, bb=0, bc=0;
+  function crecer(n){ if(op+n<=out.length) return; var len=out.length*2; while(len<op+n) len*=2; var nb=new Uint8Array(len); nb.set(out.subarray(0,op)); out=nb; }
+  function bits(n){ while(bc<n){ if(pos>=src.length) throw new Error('Datos comprimidos incompletos'); bb|=src[pos++]<<bc; bc+=8; } var v=bb&((1<<n)-1); bb>>>=n; bc-=n; return v; }
+  function tabla(lens,n){
+    var cnt=new Uint16Array(16), off=new Uint16Array(16), sym=new Uint16Array(n), i;
+    for(i=0;i<n;i++) cnt[lens[i]]++;
+    cnt[0]=0; for(i=1;i<16;i++) off[i]=off[i-1]+cnt[i-1];
+    for(i=0;i<n;i++) if(lens[i]) sym[off[lens[i]]++]=i;
+    return {cnt:cnt, sym:sym};
+  }
+  function simbolo(t){
+    var code=0, first=0, idx=0;
+    for(var len=1;len<16;len++){ code|=bits(1); var c=t.cnt[len]; if(code-first<c) return t.sym[idx+code-first]; idx+=c; first=(first+c)<<1; code<<=1; }
+    throw new Error('Código Huffman no válido');
+  }
+  if(!INF_FIJA){
+    var l=new Uint8Array(288), k; for(k=0;k<144;k++) l[k]=8; for(;k<256;k++) l[k]=9; for(;k<280;k++) l[k]=7; for(;k<288;k++) l[k]=8;
+    var d5=new Uint8Array(30); for(k=0;k<30;k++) d5[k]=5;
+    INF_FIJA={l:tabla(l,288), d:tabla(d5,30)};
+  }
+  var fin;
+  do{
+    fin=bits(1); var tipo=bits(2);
+    if(tipo===0){
+      bb=0; bc=0;
+      if(pos+4>src.length) throw new Error('Bloque sin comprimir incompleto');
+      var len=src[pos]|(src[pos+1]<<8); pos+=4;
+      if(pos+len>src.length) throw new Error('Bloque sin comprimir incompleto');
+      crecer(len); out.set(src.subarray(pos,pos+len),op); op+=len; pos+=len;
+    } else if(tipo===1||tipo===2){
+      var tl, td;
+      if(tipo===1){ tl=INF_FIJA.l; td=INF_FIJA.d; }
+      else {
+        var nlen=bits(5)+257, ndist=bits(5)+1, ncode=bits(4)+4, lc=new Uint8Array(19);
+        for(k=0;k<ncode;k++) lc[INF_ORDEN[k]]=bits(3);
+        var tc=tabla(lc,19), lens=new Uint8Array(nlen+ndist), n=0;
+        while(n<nlen+ndist){
+          var s=simbolo(tc);
+          if(s<16) lens[n++]=s;
+          else {
+            var rep, val=0;
+            if(s===16){ if(!n) throw new Error('Repetición sin longitud previa'); val=lens[n-1]; rep=3+bits(2); }
+            else if(s===17) rep=3+bits(3); else rep=11+bits(7);
+            if(n+rep>nlen+ndist) throw new Error('Longitudes Huffman excedidas');
+            while(rep--) lens[n++]=val;
+          }
+        }
+        tl=tabla(lens.subarray(0,nlen),nlen); td=tabla(lens.subarray(nlen),ndist);
+      }
+      for(;;){
+        var sy=simbolo(tl);
+        if(sy<256){ crecer(1); out[op++]=sy; }
+        else if(sy===256) break;
+        else {
+          sy-=257; if(sy>=29) throw new Error('Longitud no válida');
+          var ln=INF_LBASE[sy]+bits(INF_LEXT[sy]), ds=simbolo(td);
+          if(ds>=30) throw new Error('Distancia no válida');
+          var dist=INF_DBASE[ds]+bits(INF_DEXT[ds]);
+          if(dist>op) throw new Error('Distancia fuera de rango');
+          crecer(ln); for(var q=0;q<ln;q++){ out[op]=out[op-dist]; op++; }
+        }
+      }
+    } else throw new Error('Tipo de bloque no válido');
+  } while(!fin);
+  return out.slice(0,op);
+}
+var MOTOR_INFLATE='';
+async function inflateRaw(bytes){
+  if(typeof DecompressionStream!=='undefined'){
+    try{
+      var ds=new DecompressionStream('deflate-raw');
+      var stream=new Blob([bytes]).stream().pipeThrough(ds);
+      var buf=await new Response(stream).arrayBuffer();
+      MOTOR_INFLATE='nativa del navegador';
+      return new Uint8Array(buf);
+    }catch(e){ /* sin soporte de 'deflate-raw' o datos atípicos: se usa el descompresor propio */ }
+  }
+  MOTOR_INFLATE='JavaScript propio (sin APIs modernas)';
+  return inflarJS(bytes);
+}
+
+/* ============================================================
+   LECTURA DE XLSX REALES  (ZIP + OOXML)
+   ============================================================ */
+function u16(b,o){ return b[o]|(b[o+1]<<8); }
+function u32(b,o){ return (b[o]|(b[o+1]<<8)|(b[o+2]<<16)|(b[o+3]<<24))>>>0; }
+function esZip(b){ return b.length>4 && b[0]===0x50 && b[1]===0x4B; }
+
+async function unzip(bytes){
+  var eocd=-1;
+  for(var i=bytes.length-22;i>=0 && i>bytes.length-66000;i--){
+    if(bytes[i]===0x50&&bytes[i+1]===0x4B&&bytes[i+2]===0x05&&bytes[i+3]===0x06){ eocd=i; break; }
+  }
+  if(eocd<0) throw new Error('El archivo no es un XLSX válido (no se encontró el directorio del ZIP).');
+  var nEnt=u16(bytes,eocd+10), cdOff=u32(bytes,eocd+16);
+  var out={}, p=cdOff;
+  for(var e=0;e<nEnt;e++){
+    if(u32(bytes,p)!==0x02014b50) break;
+    var method=u16(bytes,p+10);
+    var compSize=u32(bytes,p+20), nameLen=u16(bytes,p+28);
+    var extraLen=u16(bytes,p+30), cmtLen=u16(bytes,p+32), lhOff=u32(bytes,p+42);
+    var name='';
+    for(var k=0;k<nameLen;k++) name+=String.fromCharCode(bytes[p+46+k]);
+    var lhNameLen=u16(bytes,lhOff+26), lhExtraLen=u16(bytes,lhOff+28);
+    var dataStart=lhOff+30+lhNameLen+lhExtraLen;
+    out[name]={method:method, raw:bytes.subarray(dataStart,dataStart+compSize)};
+    p+=46+nameLen+extraLen+cmtLen;
+  }
+  return {
+    nombres:function(){ return Object.keys(out); },
+    texto:async function(n){
+      var f=out[n]; if(!f) return null;
+      var data = f.method===0? f.raw : await inflateRaw(f.raw);
+      return new TextDecoder('utf-8').decode(data);
+    }
+  };
+}
+
+function colLetras(ref){ var m=/^([A-Z]+)/.exec(ref); return m?m[1]:''; }
+function colIndice(letras){ var n=0; for(var i=0;i<letras.length;i++){ n=n*26+(letras.charCodeAt(i)-64); } return n-1; }
+function filaNum(ref){ var m=/(\d+)$/.exec(ref); return m?parseInt(m[1],10):0; }
+/* ¿El formato numérico corresponde a una fecha? (ids 14–22 o código con d / m / y) */
+function esFormatoFecha(id,code){
+  if(id>=14&&id<=22) return true;
+  if(!code) return false;
+  var c=String(code).replace(/"[^"]*"/g,'').replace(/\[[^\]]*\]/g,'').replace(/\\./g,'').toLowerCase();
+  if(/[dy]/.test(c)) return true;
+  return /m/.test(c) && !/[hs]/.test(c);
+}
+
+async function leerXlsx(bytes){
+  var zip=await unzip(bytes);
+  var P=function(x){ return new DOMParser().parseFromString(x,'application/xml'); };
+  /* Cadenas compartidas (sin la guía fonética <rPh>) */
+  var shared=[];
+  var ssXml=await zip.texto('xl/sharedStrings.xml');
+  if(ssXml){
+    var sis=P(ssXml).getElementsByTagName('si');
+    for(var i=0;i<sis.length;i++){
+      var ts=sis[i].getElementsByTagName('t'), s='';
+      for(var j=0;j<ts.length;j++){ if(ts[j].parentNode && ts[j].parentNode.localName==='rPh') continue; s+=ts[j].textContent; }
+      shared.push(s);
+    }
+  }
+  /* Estilos: qué índices de estilo de celda son fechas */
+  var xfFecha=[];
+  var stXml=await zip.texto('xl/styles.xml');
+  if(stXml){
+    var sd=P(stXml), fmts={}, nf=sd.getElementsByTagName('numFmt');
+    for(var f=0;f<nf.length;f++) fmts[nf[f].getAttribute('numFmtId')]=nf[f].getAttribute('formatCode');
+    var cx=sd.getElementsByTagName('cellXfs')[0];
+    if(cx){
+      var xfs=cx.getElementsByTagName('xf');
+      for(var x=0;x<xfs.length;x++){ var id=parseInt(xfs[x].getAttribute('numFmtId')||'0',10); xfFecha[x]=esFormatoFecha(id,fmts[String(id)]); }
+    }
+  }
+  var wbXml=await zip.texto('xl/workbook.xml');
+  var relXml=await zip.texto('xl/_rels/workbook.xml.rels');
+  if(!wbXml) throw new Error('El archivo no contiene un libro de Excel legible.');
+  var base1904=/date1904="(1|true)"/.test(wbXml);
+  var relMap={};
+  if(relXml){
+    var rs=P(relXml).getElementsByTagName('Relationship');
+    for(var r=0;r<rs.length;r++) relMap[rs[r].getAttribute('Id')]=rs[r].getAttribute('Target');
+  }
+  var sheetEls=P(wbXml).getElementsByTagName('sheet');
+  var hojas=[];
+  for(var sh=0;sh<sheetEls.length;sh++){
+    var rid=sheetEls[sh].getAttribute('r:id')||sheetEls[sh].getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id');
+    var target=relMap[rid]||('worksheets/sheet'+(sh+1)+'.xml');
+    target=String(target).replace(/^\//,'').replace(/^xl\//,'');
+    hojas.push({nombre:sheetEls[sh].getAttribute('name'), ruta:'xl/'+target});
+  }
+  var cache={};
+  async function filas(nombreHoja){
+    if(cache[nombreHoja]) return cache[nombreHoja];
+    var h=hojas.filter(function(z){return z.nombre===nombreHoja;})[0]||hojas[0];
+    var xml=await zip.texto(h.ruta);
+    if(!xml) return {filas:[], combinadas:0};
+    var d=P(xml);
+    var rows=d.getElementsByTagName('row'), grid=[], maxR=-1, maxC=-1, sec=0;
+    for(var i=0;i<rows.length;i++){
+      var rAttr=parseInt(rows[i].getAttribute('r')||'0',10);
+      var ri=rAttr>0? rAttr-1 : sec; sec=ri+1;
+      var cs=rows[i].getElementsByTagName('c');
+      for(var j=0;j<cs.length;j++){
+        var c=cs[j], ref=c.getAttribute('r')||'', t=c.getAttribute('t');
+        var ci=ref? colIndice(colLetras(ref)) : j;
+        var sIdx=parseInt(c.getAttribute('s')||'0',10);
+        var vEl=c.getElementsByTagName('v')[0], val='';
+        if(t==='s'){ if(vEl){ var si=parseInt(vEl.textContent,10); val=shared[si]!==undefined?shared[si]:''; } }
+        else if(t==='inlineStr'){ var isEl=c.getElementsByTagName('t'); for(var q=0;q<isEl.length;q++) val+=isEl[q].textContent; }
+        else if(t==='b'){ val=vEl? (vEl.textContent==='1'?'VERDADERO':'FALSO') : ''; }
+        else if(t==='e'){ val=vEl? vEl.textContent : ''; }
+        else {
+          val=vEl? vEl.textContent : '';
+          /* t="n" (o sin t): si el estilo es de fecha, el serial se convierte a AAAA-MM-DD */
+          if(t!=='str' && val!=='' && xfFecha[sIdx]){ var num=parseFloat(val); if(isFinite(num) && num>=1) val=serialAFecha(num,base1904); }
+        }
+        if(val==='') continue;
+        if(!grid[ri]) grid[ri]=[];
+        grid[ri][ci]=val;
+        if(ri>maxR) maxR=ri; if(ci>maxC) maxC=ci;
+      }
+    }
+    var out=[];
+    for(var k=0;k<=maxR;k++){ var fila=[]; for(var m=0;m<=maxC;m++) fila.push(grid[k]&&grid[k][m]!==undefined?grid[k][m]:''); out.push(fila); }
+    /* Celdas combinadas: el valor de la celda superior izquierda se copia al resto del rango */
+    var mcs=d.getElementsByTagName('mergeCell'), nComb=0;
+    for(var g=0;g<mcs.length;g++){
+      var partes=String(mcs[g].getAttribute('ref')||'').split(':'); if(partes.length!==2) continue;
+      var r1=filaNum(partes[0])-1, c1=colIndice(colLetras(partes[0])), r2=filaNum(partes[1])-1, c2=colIndice(colLetras(partes[1]));
+      if(r1<0||c1<0||r1>maxR||c1>maxC) continue;
+      var v0=out[r1][c1]; if(v0==='') continue;
+      for(var rr=r1; rr<=Math.min(r2,maxR); rr++){
+        for(var cc=c1; cc<=Math.min(c2,maxC); cc++){
+          if((rr!==r1||cc!==c1) && out[rr][cc]===''){ out[rr][cc]=v0; nComb++; }
+        }
+      }
+    }
+    cache[nombreHoja]={filas:out, combinadas:nComb};
+    return cache[nombreHoja];
+  }
+  return {
+    hojas:hojas.map(function(h){return h.nombre;}),
+    filas:filas,
+    /* Cuántas filas con contenido tiene cada hoja (para el desglose) */
+    info:async function(){
+      var res=[];
+      for(var i=0;i<hojas.length;i++){
+        var g=await filas(hojas[i].nombre);
+        var llenas=g.filas.filter(function(f){ return f.filter(function(c){return String(c).trim()!=='';}).length>=2; }).length;
+        res.push({nombre:hojas[i].nombre, filas:llenas});
+      }
+      return res;
+    }
+  };
+}
+
+/* ---------- CSV / TXT ---------- */
+/* Decodifica el texto: UTF-8 por defecto; si aparecen caracteres de reemplazo
+   (tildes rotas de un CSV guardado con Excel en español), reintenta con Windows-1252. */
+function decodificarTexto(bytes){
+  try{
+    if(bytes[0]===0xFF&&bytes[1]===0xFE) return {txt:new TextDecoder('utf-16le').decode(bytes.subarray(2)), cod:'UTF-16 (Unicode)'};
+    if(bytes[0]===0xFE&&bytes[1]===0xFF) return {txt:new TextDecoder('utf-16be').decode(bytes.subarray(2)), cod:'UTF-16 BE'};
+  }catch(e){}
+  var bom=bytes[0]===0xEF&&bytes[1]===0xBB&&bytes[2]===0xBF;
+  var txt=new TextDecoder('utf-8',{fatal:false}).decode(bom?bytes.subarray(3):bytes);
+  if(txt.indexOf('�')>=0){
+    try{ return {txt:new TextDecoder('windows-1252').decode(bytes), cod:'Windows-1252 (tildes corregidas)'}; }catch(e){}
+  }
+  return {txt:txt, cod:bom?'UTF-8 con BOM':'UTF-8'};
+}
+function contarCampos(linea,d){ var n=1, enCom=false; for(var i=0;i<linea.length;i++){ var ch=linea[i]; if(ch==='"') enCom=!enCom; else if(ch===d && !enCom) n++; } return n; }
+/* Analiza las primeras 15 líneas no vacías y elige el delimitador que da
+   el mismo número de columnas en más líneas (la primera suele ser un título). */
+function detectarDelim(txt){
+  var lineas=txt.split(/\r?\n/).filter(function(l){ return l.trim()!==''; }).slice(0,15);
+  var mejor=',', mejorP=-1;
+  [';',',','\t','|'].forEach(function(d){
+    var conteo={};
+    lineas.forEach(function(l){ var n=contarCampos(l,d); if(n>1) conteo[n]=(conteo[n]||0)+1; });
+    var moda=0, frec=0;
+    Object.keys(conteo).forEach(function(k){ if(conteo[k]>frec || (conteo[k]===frec && +k>moda)){ frec=conteo[k]; moda=+k; } });
+    var p=frec*1000+moda;
+    if(frec>0 && p>mejorP){ mejorP=p; mejor=d; }
+  });
+  return mejor;
+}
+function leerCsv(txt,d){
+  if(txt.charCodeAt(0)===0xFEFF) txt=txt.slice(1);
+  d=d||detectarDelim(txt);
+  var filas=[], campo='', fila=[], enCom=false;
+  for(var i=0;i<txt.length;i++){
+    var ch=txt[i];
+    if(enCom){
+      if(ch==='"'){ if(txt[i+1]==='"'){ campo+='"'; i++; } else enCom=false; }
+      else campo+=ch;
+    } else {
+      if(ch==='"') enCom=true;
+      else if(ch===d){ fila.push(campo); campo=''; }
+      else if(ch==='\n'){ fila.push(campo); filas.push(fila); fila=[]; campo=''; }
+      else if(ch==='\r'){ /* ignorar */ }
+      else campo+=ch;
+    }
+  }
+  if(campo.length||fila.length){ fila.push(campo); filas.push(fila); }
+  return filas;
+}
+var NOMBRE_DELIM={';':'punto y coma',',':'coma','\t':'tabulador','|':'barra vertical'};
+
+/* ============================================================
+   CARGA DE ARCHIVOS
+   ============================================================ */
+function nuevoRegistro(nombre,tipo){
+  return {id:uid(), nombre:nombre, tipo:tipo, hojas:[], hoja:null, hojaIdx:0, filasCrudas:[], filaCab:0,
+    cabeceras:[], datos:[], datosIdx:[], mapeo:{}, autoMapeo:{}, error:null, lector:null,
+    codificacion:'', delimitador:'', motor:'', combinadas:0, hojasInfo:null,
+    rellenarAbajo:false, procesoDefecto:false, procesoTexto:'', desglosado:false, libro:''};
+}
+function leerComoBuffer(f){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){res(new Uint8Array(r.result));}; r.onerror=rej; r.readAsArrayBuffer(f); }); }
+
+async function cargarArchivos(files){
+  /* Se copia la lista antes de la primera espera: el navegador vacía la del selector
+     (al limpiarlo) y la del arrastre (al terminar el evento), y solo entraba el primer archivo. */
+  files=[].slice.call(files);
+  for(var i=0;i<files.length;i++){
+    var f=files[i];
+    try{ var bytes=await leerComoBuffer(f); await cargarBytes(f.name, bytes); }
+    catch(err){ toast('No se pudo leer «'+f.name+'»: '+err.message,'err'); }
+  }
+  renderPaso1(); renderSteps(); autoguardar();
+}
+async function cargarBytes(nombre,bytes){
+  var esCsv=/\.(csv|txt|tsv)$/i.test(nombre);
+  var reg=nuevoRegistro(nombre, esCsv?'csv':'xlsx');
+  if(esCsv){
+    var dec=decodificarTexto(bytes);
+    reg.codificacion=dec.cod;
+    reg.delimitador=detectarDelim(dec.txt);
+    reg.filasCrudas=leerCsv(dec.txt, reg.delimitador);
+    reg.hojas=['(CSV)']; reg.hoja='(CSV)';
+  } else {
+    if(bytes[0]===0xD0&&bytes[1]===0xCF) throw new Error('es un Excel antiguo (.xls). Ábralo en Excel y guárdelo como .xlsx.');
+    if(!esZip(bytes)) throw new Error('no es un archivo .xlsx válido.');
+    MOTOR_INFLATE='';
+    var libro=await leerXlsx(bytes);
+    reg.lector=libro; reg.hojas=libro.hojas;
+    reg.hojasInfo=await libro.info();
+    reg.hoja=elegirHoja(libro.hojas, reg.hojasInfo);
+    reg.hojaIdx=libro.hojas.indexOf(reg.hoja);
+    var g=await libro.filas(reg.hoja);
+    reg.filasCrudas=g.filas; reg.combinadas=g.combinadas;
+    reg.motor=MOTOR_INFLATE||'sin compresión';
+  }
+  reg.filaCab=detectarCabecera(reg.filasCrudas);
+  recalcularArchivo(reg);
+  autoMapear(reg);
+  state.archivos.push(reg);
+  return reg;
+}
+/* Prefiere hojas cuyo nombre sugiera la matriz; si no hay, la que tiene más filas con datos */
+function elegirHoja(hojas,info){
+  var pref=['matriz de riesgo','matriz riesgos','matriz','riesgos','risk'];
+  for(var p=0;p<pref.length;p++){
+    for(var i=0;i<hojas.length;i++){ if(norm(hojas[i]).indexOf(pref[p])>=0) return hojas[i]; }
+  }
+  if(info&&info.length){ var mejor=info[0]; info.forEach(function(x){ if(x.filas>mejor.filas) mejor=x; }); return mejor.nombre; }
+  return hojas[0];
+}
+/* La cabecera es la fila con más textos distintos y más nombres de columna reconocibles.
+   Contar valores distintos evita confundirla con un título combinado que se repite en toda la fila. */
+function detectarCabecera(filas){
+  var mejor=0, mejorPuntaje=-1;
+  var lim=Math.min(filas.length,20);
+  for(var i=0;i<lim;i++){
+    var vistos={}, distintos=0, textos=0, conocidos=0;
+    (filas[i]||[]).forEach(function(c){
+      var v=String(c==null?'':c).trim(); if(!v) return;
+      var k=v.toLowerCase(); if(vistos[k]) return; vistos[k]=1; distintos++;
+      if(!/^-?[\d.,%\/ -]+$/.test(v)){ textos++;
+        if(v.length<=45 && CAMPOS.some(function(cp){ return puntuarCampo(cp,v)>=70; })) conocidos++; }
+    });
+    var puntaje=distintos+textos+conocidos*3;
+    if(puntaje>mejorPuntaje){ mejorPuntaje=puntaje; mejor=i; }
+  }
+  return mejor;
+}
+function recalcularArchivo(reg){
+  var cab=reg.filasCrudas[reg.filaCab]||[];
+  reg.cabeceras=cab.map(function(c,i){ var v=String(c==null?'':c).trim(); return v || ('Columna '+colName(i)); });
+  reg.datos=[]; reg.datosIdx=[];
+  for(var i=reg.filaCab+1;i<reg.filasCrudas.length;i++){
+    var f=reg.filasCrudas[i]||[];
+    var vacia=f.every(function(c){ return String(c==null?'':c).trim()===''; });
+    if(vacia) continue;
+    reg.datos.push(f); reg.datosIdx.push(i);
+  }
+  reg.error=reg.cabeceras.length? null : 'No se detectaron columnas.';
+}
+/* Puntúa qué tan bien un encabezado corresponde a un campo destino.
+   Las claves cortas ('id','no','ref') solo valen como palabra completa. */
+function puntuarCampo(campo,cab){
+  var n=norm(cab);
+  if(!n) return 0;
+  var palabras=n.split(/[^a-z0-9]+/).filter(Boolean);
+  var mejor=0;
+  campo.claves.forEach(function(k0){
+    var k=norm(k0), p=0;
+    if(n===k) p=100;
+    else if(k.length<=3){ if(palabras.indexOf(k)>=0) p=70; }
+    else if(palabras.indexOf(k)>=0) p=85;
+    else if(n.indexOf(k)>=0) p=60+k.length;
+    else if(k.indexOf(n)>=0 && n.length>3) p=40+n.length;
+    if(p>mejor) mejor=p;
+  });
+  return mejor;
+}
+function baseEncabezado(cab){ return normClave(cab).replace(/(\s*(n|no|nro|#)?\s*\d+)$/,'').trim(); }
+/* Asignación global por puntaje. En los campos de texto que admiten varias columnas
+   («Causa 1», «Causa 2»…), las columnas hermanas se agregan solas para concatenarse. */
+function autoMapear(reg){
+  reg.mapeo={};
+  var cands=[];
+  CAMPOS.forEach(function(campo){
+    reg.cabeceras.forEach(function(cab,idx){
+      if(/^Columna [A-Z]+$/.test(cab)) return;
+      var p=puntuarCampo(campo,cab);
+      if(p>=45) cands.push({campo:campo.id, col:idx, p:p});
+    });
+  });
+  cands.sort(function(a,b){ return b.p-a.p || a.col-b.col; });
+  var campoUsado={}, colUsada={};
+  cands.forEach(function(c){
+    if(campoUsado[c.campo]||colUsada[c.col]) return;
+    reg.mapeo[c.campo]=[c.col];
+    campoUsado[c.campo]=true; colUsada[c.col]=true;
+  });
+  CAMPOS.forEach(function(campo){
+    if(!campo.concat || !reg.mapeo[campo.id]) return;
+    var b0=baseEncabezado(reg.cabeceras[reg.mapeo[campo.id][0]]);
+    if(!b0 || b0===normClave(reg.cabeceras[reg.mapeo[campo.id][0]]) && !/\d\s*$/.test(reg.cabeceras[reg.mapeo[campo.id][0]])) return;
+    reg.cabeceras.forEach(function(cab,idx){
+      if(colUsada[idx]) return;
+      if(baseEncabezado(cab)===b0 && /\d\s*$/.test(cab)){ reg.mapeo[campo.id].push(idx); colUsada[idx]=true; }
+    });
+  });
+  reg.autoMapeo=JSON.parse(JSON.stringify(reg.mapeo));
+}
+async function cambiarHoja(i,hoja){
+  var a=state.archivos[i]; if(!a.lector) return;
+  a.hoja=hoja; a.hojaIdx=a.hojas.indexOf(hoja);
+  var g=await a.lector.filas(hoja);
+  a.filasCrudas=g.filas; a.combinadas=g.combinadas;
+  a.filaCab=detectarCabecera(a.filasCrudas);
+  recalcularArchivo(a); autoMapear(a);
+  renderPaso1(); autoguardar(); toast('Hoja «'+hoja+'» cargada','ok');
+}
+function cambiarCabecera(i,v){
+  var a=state.archivos[i];
+  a.filaCab=Math.max(0,Math.min(a.filasCrudas.length-1,(parseInt(v,10)||1)-1));
+  recalcularArchivo(a); autoMapear(a);
+  renderPaso1(); autoguardar();
+}
+function quitarArchivo(i){
+  var a=state.archivos[i];
+  if(!confirm('¿Quitar «'+a.nombre+'» de la consolidación?')) return;
+  state.archivos.splice(i,1); renderPaso1(); renderSteps(); autoguardar();
+}
+function nombreBase(a){
+  var n=a.desglosado? a.hoja : String(a.nombre).replace(/\.[a-z0-9]+$/i,'');
+  n=n.replace(/[_]+/g,' ').replace(/\bmatriz( de)?( riesgos?)?\b/ig,'').replace(/\s+/g,' ').trim();
+  return n || a.nombre;
+}
+
+/* ============================================================
+   PASO 1 — CARGA
+   ============================================================ */
+function vistaPrevia(a,i){
+  var n=Math.min(a.filasCrudas.length,12), maxC=0;
+  for(var r=0;r<n;r++) maxC=Math.max(maxC,(a.filasCrudas[r]||[]).length);
+  maxC=Math.min(maxC,10);
+  var h='<div class="hint" style="margin-bottom:6px">Haga clic en la fila que contiene los nombres de las columnas. La fila resaltada es la que se usa ahora.</div><div class="tbl-scroll" style="max-height:300px"><table class="prev-tbl"><tbody>';
+  for(var r2=0;r2<n;r2++){
+    var f=a.filasCrudas[r2]||[];
+    h+='<tr class="'+(r2===a.filaCab?'hdr':'')+'" onclick="cambiarCabecera('+i+','+(r2+1)+')"><td class="rn">'+(r2+1)+'</td>';
+    for(var c=0;c<maxC;c++) h+='<td title="'+escAttr(f[c]||'')+'">'+escH(String(f[c]==null?'':f[c]).slice(0,30))+'</td>';
+    h+='</tr>';
+  }
+  return h+'</tbody></table></div>';
+}
+function opcionesCabecera(a){
+  var n=Math.min(a.filasCrudas.length,30), h='';
+  for(var r=0;r<n;r++){
+    var txt=(a.filasCrudas[r]||[]).filter(function(c){return String(c).trim()!=='';}).slice(0,3).join(' · ');
+    h+='<option value="'+(r+1)+'" '+(r===a.filaCab?'selected':'')+'>Fila '+(r+1)+(txt?' — '+escH(txt.slice(0,48)):' (vacía)')+'</option>';
+  }
+  return h;
+}
+function renderPaso1(){
+  var h='<div class="card"><h3>1 · Cargue las matrices de riesgos</h3>'+
+    '<p class="hint">Acepta <b>.xlsx</b> (Excel) y <b>.csv</b>. Puede cargar varios archivos a la vez, cada uno con su propia estructura de columnas. '+
+    'Nada sale de su computador: todo el procesamiento ocurre en el navegador.</p>'+
+    '<div class="drop" id="drop" onclick="document.getElementById(\'filePick\').click()">'+
+      '<div class="ic">📂</div><div class="t">Arrastre los archivos aquí o haga clic para seleccionarlos</div>'+
+      '<div class="hint">Excel (.xlsx, .xlsm) y CSV (.csv, .txt)</div>'+
+    '</div>'+
+    '<div class="demo-row"><button class="btn-demo" onclick="cargarDemo()">⚡ Cargar 3 matrices de demostración (Finanzas, Operaciones, TI)</button>'+
+    '<span class="hint">Tres matrices ficticias con escalas y columnas distintas, celdas combinadas y riesgos repetidos entre áreas, para probar los 5 pasos sin archivos propios.</span></div>';
+  if(state.archivos.length){
+    h+='<div class="section-title">Archivos cargados ('+state.archivos.length+')</div>';
+    h+=state.archivos.map(function(a,i){
+      var tags=[];
+      if(a.tipo==='csv'){ tags.push('Codificación: '+(a.codificacion||'UTF-8')); if(a.delimitador) tags.push('Separador: '+(NOMBRE_DELIM[a.delimitador]||a.delimitador)); }
+      else { if(a.motor) tags.push('Descompresión: '+a.motor); if(a.combinadas) tags.push(a.combinadas+' celdas combinadas completadas'); }
+      if(!a.lector && a.tipo!=='csv') tags.push('Recuperado del proyecto');
+      var opts=a.hojas.map(function(hn){ return '<option '+(a.hoja===hn?'selected':'')+'>'+escH(hn)+'</option>'; }).join('');
+      var conDatos=(a.hojasInfo||[]).filter(function(x){return x.filas>=3;});
+      var row='<div class="file-row">'+
+        '<span class="file-ic">'+(a.tipo==='csv'?'📄':'📗')+'</span>'+
+        '<div class="file-meta"><div class="file-name">'+escH(a.nombre)+'</div>'+
+        '<div class="file-sub">'+a.filasCrudas.length+' filas leídas · '+(a.error?('<span style="color:var(--danger)">'+escH(a.error)+'</span>'):(a.datos.length+' registros con la cabecera en la fila '+(a.filaCab+1)))+'</div>'+
+        '<div class="file-tags">'+tags.map(function(t){return '<span class="pill">'+escH(t)+'</span>';}).join('')+'</div></div>'+
+        (a.hojas.length>1 && a.lector && !a.desglosado? '<div><label>Hoja</label><select onchange="cambiarHoja('+i+',this.value)">'+opts+'</select></div>':'')+
+        '<div><label>Fila de encabezado</label><select class="hdr-sel" onchange="cambiarCabecera('+i+',this.value)">'+opcionesCabecera(a)+'</select></div>'+
+        '<button class="btn-secondary btn-sm" onclick="UI.previa[\''+a.id+'\']=!UI.previa[\''+a.id+'\'];renderPaso1()">'+(UI.previa[a.id]?'Ocultar vista previa':'👁 Vista previa')+'</button>'+
+        (a.lector && !a.desglosado && conDatos.length>1? '<button class="btn-secondary btn-sm" onclick="UI.desglose[\''+a.id+'\']=!UI.desglose[\''+a.id+'\'];renderPaso1()">📑 Desglosar '+conDatos.length+' hojas como matrices independientes</button>':'')+
+        '<button class="btn-danger" onclick="quitarArchivo('+i+')">Quitar</button>'+
+      '</div>';
+      var extra='';
+      if(UI.previa[a.id]) extra+=vistaPrevia(a,i);
+      if(UI.desglose[a.id] && a.lector){
+        extra+='<div class="hint"><b>Desglosar el libro:</b> cada hoja marcada se convierte en una matriz independiente, con su propio encabezado y mapeo. No hace falta subir el archivo varias veces.</div><div class="desg-list">'+
+          (a.hojasInfo||[]).map(function(x){ return '<label class="chk-row"><input type="checkbox" data-desg="'+a.id+'" value="'+escAttr(x.nombre)+'" '+(x.filas>=3?'checked':'')+'> '+escH(x.nombre)+' <span class="mini">('+x.filas+' filas con datos)</span></label>'; }).join('')+
+          '</div><div class="toolbar"><button class="btn-primary btn-sm" onclick="desglosar('+i+')">Crear matrices independientes</button><button class="btn-secondary btn-sm" onclick="UI.desglose[\''+a.id+'\']=false;renderPaso1()">Cancelar</button></div>';
+      }
+      return '<div class="file-box">'+row+(extra?'<div class="file-extra">'+extra+'</div>':'')+'</div>';
+    }).join('');
+    var totalReg=state.archivos.reduce(function(s,a){return s+a.datos.length;},0);
+    h+='<div class="banner banner-ok">'+state.archivos.length+' matriz(ces) · <b>'+totalReg+'</b> registros detectados en total.</div>';
+  }
+  h+='</div>';
+  document.getElementById('body').innerHTML=h;
+  activarDrop();
+}
+async function desglosar(i){
+  var a=state.archivos[i];
+  var marcadas=[].slice.call(document.querySelectorAll('input[data-desg="'+a.id+'"]:checked')).map(function(c){return c.value;});
+  if(!marcadas.length){ toast('Marque al menos una hoja','warn'); return; }
+  var nuevos=[];
+  for(var k=0;k<marcadas.length;k++){
+    var hoja=marcadas[k], reg=nuevoRegistro(a.nombre+' › '+hoja,'xlsx');
+    var g=await a.lector.filas(hoja);
+    reg.lector=a.lector; reg.hojas=[hoja]; reg.hoja=hoja; reg.hojaIdx=a.hojas.indexOf(hoja);
+    reg.libro=a.nombre; reg.desglosado=true; reg.motor=a.motor;
+    reg.filasCrudas=g.filas; reg.combinadas=g.combinadas;
+    reg.filaCab=detectarCabecera(reg.filasCrudas);
+    recalcularArchivo(reg); autoMapear(reg);
+    nuevos.push(reg);
+  }
+  state.archivos.splice.apply(state.archivos,[i,1].concat(nuevos));
+  delete UI.desglose[a.id];
+  renderPaso1(); renderSteps(); autoguardar();
+  toast('«'+a.nombre+'» se desglosó en '+nuevos.length+' matrices','ok');
+}
+function activarDrop(){
+  var d=document.getElementById('drop'); if(!d) return;
+  ['dragenter','dragover'].forEach(function(ev){ d.addEventListener(ev,function(e){ e.preventDefault(); d.classList.add('over'); }); });
+  ['dragleave','drop'].forEach(function(ev){ d.addEventListener(ev,function(e){ e.preventDefault(); d.classList.remove('over'); }); });
+  d.addEventListener('drop',function(e){ if(e.dataTransfer.files.length) cargarArchivos(e.dataTransfer.files); });
+}
+document.getElementById('filePick').addEventListener('change',function(e){
+  if(e.target.files.length) cargarArchivos(e.target.files);
+  e.target.value='';
+});
+
+/* ============================================================
+   PASO 2 — MAPEO DE COLUMNAS
+   ============================================================ */
+/* Filas con contenido pero sin nombre de riesgo: suelen ser filas de controles adicionales */
+function contarSinRiesgo(a){
+  var cr=colsDe(a,'riesgo'); if(!cr.length) return 0;
+  var n=0;
+  a.datos.forEach(function(f){
+    var tieneR=cr.some(function(ci){ return String(f[ci]==null?'':f[ci]).trim()!==''; });
+    if(!tieneR) n++;
+  });
+  return n;
+}
+function muestraCampo(a,campoId){
+  var cols=colsDe(a,campoId), vals=[];
+  for(var r=0;r<a.datos.length && vals.length<3;r++){
+    var partes=cols.map(function(ci){ return String(a.datos[r][ci]==null?'':a.datos[r][ci]).trim(); }).filter(Boolean);
+    if(partes.length) vals.push(partes.join(' | ').slice(0,30));
+  }
+  return vals.join(' · ');
+}
+function opcionesColumnas(a,sel){
+  return '<option value="">— Ignorar —</option>'+a.cabeceras.map(function(cab,idx){
+    return '<option value="'+idx+'" '+(String(sel)===String(idx)?'selected':'')+'>'+colName(idx)+' · '+escH(cab)+'</option>';
+  }).join('');
+}
+function colsNoMapeadasArchivo(a){
+  var usadas={};
+  CAMPOS.forEach(function(c){ colsDe(a,c.id).forEach(function(ci){ usadas[ci]=1; }); });
+  var libres=[];
+  a.cabeceras.forEach(function(cab,idx){ if(!usadas[idx]) libres.push({idx:idx, cab:cab}); });
+  return libres;
+}
+function renderPaso2(){
+  if(!state.archivos.length){ document.getElementById('body').innerHTML=vacio('📂','Sin archivos','Cargue al menos un archivo en el paso anterior.'); return; }
+  var h='<div class="card"><h3>2 · Relacione las columnas de cada archivo</h3>'+
+    '<p class="hint">A la izquierda, el campo de destino; a la derecha, de cuál columna del archivo se toma. '+
+    'Las marcadas con <span class="auto-tag">auto</span> las detectó la aplicación por el nombre del encabezado; revíselas y corrija lo que haga falta. '+
+    'Deje en «<b>— Ignorar —</b>» lo que no aplique al esquema estándar. En causas, consecuencias, controles y planes puede sumar varias columnas: sus textos se unen con « | ».</p>'+
+    '<div class="banner banner-info" style="margin-top:10px;font-weight:500">ℹ️ <b>¿Qué sucede con las columnas marcadas como «— Ignorar —»?</b> Por defecto no forman parte de los 21 campos estándar de la tabla maestra, pero <b>ningún metadato se pierde</b>: en el Paso 5 puede activar la casilla <i>«Conservar columnas adicionales no mapeadas al final de la hoja Consolidado (prefijadas con [Extra] NombreColumna)»</i> para incluirlas íntegras como anexo en el Excel final.</div></div>';
+  h+=state.archivos.map(function(a,ai){
+    var mapeados=CAMPOS.filter(function(c){return colsDe(a,c.id).length;}).length;
+    var libres=colsNoMapeadasArchivo(a);
+    var sinR=contarSinRiesgo(a);
+    var body='<div class="card"><h3>'+escH(a.nombre)+'</h3>'+
+      '<p class="hint">'+a.datos.length+' registros · '+a.cabeceras.length+' columnas · <b>'+mapeados+'</b> campos relacionados · <b>'+libres.length+'</b> columna(s) no mapeadas ('+(libres.length?libres.map(function(x){return colName(x.idx)+' · '+escH(x.cab);}).join(', '):'ninguna')+')</p>'+
+      (!colsDe(a,'riesgo').length? '<div class="banner banner-warn">No se ha relacionado la columna <b>Riesgo</b>. Es el campo mínimo para consolidar.</div>':'')+
+      (sinR && !a.rellenarAbajo? '<div class="banner banner-info">'+sinR+' fila(s) tienen datos pero no tienen nombre de riesgo: parecen filas de controles adicionales de un riesgo anterior. Active «Rellenar hacia abajo» para no perderlas.</div>':'')+
+      '<div class="opt-box">'+
+        '<label class="chk-row"><input type="checkbox" '+(a.rellenarAbajo?'checked':'')+' onchange="setOpcionArchivo('+ai+',\'rellenarAbajo\',this.checked)"> '+
+          '<span><b>Rellenar hacia abajo (<i>Fill Down</i>) Proceso/Riesgo en filas continuas de controles.</b> '+
+          '<span class="hint">Cuando una fila no trae riesgo, toma el Proceso, Código, Riesgo y Categoría de la fila de arriba. Si solo falta el Proceso, se completa el Proceso.</span></span></label>'+
+        '<label class="chk-row"><input type="checkbox" '+(a.procesoDefecto?'checked':'')+' onchange="setOpcionArchivo('+ai+',\'procesoDefecto\',this.checked)"> '+
+          '<span><b>Asignar el nombre del archivo/hoja como Proceso por defecto</b> '+
+          '<span class="hint">a los registros que no traigan proceso:</span> '+
+          '<input type="text" value="'+escAttr(a.procesoTexto||nombreBase(a))+'" onchange="setOpcionArchivo('+ai+',\'procesoTexto\',this.value)"></span></label>'+
+      '</div>'+
+      (state.archivos.length>1? '<div class="toolbar" style="margin-bottom:8px"><button class="btn-secondary btn-sm" onclick="propagarMapeo('+ai+')">⇄ Aplicar este mapeo a todos los archivos con encabezados similares</button></div>':'')+
+      '<div class="section-title">Campo destino ← columna del archivo</div><div class="map-grid">';
+    CAMPOS.forEach(function(c){
+      var lista=Array.isArray(a.mapeo[c.id])? a.mapeo[c.id] : [];
+      var validos=colsDe(a,c.id);
+      var esAuto=a.autoMapeo && JSON.stringify(a.autoMapeo[c.id]||null)===JSON.stringify(validos.length?validos:null) && validos.length>0;
+      var muestra=muestraCampo(a,c.id);
+      body+='<div class="map-src">'+escH(c.label)+(esAuto?'<span class="auto-tag">auto</span>':'')+
+            (validos.length>1?'<span class="concat-note">'+validos.length+' columnas unidas con « | »</span>':'')+
+            (muestra?'<span class="map-sample">'+escH(muestra)+'</span>':'')+'</div>'+
+        '<div class="map-arrow">←</div><div class="map-multi">';
+      var filasSel=lista.length? lista : [null];
+      filasSel.forEach(function(sel,pos){
+        body+='<div class="mm"><select onchange="setMapeo('+ai+',\''+c.id+'\','+pos+',this.value)">'+opcionesColumnas(a,sel)+'</select>'+
+          (pos>0? '<button class="btn-x" title="Quitar esta columna" onclick="setMapeo('+ai+',\''+c.id+'\','+pos+',\'\')">✕</button>':'')+'</div>';
+      });
+      if(c.concat && validos.length) body+='<div><button class="btn-link" onclick="agregarColumnaCampo('+ai+',\''+c.id+'\')">+ Unir otra columna a «'+escH(c.label)+'»</button></div>';
+      body+='</div>';
+    });
+    body+='</div></div>';
+    return body;
+  }).join('');
+  document.getElementById('body').innerHTML=h;
+}
+function setMapeo(ai,campoId,pos,val){
+  var a=state.archivos[ai];
+  var lista=Array.isArray(a.mapeo[campoId])? a.mapeo[campoId].slice() : [];
+  if(val===''){ lista.splice(pos,1); }
+  else {
+    var col=parseInt(val,10);
+    /* una columna no puede alimentar dos campos distintos */
+    CAMPOS.forEach(function(c){ if(c.id!==campoId && Array.isArray(a.mapeo[c.id])){ var k=a.mapeo[c.id].indexOf(col); if(k>=0){ a.mapeo[c.id].splice(k,1); toast('La columna '+colName(col)+' se quitó de «'+c.label+'»','warn'); } } });
+    if(lista.indexOf(col)>=0 && lista.indexOf(col)!==pos){ toast('Esa columna ya está unida a este campo','warn'); return renderPaso2(); }
+    lista[pos]=col;
+  }
+  lista=lista.filter(function(x){ return x!==undefined; });
+  if(lista.length) a.mapeo[campoId]=lista; else delete a.mapeo[campoId];
+  renderPaso2(); renderSteps(); autoguardar();
+}
+function agregarColumnaCampo(ai,campoId){
+  var a=state.archivos[ai];
+  a.mapeo[campoId]=(a.mapeo[campoId]||[]).concat([null]);
+  renderPaso2();
+}
+function setOpcionArchivo(ai,clave,val){
+  state.archivos[ai][clave]=val;
+  if(clave!=='procesoTexto') renderPaso2();
+  autoguardar();
+}
+function buscarColumnaSimilar(cabs,cab){
+  var k=normClave(cab), mejor=-1, mp=0;
+  cabs.forEach(function(c,j){ var kc=normClave(c); var s=kc===k?1:similitud(kc,k); if(s>mp){ mp=s; mejor=j; } });
+  return mp>=0.75? mejor : -1;
+}
+/* Copia el mapeo a los demás archivos cuyos encabezados se parecen (≥ 75 % de similitud);
+   un archivo recibe el mapeo si se encuentra al menos la mitad de las columnas. */
+function propagarMapeo(ai){
+  var src=state.archivos[ai], ok=[], omit=[];
+  state.archivos.forEach(function(b,bi){
+    if(bi===ai) return;
+    var nuevo=JSON.parse(JSON.stringify(b.mapeo)), hallados=0, total=0, usadas={};
+    CAMPOS.forEach(function(c){
+      var cols=colsDe(src,c.id); if(!cols.length) return;
+      var dest=[];
+      cols.forEach(function(ci){ total++; var j=buscarColumnaSimilar(b.cabeceras, src.cabeceras[ci]); if(j>=0 && !usadas[j]){ hallados++; dest.push(j); usadas[j]=c.id; } });
+      if(dest.length) nuevo[c.id]=dest;
+    });
+    if(total && hallados/total>=0.5){
+      /* quita de otros campos las columnas que ahora usa el mapeo copiado */
+      Object.keys(nuevo).forEach(function(cid){ if(!Array.isArray(nuevo[cid])) return; nuevo[cid]=nuevo[cid].filter(function(j){ return !usadas[j] || usadas[j]===cid; }); if(!nuevo[cid].length) delete nuevo[cid]; });
+      b.mapeo=nuevo; ok.push(b.nombre);
+    } else omit.push(b.nombre);
+  });
+  renderPaso2(); renderSteps(); autoguardar();
+  if(ok.length) toast('Mapeo aplicado a '+ok.length+' archivo(s)'+(omit.length?' · '+omit.length+' con encabezados distintos se dejaron igual':''),'ok');
+  else toast('Ningún otro archivo tiene encabezados suficientemente parecidos','warn');
+}
+
+/* ============================================================
+   PASO 3 — NORMALIZACIÓN DE VALORES
+   Las equivalencias se guardan por archivo: el «3» de una matriz
+   de 1 a 3 no vale lo mismo que el «3» de una de 1 a 5.
+   ============================================================ */
+var VOCAB={
+  probabilidad:{1:['muy baja','muy bajo','raro','rara','remota','remoto','muy improbable','excepcional'],2:['baja','bajo','poco probable','improbable','unlikely'],3:['media','medio','moderada','moderado','posible','ocasional'],4:['alta','alto','probable','frecuente','likely'],5:['muy alta','muy alto','casi cierta','casi seguro','casi segura','certeza','muy frecuente','constante','casi certeza']},
+  impacto:{1:['insignificante','muy bajo','muy baja','leve','minimo','minima'],2:['menor','bajo','baja','minor'],3:['moderado','moderada','medio','media'],4:['mayor','alto','alta','grave','major'],5:['catastrofico','catastrofica','muy alto','muy alta','critico','critica','severo','extremo']},
+  nivel:{1:['bajo','baja','aceptable','verde','tolerable bajo','low'],2:['moderado','moderada','medio','media','amarillo','tolerable','medium'],3:['alto','alta','naranja','importante','high'],4:['extremo','extrema','critico','critica','muy alto','muy alta','rojo','inaceptable','catastrofico']},
+  efect:{1:['debil','inefectivo','no efectivo','ineficaz','deficiente','inadecuado','bajo','baja','inexistente','no existe'],2:['moderado','moderada','medio','media','parcial','parcialmente efectivo','aceptable','regular','mejorable'],3:['fuerte','efectivo','eficaz','alto','alta','adecuado','optimo','solido','satisfactorio']}
+};
+/* Busca el nivel del vocabulario: primero coincidencia exacta y luego la palabra
+   más larga contenida (así «muy alta» no se confunde con «alta»). */
+function nivelVocab(voc,valor){
+  var n=normClave(valor); if(!n) return 0;
+  var k, i, mejor=0, largo=0;
+  for(k in voc){ for(i=0;i<voc[k].length;i++){ if(n===voc[k][i]) return +k; } }
+  for(k in voc){ for(i=0;i<voc[k].length;i++){ var w=voc[k][i]; if(w.length>largo && (' '+n+' ').indexOf(' '+w+' ')>=0){ mejor=+k; largo=w.length; } } }
+  return mejor;
+}
+function valoresArchivo(campoId,a){
+  var mapa={}, cols=colsDe(a,campoId);
+  if(!cols.length) return [];
+  a.datos.forEach(function(f){
+    var v=cols.map(function(ci){ return String(f[ci]==null?'':f[ci]).trim(); }).filter(Boolean).join(' | ');
+    if(!v) return;
+    if(!mapa[v]) mapa[v]={valor:v,n:0};
+    mapa[v].n++;
+  });
+  return Object.keys(mapa).map(function(k){return mapa[k];}).sort(function(x,y){
+    var nx=numeroDe(x.valor), ny=numeroDe(y.valor);
+    if(nx&&ny) return nx.n-ny.n;
+    return y.n-x.n;
+  });
+}
+/* Escala de origen de una columna 1–5. Es conservadora: si no hay evidencia, deja 1 a 5
+   (no transforma). Evidencias, en orden: el encabezado («Prob. (1-3)»); el valor más alto
+   de TODAS las columnas de calificación del mismo archivo (probabilidad e impacto de una
+   matriz comparten escala, y una sola columna con pocos datos engaña); y, si son palabras,
+   que solo use tres niveles (Baja / Media / Alta). */
+function detectarEscala(campo,a){
+  var cols=colsDe(a,campo.id), cab=cols.length? a.cabeceras[cols[0]] : '';
+  var mh=/(?:^|[^\d])1\s*(?:-|–|a|al|hasta)\s*(3|4|5|10)(?!\d)/i.exec(cab);
+  if(mh) return {escala:+mh[1], motivo:'lo indica el encabezado «'+cab+'»', supuesta:false};
+  var maxN=0, nNum=0, niveles={}, textos=0;
+  CAMPOS.filter(function(c){ return c.escala==='p5'; }).forEach(function(c){
+    valoresArchivo(c.id,a).forEach(function(v){ var x=numeroDe(v.valor); if(x && !x.pct){ nNum+=v.n; if(x.n>maxN) maxN=x.n; } });
+  });
+  valoresArchivo(campo.id,a).forEach(function(v){
+    if(numeroDe(v.valor)) return;
+    var l=nivelVocab(VOCAB[campo.vocab],v.valor); if(l){ niveles[l]=1; textos++; }
+  });
+  if(maxN>0){
+    if(maxN<=3 && nNum>=6) return {escala:3, motivo:'en todo el archivo ninguna calificación pasa de '+maxN, supuesta:true};
+    if(maxN<=5) return {escala:5, motivo:maxN===5?'hay calificaciones de 5 en el archivo':'el valor más alto del archivo es '+maxN+'; si la escala es más corta, cámbiela', supuesta:maxN<5};
+    if(maxN<=10) return {escala:10, motivo:'hay calificaciones mayores que 5', supuesta:true};
+    return {escala:5, motivo:'hay valores fuera de una escala conocida', supuesta:true};
+  }
+  var ks=Object.keys(niveles);
+  if(ks.length>=2 && ks.every(function(k){ return k==='2'||k==='3'||k==='4'; })) return {escala:3, motivo:'usa solo tres niveles en palabras (por ejemplo Baja, Media, Alta)', supuesta:true};
+  return {escala:5, motivo:textos?'usa niveles en palabras de una escala de cinco':'sin valores numéricos', supuesta:false};
+}
+function escalaDe(campo,a){
+  var e=(state.escalaOrigen[campo.id]||{})[a.id];
+  return e || detectarEscala(campo,a).escala;
+}
+function reescalar(n,N){ return Math.max(1,Math.min(5,Math.round(1+(n-1)*4/(N-1)))); }
+/* Propone el valor unificado. Devuelve {v, incierto}: incierto = no se reconoció y se asignó el valor medio. */
+function sugerirDestino(campo,a,valor){
+  var x=numeroDe(valor);
+  if(campo.escala==='p5'){
+    var N=escalaDe(campo,a);
+    if(x && x.pct){ var p=x.n; return {v:String(p<=10?1:p<=30?2:p<=50?3:p<=80?4:5), incierto:true}; }
+    if(x){ if(x.n<1||x.n>N) return {v:'3', incierto:true}; return {v:String(N===5?Math.round(x.n):reescalar(x.n,N)), incierto:false}; }
+    var l=nivelVocab(VOCAB[campo.vocab],valor);
+    if(!l) return {v:'3', incierto:true};
+    if(N===3){ l= l<=2?1 : (l===3?3:5); }
+    return {v:String(l), incierto:false};
+  }
+  if(campo.escala==='nivel'){
+    if(x && !x.pct){
+      if(x.n>=1 && x.n<=4 && Math.round(x.n)===x.n) return {v:NIVELES[x.n-1], incierto:false};
+      if(x.n>4 && x.n<=25) return {v:nivelDePuntaje(Math.round(x.n)), incierto:false};
+      return {v:'Medio', incierto:true};
+    }
+    var ln=nivelVocab(VOCAB.nivel,valor);
+    return ln? {v:NIVELES[ln-1], incierto:false} : {v:'Medio', incierto:true};
+  }
+  if(campo.escala==='efect'){
+    if(x){
+      if(x.pct || x.n>5){ return {v:x.n>=70?'Fuerte':(x.n>=40?'Moderado':'Débil'), incierto:false}; }
+      var maxE=0; valoresArchivo(campo.id,a).forEach(function(z){ var y=numeroDe(z.valor); if(y&&!y.pct&&y.n>maxE) maxE=y.n; });
+      if(maxE<=3) return {v:EFECTIVIDADES[Math.max(1,Math.min(3,Math.round(x.n)))-1], incierto:false};
+      return {v:x.n<=2?'Débil':(x.n<4?'Moderado':'Fuerte'), incierto:false};
+    }
+    var le=nivelVocab(VOCAB.efect,valor);
+    return le? {v:EFECTIVIDADES[le-1], incierto:false} : {v:'Moderado', incierto:true};
+  }
+  return {v:'', incierto:false};
+}
+function camposEscala(){ return CAMPOS.filter(function(c){return c.escala;}); }
+/* Completa las equivalencias que falten (también si se salta directo al paso 4) */
+function asegurarNormalizacion(){
+  camposEscala().forEach(function(c){
+    state.normalizacion[c.id]=state.normalizacion[c.id]||{};
+    state.inciertos[c.id]=state.inciertos[c.id]||{};
+    state.archivos.forEach(function(a){
+      var vals=valoresArchivo(c.id,a); if(!vals.length) return;
+      var m=state.normalizacion[c.id][a.id]=state.normalizacion[c.id][a.id]||{};
+      var inc=state.inciertos[c.id][a.id]=state.inciertos[c.id][a.id]||{};
+      vals.forEach(function(v){
+        if(m[v.valor]!==undefined) return;
+        var s=sugerirDestino(c,a,v.valor);
+        m[v.valor]=s.v; if(s.incierto) inc[v.valor]=true;
+      });
+    });
+  });
+}
+function opcionesDestino(c){
+  if(c.escala==='p5') return ['1','2','3','4','5'];
+  if(c.escala==='nivel') return NIVELES;
+  if(c.escala==='efect') return EFECTIVIDADES;
+  return [];
+}
+function heatMini(){
+  var h='<div><div class="heat"><div></div>';
+  for(var i=1;i<=5;i++) h+='<div class="ax">I'+i+'</div>';
+  for(var p=5;p>=1;p--){
+    h+='<div class="ax">P'+p+'</div>';
+    for(var j=1;j<=5;j++){ var s=p*j; h+='<div class="h lvb-'+(NIVELES.indexOf(nivelDePuntaje(s))+1)+'" title="Probabilidad '+p+' × Impacto '+j+' = '+s+' → '+nivelDePuntaje(s)+'">'+s+'</div>'; }
+  }
+  return h+'</div><div class="heat-cap">Filas: probabilidad (P) · Columnas: impacto (I)</div></div>';
+}
+function estadisticasNivel(){
+  var sinNivel=0, distintos=0;
+  (state.consolidado||[]).forEach(function(r){
+    var p=entero15(r.probabilidad), i=entero15(r.impacto);
+    if(!p||!i) return;
+    if(r._calc_nivel) sinNivel++;
+    else if(r.nivel && NIVELES.indexOf(r.nivel)>=0 && r.nivel!==nivelDePuntaje(p*i)) distintos++;
+  });
+  return {calc:sinNivel, distintos:distintos};
+}
+function renderPaso3(){
+  if(!state.archivos.length){ document.getElementById('body').innerHTML=vacio('📂','Sin archivos','Cargue archivos primero.'); return; }
+  consolidar();
+  UI.regValores=[]; UI.regHomo=[];
+  var est=estadisticasNivel();
+  var h='<div class="card"><h3>3 · Unifique los valores de las escalas</h3>'+
+    '<p class="hint">Cada archivo puede usar un vocabulario distinto («Alta», «3», «H») y escalas distintas (1 a 3, 1 a 5). Aquí todo se lleva a una escala común: '+
+    'probabilidad e impacto de 1 a 5, nivel en Bajo / Medio / Alto / Crítico y efectividad del control en Débil / Moderado / Fuerte. '+
+    'La aplicación propone una equivalencia para cada archivo; ajústela donde no corresponda. Los valores marcados en <b style="color:var(--warn)">ámbar</b> no se reconocieron y quedaron en el valor medio: revíselos.</p></div>';
+
+  /* Cálculo del nivel P × I */
+  h+='<div class="card"><h3>Cálculo automático del nivel de riesgo (P × I)</h3>'+
+    '<p class="hint">Cuando un registro tiene probabilidad e impacto (de 1 a 5) pero no trae nivel, la aplicación lo calcula multiplicándolos. '+
+    'El resultado (de 1 a 25) se ubica en esta <b>matriz de calor</b>: una cuadrícula que cruza la probabilidad con el impacto y pinta cada combinación según su gravedad, de verde (bajo) a rojo (crítico). '+
+    'No existe una sola matriz de calor: cada organización define la suya. Esta es la que usa el consolidador; se aplica igual al riesgo inherente (antes de controles) y al residual (después de controles).</p>'+
+    '<div class="heat-wrap">'+heatMini()+
+      '<div class="leg"><div><span class="sw lvb-1"></span><b>Bajo</b>: 1 a 4</div><div><span class="sw lvb-2"></span><b>Medio</b>: 5 a 9</div><div><span class="sw lvb-3"></span><b>Alto</b>: 10 a 15</div><div><span class="sw lvb-4"></span><b>Crítico</b>: 16 a 25</div></div>'+
+    '</div>'+
+    '<div class="opt-box" style="margin-top:12px"><label class="chk-row"><input type="checkbox" '+(state.opciones.recalcularNivel?'checked':'')+' onchange="state.opciones.recalcularNivel=this.checked;autoguardar();renderPaso3()"> '+
+      '<span><b>Recalcular Nivel según P × I homologado</b> <span class="hint">— reemplaza el nivel que traen los archivos por el que resulta de la matriz de calor (no toca los niveles que usted edite a mano en el paso 4).</span></span></label>'+
+      '<div class="hint">Nivel residual: <b>'+est.calc+'</b> registro(s) se completan con el cálculo'+(est.distintos?' · <b style="color:#92400E">'+est.distintos+'</b> traen un nivel distinto al que resulta de P × I':'')+'.</div></div>'+
+  '</div>';
+
+  /* Tarjetas de equivalencias por campo y por archivo */
+  var hubo=false;
+  camposEscala().forEach(function(c){
+    var fuentes=state.archivos.filter(function(a){ return valoresArchivo(c.id,a).length; });
+    if(!fuentes.length) return;
+    hubo=true;
+    var opciones=opcionesDestino(c);
+    h+='<div class="card"><h3>'+escH(c.label)+'</h3>';
+    if(c.escala==='p5') h+='<p class="hint">Escala destino: 1 (muy baja) a 5 (muy alta).</p>';
+    if(c.escala==='nivel') h+='<p class="hint">Escala destino: Bajo · Medio · Alto · Crítico. Un número entre 5 y 25 se interpreta como puntaje P × I.</p>';
+    if(c.escala==='efect') h+='<p class="hint">Escala destino: Débil · Moderado · Fuerte.</p>';
+    if(c.escala==='libre') h+='<p class="hint">Texto libre: escriba el valor unificado o deje en blanco para conservar el original.</p>';
+    fuentes.forEach(function(a){
+      var vals=valoresArchivo(c.id,a);
+      var m=state.normalizacion[c.id][a.id]||{}, inc=(state.inciertos[c.id]||{})[a.id]||{};
+      h+='<div class="src-head"><span class="nm">'+(a.tipo==='csv'?'📄 ':'📗 ')+escH(a.nombre)+'</span><span class="mini">'+vals.length+' valor(es) distinto(s)</span>';
+      if(c.escala==='p5'){
+        var det=detectarEscala(c,a), actual=escalaDe(c,a), elegida=!!(state.escalaOrigen[c.id]||{})[a.id];
+        h+='<label class="chk-row" style="margin-left:auto">Escala de origen: <select class="'+(det.supuesta&&!elegida?'sel-incierto':'')+'" onchange="setEscalaOrigen(\''+c.id+'\',\''+a.id+'\',this.value)">'+
+          [3,4,5,10].map(function(e){ return '<option value="'+e+'" '+(e===actual?'selected':'')+'>1 a '+e+'</option>'; }).join('')+'</select></label>'+
+          '<span class="mini" style="width:100%">'+(elegida?'Elegida por usted. ':'')+'Detectada: 1 a '+det.escala+' ('+escH(det.motivo)+')'+(det.supuesta&&!elegida?' — es una suposición: confírmela.':'.')+'</span>';
+      }
+      h+='</div>';
+      vals.forEach(function(v){
+        var idx=UI.regValores.push({campo:c.id, archivo:a.id, valor:v.valor})-1;
+        var actual=m[v.valor]===undefined?'':m[v.valor], esInc=!!inc[v.valor];
+        var control;
+        if(opciones.length){
+          control='<select onchange="setNorm('+idx+',this.value)"><option value="">— Dejar igual —</option>'+
+            opciones.map(function(o){ return '<option value="'+escAttr(o)+'" '+(String(actual)===o?'selected':'')+'>'+escH(o)+'</option>'; }).join('')+'</select>';
+        } else {
+          control='<input value="'+escAttr(actual)+'" placeholder="Dejar igual" onchange="setNorm('+idx+',this.value)">';
+        }
+        h+='<div class="val-map'+(esInc?' incierto':'')+'"><div class="val-src">'+escH(v.valor)+'</div><div class="map-arrow">→</div>'+
+           '<div>'+control+'</div><div class="val-count">'+v.n+' reg.</div>'+
+           (esInc?'<div class="incierto-note">⚠ No se reconoció este valor: se asignó el valor medio por defecto. Elija el que corresponda.</div>':'')+'</div>';
+      });
+    });
+    h+='</div>';
+  });
+  if(!hubo) h+='<div class="card">'+vacio('✅','Nada que normalizar','No se relacionaron columnas de escala (probabilidad, impacto, nivel, efectividad, estado o tipo de control) en el paso anterior.')+'</div>';
+
+  h+=renderHomologacion();
+  document.getElementById('body').innerHTML=h;
+}
+function setNorm(idx,nuevo){
+  var r=UI.regValores[idx]; if(!r) return;
+  state.normalizacion[r.campo]=state.normalizacion[r.campo]||{};
+  var m=state.normalizacion[r.campo][r.archivo]=state.normalizacion[r.campo][r.archivo]||{};
+  m[r.valor]=nuevo;
+  if(state.inciertos[r.campo]&&state.inciertos[r.campo][r.archivo]) delete state.inciertos[r.campo][r.archivo][r.valor];
+  autoguardar();
+  renderPaso3Suave();
+}
+/* Repinta el paso 3 conservando la posición de la pantalla */
+function renderPaso3Suave(){ var y=window.scrollY; renderPaso3(); window.scrollTo(0,y); }
+function setEscalaOrigen(campoId,archivoId,val){
+  state.escalaOrigen[campoId]=state.escalaOrigen[campoId]||{};
+  state.escalaOrigen[campoId][archivoId]=parseInt(val,10);
+  /* se recalculan las equivalencias de ese archivo con la nueva escala */
+  if(state.normalizacion[campoId]) delete state.normalizacion[campoId][archivoId];
+  if(state.inciertos[campoId]) delete state.inciertos[campoId][archivoId];
+  autoguardar(); renderPaso3Suave();
+  toast('Equivalencias recalculadas con la escala 1 a '+val,'ok');
+}
+
+/* ---------- Homologación de categorías y procesos ---------- */
+var GRUPOS_SINONIMOS=[
+  {cat:'Tecnológico', proc:'Tecnología', p:['ti','it','tic','tics','tecnologia','tecnologico','tecnologica','tecnologia de la informacion','tecnologias de la informacion','sistemas','informatica','ciberseguridad','seguridad de la informacion','seguridad informatica','ciber']},
+  {cat:'Operacional', proc:'Operaciones', p:['operacional','operativo','operativa','operaciones','operacion','operacionales']},
+  {cat:'Financiero', proc:'Finanzas', p:['financiero','financiera','finanzas','financieros','financieras','gerencia financiera']},
+  {cat:'Cumplimiento', proc:'Jurídica y cumplimiento', p:['cumplimiento','legal','regulatorio','regulatoria','normativo','normativa','juridico','juridica','compliance','legal y regulatorio']},
+  {cat:'Estratégico', proc:'Estrategia', p:['estrategico','estrategica','estrategia','estrategicos']},
+  {cat:'Reputacional', proc:'Comunicaciones', p:['reputacional','reputacion','imagen']},
+  {cat:'Talento humano', proc:'Talento humano', p:['talento humano','gestion humana','recursos humanos','rrhh','rr hh','personas','personal','capital humano']},
+  {cat:'Socioambiental', proc:'Sostenibilidad', p:['ambiental','socioambiental','sostenibilidad','medio ambiente','social y ambiental']},
+  {cat:'Seguridad y salud en el trabajo', proc:'Seguridad y salud en el trabajo', p:['sst','seguridad y salud','seguridad y salud en el trabajo','seguridad industrial','hse','hseq']},
+  {cat:'Compras', proc:'Compras', p:['compras','abastecimiento','adquisiciones','aprovisionamiento','suministros']},
+  {cat:'Logístico', proc:'Logística', p:['logistica','distribucion','transporte']},
+  {cat:'Comercial', proc:'Comercial', p:['comercial','ventas','mercadeo','marketing']}
+];
+/* Agrupa valores parecidos: primero por sinónimos conocidos y luego por similitud léxica ≥ 75 % */
+function sugerenciasHomologacion(campo,valores){
+  var nombres=Object.keys(valores), usados={}, grupos=[];
+  GRUPOS_SINONIMOS.forEach(function(g){
+    var miembros=nombres.filter(function(v){ return !usados[v] && g.p.indexOf(normClave(v))>=0; });
+    if(miembros.length>=2){ miembros.forEach(function(v){usados[v]=1;}); grupos.push({std:campo==='categoria'?g.cat:g.proc, miembros:miembros}); }
+  });
+  var resto=nombres.filter(function(v){ return !usados[v]; });
+  resto.forEach(function(v,i){
+    if(usados[v]) return;
+    var miembros=[v];
+    for(var j=i+1;j<resto.length;j++){ var w=resto[j]; if(!usados[w] && (normClave(w)===normClave(v) || similitud(v,w)>=0.75)) miembros.push(w); }
+    if(miembros.length>=2){
+      miembros.forEach(function(x){usados[x]=1;});
+      var std=miembros.slice().sort(function(x,y){ return valores[y]-valores[x]; })[0];
+      grupos.push({std:std, miembros:miembros});
+    }
+  });
+  /* solo se sugiere lo que aún no está homologado así */
+  return grupos.filter(function(g){ return g.miembros.some(function(v){ return (state.homologacion[campo][v]||v)!==g.std; }); });
+}
+function renderHomologacion(){
+  var orig=state._valoresOriginales||{categoria:{},proceso:{}};
+  var campos=['categoria','proceso'].filter(function(k){ return Object.keys(orig[k]).length; });
+  if(!campos.length) return '';
+  var h='<div class="card"><h3>Homologación de Categorías y Procesos</h3>'+
+    '<p class="hint">Cada área nombra a su manera las mismas cosas («TI», «Tecnología», «Sistemas»). Unifíquelas bajo un nombre estándar antes de consolidar: '+
+    'así los conteos, los duplicados y los informes no se fragmentan. Deje en blanco lo que no quiera cambiar.</p>';
+  campos.forEach(function(k){
+    var etiqueta=k==='categoria'?'Categoría':'Proceso';
+    var valores=orig[k], sug=sugerenciasHomologacion(k,valores);
+    var todos=Object.keys(valores).sort(function(x,y){ return x.localeCompare(y,'es'); });
+    var std=unicos(todos.map(function(v){ return state.homologacion[k][v]||v; }).concat(GRUPOS_SINONIMOS.map(function(g){ return k==='categoria'?g.cat:g.proc; })));
+    h+='<div class="section-title">'+etiqueta+' ('+todos.length+' valores distintos)</div>';
+    if(sug.length){
+      h+=sug.map(function(g){
+        var idx=UI.regHomo.push({campo:k, miembros:g.miembros})-1;
+        return '<div class="homo-sug">💡 Unificar '+g.miembros.map(function(m){return '«'+escH(m)+'»';}).join(', ')+' como '+
+          '<input id="homoSug'+idx+'" value="'+escAttr(g.std)+'"> <button class="btn-secondary btn-sm" onclick="aplicarSugerencia('+idx+')">Aplicar</button></div>';
+      }).join('');
+      h+='<div class="toolbar" style="margin:4px 0 10px"><button class="btn-secondary btn-sm" onclick="aplicarTodasSugerencias(\''+k+'\')">Aplicar todas las sugerencias de '+etiqueta.toLowerCase()+'</button></div>';
+    }
+    h+='<datalist id="dl_'+k+'">'+std.map(function(s){return '<option value="'+escAttr(s)+'">';}).join('')+'</datalist>';
+    todos.forEach(function(v){
+      var idx=UI.regHomo.push({campo:k, valor:v})-1;
+      h+='<div class="homo-grid"><div class="val-src">'+escH(v)+'</div><div class="map-arrow">→</div>'+
+        '<div><input list="dl_'+k+'" value="'+escAttr(state.homologacion[k][v]||'')+'" placeholder="(sin cambio)" onchange="setHomo('+idx+',this.value)"></div>'+
+        '<div class="val-count">'+valores[v]+' reg.</div></div>';
+    });
+  });
+  h+='<div class="toolbar" style="margin-top:8px"><button class="btn-secondary btn-sm" onclick="deshacerHomologacion()">Deshacer toda la homologación</button></div></div>';
+  return h;
+}
+function setHomo(idx,val){
+  var r=UI.regHomo[idx]; if(!r) return;
+  val=String(val||'').trim();
+  if(!val || val===r.valor) delete state.homologacion[r.campo][r.valor]; else state.homologacion[r.campo][r.valor]=val;
+  autoguardar(); renderPaso3Suave();
+}
+function aplicarSugerencia(idx,silencioso){
+  var r=UI.regHomo[idx]; if(!r) return;
+  var el=document.getElementById('homoSug'+idx), std=String(el?el.value:'').trim();
+  if(!std){ toast('Escriba el nombre estándar','warn'); return; }
+  r.miembros.forEach(function(v){ if(v===std) delete state.homologacion[r.campo][v]; else state.homologacion[r.campo][v]=std; });
+  if(!silencioso){ autoguardar(); renderPaso3Suave(); toast(r.miembros.length+' valores unificados como «'+std+'»','ok'); }
+}
+function aplicarTodasSugerencias(campo){
+  var n=0;
+  UI.regHomo.forEach(function(r,i){ if(r.campo===campo && r.miembros){ aplicarSugerencia(i,true); n++; } });
+  autoguardar(); renderPaso3Suave(); toast(n+' grupo(s) unificados','ok');
+}
+function deshacerHomologacion(){
+  if(!confirm('¿Quitar todas las unificaciones de categorías y procesos?')) return;
+  state.homologacion={categoria:{},proceso:{}}; autoguardar(); renderPaso3Suave();
+}
+
+/* ============================================================
+   CONSOLIDACIÓN
+   Orden: datos leídos → relleno hacia abajo → proceso por defecto
+   → escalas unificadas → homologación → ediciones manuales
+   → nivel P × I → filas manuales → exclusiones → duplicados.
+   ============================================================ */
+function manualPorUid(u){ for(var i=0;i<state.filasManuales.length;i++){ if(state.filasManuales[i]._uid===u) return state.filasManuales[i]; } return null; }
+function completarNivel(reg,editados){
+  editados=editados||{};
+  [['probabilidad','impacto','nivel','puntaje'],['prob_inherente','imp_inherente','nivel_inherente','puntaje_inherente']].forEach(function(t){
+    var p=entero15(reg[t[0]]), i=entero15(reg[t[1]]);
+    reg[t[3]]=(p&&i)? p*i : '';
+    reg['_calc_'+t[2]]=false;
+    if(p && i && editados[t[2]]===undefined && (!reg[t[2]] || state.opciones.recalcularNivel)){
+      reg[t[2]]=nivelDePuntaje(p*i); reg['_calc_'+t[2]]=true;
+    }
+  });
+}
+function prefijoProceso(proc,prefFijo){
+  var p=String(prefFijo||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5);
+  if(p) return p;
+  var limpio=normClave(proc||'').replace(/\b(de|del|la|las|el|los|y|en|para|por|a|con|gerencia|area|proceso|subproceso|macroproceso|direccion|departamento|unidad)\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!limpio) limpio=normClave(proc||'');
+  var letras=limpio.replace(/[^a-z0-9]/g,'').toUpperCase();
+  if(letras.length>=3) return letras.slice(0,3);
+  return (letras+'RSK').slice(0,3);
+}
+function pad3(n){ n=String(n); while(n.length<3) n='0'+n; return n; }
+function recodificarRiesgos(regs,activar,prefijo){
+  if(activar!==undefined) state.opciones.recodificar=!!activar;
+  if(prefijo!==undefined) state.opciones.prefijoCodigo=String(prefijo||'').trim();
+  var lista=Array.isArray(regs)? regs : state.consolidado;
+  var cont={};
+  lista.forEach(function(r){
+    if(r.codigo_origen===undefined) r.codigo_origen=r.codigo||'';
+    if(!state.opciones.recodificar) return;
+    var e=state.edicionesManuales[r._uid];
+    if(e && e.codigo!==undefined) return;
+    /* En las filas manuales _editados es la lista de campos escritos a mano */
+    if(r._manual && (r._editados||[]).indexOf('codigo')>=0) return;
+    var pref=prefijoProceso(r.proceso,state.opciones.prefijoCodigo);
+    cont[pref]=(cont[pref]||0)+1;
+    r.codigo=pref+'-'+pad3(cont[pref]);
+    r._codigoAuto=true;
+    if(r.codigo_origen && r.codigo_origen!==r.codigo) r._orig_codigo=r.codigo_origen;
+  });
+  return lista;
+}
+function toggleRecodificar(on,prefijo){
+  state.opciones.recodificar=!!on;
+  if(prefijo!==undefined) state.opciones.prefijoCodigo=String(prefijo||'').trim();
+  consolidar();
+  autoguardar();
+  var y=window.scrollY;
+  /* El paso 4 se repinta completo para que el selector de columnas incluya Código */
+  if(state.paso===3) renderPaso4();
+  else if(state.paso===4) renderPaso5();
+  window.scrollTo(0,y);
+  toast(state.opciones.recodificar?'Códigos únicos estandarizados generados (trazabilidad en codigo_origen)':'Se restauraron los códigos originales de cada archivo fuente','ok');
+}
+function consolidar(){
+  asegurarNormalizacion();
+  var out=[], excluidas=[], originales={categoria:{},proceso:{}}, sinRiesgo={}, colsExtraOrden=[], colsExtraVistas={};
+  var edic=state.edicionesManuales, excl=state.filasExcluidas;
+  state.archivos.forEach(function(a){
+    var arr={}, cuentaSin=0;
+    var norms={}; camposEscala().forEach(function(c){ norms[c.id]=(state.normalizacion[c.id]||{})[a.id]||{}; });
+    /* Columnas no mapeadas con al menos un dato (las columnas vacías no se arrastran como anexo) */
+    var libres=colsNoMapeadasArchivo(a).filter(function(x){
+      return a.datos.some(function(f){ return String(f[x.idx]==null?'':f[x.idx]).trim()!==''; });
+    });
+    libres.forEach(function(x){ if(!colsExtraVistas[x.cab]){ colsExtraVistas[x.cab]=1; colsExtraOrden.push(x.cab); } });
+    a.datos.forEach(function(f,fi){
+      var filaIdx=a.datosIdx[fi];
+      var u=a.id+':'+(a.hojaIdx||0)+':'+filaIdx;
+      var reg={_uid:u, _origen:a.nombre, _hoja:a.hoja, _fila:filaIdx+1, _archivoId:a.id, _extras:{}};
+      CAMPOS.forEach(function(c){
+        var cols=colsDe(a,c.id), partes=[];
+        cols.forEach(function(ci){ var v=String(f[ci]==null?'':f[ci]).trim(); if(v && partes.indexOf(v)<0) partes.push(v); });
+        reg[c.id]=partes.join(' | ');
+      });
+      libres.forEach(function(x){
+        var v=String(f[x.idx]==null?'':f[x.idx]).trim();
+        if(v) reg._extras[x.cab]=reg._extras[x.cab]? (reg._extras[x.cab]+' | '+v) : v;
+      });
+      /* Relleno hacia abajo de filas de controles */
+      if(a.rellenarAbajo){
+        if(!reg.riesgo && arr.riesgo){ ['codigo','riesgo','categoria'].forEach(function(k){ if(!reg[k]) reg[k]=arr[k]||''; }); reg._rellenado=true; }
+        else if(reg.riesgo){ arr.codigo=reg.codigo; arr.riesgo=reg.riesgo; arr.categoria=reg.categoria; }
+        if(!reg.proceso && arr.proceso){ reg.proceso=arr.proceso; reg._rellenado=true; }
+        if(reg.proceso) arr.proceso=reg.proceso;
+      }
+      if(!reg.riesgo){ cuentaSin++; return; }
+      if(!reg.proceso && a.procesoDefecto){ reg.proceso=String(a.procesoTexto||nombreBase(a)).trim(); reg._procDefecto=true; }
+      /* Escalas unificadas (por archivo) */
+      camposEscala().forEach(function(c){ var v=reg[c.id]; if(!v) return; var n=norms[c.id][v]; if(n!==undefined && n!=='') reg[c.id]=n; });
+      if(reg.fecha) reg.fecha=normalizarFecha(reg.fecha);
+      /* Homologación */
+      ['categoria','proceso'].forEach(function(k){
+        if(!reg[k]) return;
+        originales[k][reg[k]]=(originales[k][reg[k]]||0)+1;
+        var hm=state.homologacion[k][reg[k]]; if(hm){ reg['_orig_'+k]=reg[k]; reg[k]=hm; }
+      });
+      reg.codigo_origen=reg.codigo||'';
+      /* Ediciones manuales del paso 4 */
+      var e=edic[u];
+      if(e){ Object.keys(e).forEach(function(k){ if(k.charAt(0)!=='_') reg[k]=e[k]; }); reg._editados=Object.keys(e).filter(function(k){return k.charAt(0)!=='_';}); if(e._obs) reg._obs=e._obs; }
+      completarNivel(reg,e);
+      if(excl[u]){ reg._excluida=excl[u]; excluidas.push(reg); return; }
+      out.push(reg);
+    });
+    sinRiesgo[a.id]=cuentaSin;
+  });
+  state.filasManuales.forEach(function(m){
+    var reg={_extras:{}};
+    Object.keys(m).forEach(function(k){ reg[k]=m[k]; });
+    reg._origen='Agregada manualmente'; reg._hoja=''; reg._fila='—'; reg._manual=true;
+    reg.codigo_origen=reg.codigo||'';
+    reg._editados=Object.keys(m._editados||{});
+    if(reg.fecha) reg.fecha=normalizarFecha(reg.fecha);
+    completarNivel(reg,m._editados||{});
+    if(excl[m._uid]){ reg._excluida=excl[m._uid]; excluidas.push(reg); return; }
+    out.push(reg);
+  });
+  recodificarRiesgos(out);
+  marcarDuplicados(out);
+  state.consolidado=out;
+  state._excluidas=excluidas;
+  state._valoresOriginales=originales;
+  state._sinRiesgo=sinRiesgo;
+  state._colsExtra=colsExtraOrden;
+  return out;
+}
+/* Duplicados según el criterio elegido. Cada grupo recibe un número (_grupo). */
+function marcarDuplicados(regs){
+  var crit=state.opciones.criterioDup||'riesgo_proceso';
+  regs.forEach(function(r){ r._dup=false; r._grupo=0; });
+  var padre=regs.map(function(_,i){return i;});
+  function raiz(i){ while(padre[i]!==i){ padre[i]=padre[padre[i]]; i=padre[i]; } return i; }
+  function unir(i,j){ var a=raiz(i), b=raiz(j); if(a!==b) padre[b]=a; }
+  if(crit==='similar'){
+    var bg=regs.map(function(r){ return bigramas(r.riesgo); });
+    var lim=Math.min(regs.length,3000);
+    for(var i=0;i<lim;i++) for(var j=i+1;j<lim;j++){ if(similitud(bg[i],bg[j])>=0.75) unir(i,j); }
+  } else {
+    var vistos={};
+    regs.forEach(function(r,i){
+      /* Con la recodificación activa todos los códigos son únicos: se compara el código del archivo fuente */
+      var k = crit==='codigo'? normClave(r._codigoAuto? r.codigo_origen : r.codigo) : normClave(r.riesgo)+'|'+normClave(r.proceso);
+      if(!k || k==='|' ) return;
+      if(vistos[k]!==undefined) unir(vistos[k],i); else vistos[k]=i;
+    });
+  }
+  var grupos={}, n=0;
+  regs.forEach(function(r,i){ var g=raiz(i); (grupos[g]=grupos[g]||[]).push(r); });
+  Object.keys(grupos).map(function(k){return grupos[k];}).filter(function(g){return g.length>1;})
+    .sort(function(x,y){ return regs.indexOf(x[0])-regs.indexOf(y[0]); })
+    .forEach(function(g){ n++; g.forEach(function(r){ r._dup=true; r._grupo=n; }); });
+  state._nGrupos=n;
+}
+
+/* ============================================================
+   PASO 4 — CONSOLIDADO
+   ============================================================ */
+var COLS_DEFECTO=['proceso','riesgo','categoria','probabilidad','impacto','nivel','control','responsable'];
+var CRITERIOS_DUP=[
+  {id:'riesgo_proceso', t:'Mismo Riesgo + Mismo Proceso'},
+  {id:'similar', t:'Nombre de riesgo similar (similitud léxica ≥ 75 %, también entre distintos procesos)'},
+  {id:'codigo', t:'Mismo Código'}
+];
+function columnasDisponibles(){
+  return CAMPOS.filter(function(c){
+    return state.archivos.some(function(a){ return colsDe(a,c.id).length; }) || state.consolidado.some(function(r){ return r[c.id]; });
+  }).map(function(c){return c.id;});
+}
+function columnasVisibles(){
+  var disp=columnasDisponibles(), sel=state.opciones.columnas;
+  sel=(sel||COLS_DEFECTO).filter(function(c){ return disp.indexOf(c)>=0; });
+  if(state.opciones.recodificar && disp.indexOf('codigo')>=0 && sel.indexOf('codigo')<0) sel.unshift('codigo');
+  if(sel.indexOf('riesgo')<0) sel.push('riesgo');
+  return CAMPOS.map(function(c){return c.id;}).filter(function(id){ return sel.indexOf(id)>=0; });
+}
+function bloqueRecodificarHtml(){
+  return '<div class="recod-bar no-print">'+
+    '<label class="chk-row"><input type="checkbox" '+(state.opciones.recodificar?'checked':'')+' onchange="toggleRecodificar(this.checked)"> '+
+    '<span><b>🔢 Generar códigos únicos estandarizados (<code>PROC-001</code>, <code>PROC-002</code>...)</b> <span class="hint">— toma las primeras 3 letras normalizadas del Proceso (o el prefijo global opcional) y numera secuencialmente cada riesgo consolidado, conservando el código original del archivo fuente en <code>codigo_origen</code> para trazabilidad.</span></span></label>'+
+    '<label class="chk-row" style="margin-left:auto">Prefijo fijo opcional: <input type="text" placeholder="Auto (3 letras)" value="'+escAttr(state.opciones.prefijoCodigo||'')+'" onchange="toggleRecodificar(state.opciones.recodificar,this.value)" title="Déjelo vacío para usar las 3 primeras letras de cada Proceso (ej. TES-001, COM-001) o escriba un prefijo único (ej. RSK)"></label>'+
+  '</div>';
+}
+function renderPaso4(){
+  consolidar();
+  if(!state.consolidado.length && !state._excluidas.length){
+    document.getElementById('body').innerHTML='<div class="card">'+vacio('📋','Sin registros','No se generaron registros. Verifique que la columna <b>Riesgo</b> esté relacionada en el paso 2.')+
+      '<div class="toolbar" style="justify-content:center"><button class="btn-secondary" onclick="agregarFila()">+ Agregar fila manual</button></div></div>';
+    return;
+  }
+  var disp=columnasDisponibles(), vis=columnasVisibles();
+  var h='<div id="kpis4"></div>'+
+    '<div class="card"><h3>4 · Revise el consolidado</h3>'+
+    '<p class="hint">Haga clic en cualquier celda para editarla; los cambios se conservan aunque cambie de paso o ajuste las escalas. '+
+    'Los registros resaltados en amarillo son posibles duplicados según el criterio elegido. Haga clic en un encabezado para ordenar. '+
+    'El nivel en cursiva con una línea azul a la izquierda fue calculado con P × I.</p>'+
+    bloqueRecodificarHtml()+
+    '<div class="toolbar" style="margin:10px 0">'+
+      '<input id="inpBusq4" placeholder="Buscar en el consolidado… (Esc limpia)" value="'+escAttr(state.busqueda)+'" oninput="state.busqueda=this.value; pintarTabla();" style="max-width:240px">'+
+      '<label class="chk-row"><input type="checkbox" id="chkDup" '+(state.soloDuplicados?'checked':'')+' onchange="state.soloDuplicados=this.checked; pintarTabla();"> Solo posibles duplicados <span id="nDup"></span></label>'+
+      '<select style="width:auto;max-width:360px" title="Criterio de detección de duplicados" onchange="state.opciones.criterioDup=this.value; refrescar4(); autoguardar();">'+
+        CRITERIOS_DUP.map(function(c,i){ return '<option value="'+c.id+'" '+(state.opciones.criterioDup===c.id?'selected':'')+'>Duplicados: '+(i+1)+') '+escH(c.t)+'</option>'; }).join('')+
+      '</select>'+
+      '<details class="cols-pop" id="colsPop"><summary id="colsSum">Columnas visibles ('+vis.length+' / '+disp.length+') ▾</summary><div class="cols-panel">'+
+        '<div class="toolbar" style="margin-bottom:6px"><button class="btn-secondary btn-sm" onclick="verColumnas(\'todas\')">Ver todas las mapeadas</button><button class="btn-secondary btn-sm" onclick="verColumnas(\'basica\')">Vista básica</button></div>'+
+        CAMPOS.filter(function(c){ return disp.indexOf(c.id)>=0; }).map(function(c){
+          return '<label class="chk-row"><input type="checkbox" data-col="'+c.id+'" '+(vis.indexOf(c.id)>=0?'checked':'')+' '+(c.id==='riesgo'?'disabled':'')+' onchange="toggleColumna(\''+c.id+'\',this.checked)"> '+escH(c.label)+'</label>';
+        }).join('')+
+      '</div></details>'+
+    '</div>'+
+    '<div class="toolbar" id="acciones4" style="margin-bottom:10px"></div>'+
+    '<div id="avisos4"></div><div id="tablaCons"></div></div>';
+  document.getElementById('body').innerHTML=h;
+  refrescar4(true);
+}
+/* Actualiza indicadores, acciones y tabla sin reconstruir la barra de herramientas */
+function refrescar4(sinConsolidar){
+  if(!sinConsolidar) consolidar();
+  var regs=state.consolidado, excl=state._excluidas||[];
+  var dups=regs.filter(function(r){return r._dup;}).length;
+  var completos=regs.filter(function(r){ return r.riesgo&&r.proceso&&r.probabilidad&&r.impacto; }).length;
+  var editados=regs.filter(function(r){ return (r._editados&&r._editados.length)||r._manual; }).length;
+  var calc=regs.filter(function(r){ return r._calc_nivel||r._calc_nivel_inherente; }).length;
+  var k=document.getElementById('kpis4');
+  if(k) k.innerHTML='<div class="kpi-grid">'+
+    '<div class="kpi"><div class="v">'+regs.length+'</div><div class="l">Registros consolidados</div></div>'+
+    '<div class="kpi"><div class="v">'+state.archivos.length+'</div><div class="l">Matrices de origen</div></div>'+
+    '<div class="kpi"><div class="v" style="color:'+(dups?'var(--warn)':'var(--success)')+'">'+dups+'</div><div class="l">Posibles duplicados ('+(state._nGrupos||0)+' grupos)</div></div>'+
+    '<div class="kpi"><div class="v">'+completos+'</div><div class="l">Registros completos</div></div>'+
+    '<div class="kpi"><div class="v">'+editados+'</div><div class="l">Editados o agregados a mano</div></div>'+
+    '<div class="kpi"><div class="v">'+excl.length+'</div><div class="l">Excluidos o fusionados</div></div>'+
+    '<div class="kpi"><div class="v">'+calc+'</div><div class="l">Con nivel calculado (P × I)</div></div>'+
+  '</div>';
+  var nd=document.getElementById('nDup'); if(nd) nd.textContent=dups?'('+dups+')':'';
+  var ac=document.getElementById('acciones4');
+  if(ac) ac.innerHTML='<button class="btn-secondary btn-sm" onclick="limpiarFilas()">🧹 Limpiar filas vacías o de totales</button>'+
+    '<button class="btn-secondary btn-sm" onclick="agregarFila()">+ Agregar fila manual</button>'+
+    (state._nGrupos? '<button class="btn-secondary btn-sm" onclick="fusionarTodos()">🔗 Fusionar todos los grupos de duplicados ('+state._nGrupos+')</button>':'')+
+    (excl.length? '<button class="btn-secondary btn-sm" onclick="restaurarExcluidas()">↩ Restaurar excluidos ('+excl.length+')</button>':'');
+  var av=document.getElementById('avisos4');
+  if(av){
+    var avisos=[];
+    state.archivos.forEach(function(a){ var n=(state._sinRiesgo||{})[a.id]; if(n && !a.rellenarAbajo) avisos.push('«'+escH(a.nombre)+'» tiene '+n+' fila(s) sin nombre de riesgo que no se consolidaron. Si son controles adicionales de un riesgo, active «Rellenar hacia abajo» en el paso 2.'); });
+    av.innerHTML=avisos.map(function(t){ return '<div class="banner banner-info">'+t+'</div>'; }).join('');
+  }
+  pintarTabla();
+}
+function filtrados(){
+  var regs=state.consolidado.slice();
+  if(state.soloDuplicados) regs=regs.filter(function(r){return r._dup;});
+  var q=norm(state.busqueda);
+  if(q){
+    var terms=q.split(/\s+/);
+    regs=regs.filter(function(r){
+      var heno=norm(CAMPOS.map(function(c){return r[c.id];}).concat([r._origen]).join(' '));
+      return terms.every(function(t){return heno.indexOf(t)>=0;});
+    });
+  }
+  var o=state.opciones.orden||{};
+  if(o.campo){
+    var dir=o.dir||1;
+    regs.sort(function(a,b){
+      var x=a[o.campo], y=b[o.campo];
+      if(o.campo==='nivel'||o.campo==='nivel_inherente'){ x=NIVELES.indexOf(x); y=NIVELES.indexOf(y); }
+      else if(o.campo==='efectividad_control'){ x=EFECTIVIDADES.indexOf(x); y=EFECTIVIDADES.indexOf(y); }
+      var nx=numeroDe(x), ny=numeroDe(y);
+      if(typeof x==='number' && typeof y==='number') return (x-y)*dir;
+      if(nx&&ny) return (nx.n-ny.n)*dir;
+      return String(x==null?'':x).localeCompare(String(y==null?'':y),'es',{numeric:true,sensitivity:'base'})*dir;
+    });
+  }
+  if(state.soloDuplicados){
+    regs.sort(function(a,b){ return a._grupo-b._grupo; });
+  }
+  return regs;
+}
+function ordenarPor(campo){
+  var o=state.opciones.orden||{campo:'',dir:1};
+  if(o.campo===campo){ if(o.dir===1) o.dir=-1; else { o.campo=''; o.dir=1; } }
+  else { o.campo=campo; o.dir=1; }
+  state.opciones.orden=o; pintarTabla(); autoguardar();
+}
+function pintarTabla(){
+  var cont=document.getElementById('tablaCons'); if(!cont) return;
+  var regs=filtrados(), cols=columnasVisibles(), o=state.opciones.orden||{};
+  if(!regs.length){ cont.innerHTML=vacio('🔎','Sin resultados',state.consolidado.length?'Ningún registro coincide con el filtro.':'Todos los registros están excluidos. Use «Restaurar excluidos» para recuperarlos.'); return; }
+  function th(campo,label){ return '<th class="sortable" onclick="ordenarPor(\''+campo+'\')">'+escH(label)+(o.campo===campo?'<span class="arr">'+(o.dir===1?'▲':'▼')+'</span>':'')+'</th>'; }
+  var h='<div class="tbl-scroll"><table><thead><tr>'+th('_origen','Origen')+
+    cols.map(function(c){ return th(c,campoById(c).label); }).join('')+'<th>Acción</th></tr></thead><tbody>';
+  var grupoActual=-1, nCols=cols.length+2;
+  regs.forEach(function(r){
+    if(state.soloDuplicados && r._grupo!==grupoActual){
+      grupoActual=r._grupo;
+      var n=state.consolidado.filter(function(x){return x._grupo===r._grupo;}).length;
+      h+='<tr class="grp-row"><td colspan="'+nCols+'">Grupo '+r._grupo+' · '+n+' registros parecidos'+
+        '<button class="btn-secondary btn-sm" onclick="fusionarGrupo('+r._grupo+')" title="Conserva el registro más completo y le une los controles, causas, consecuencias y planes de los demás">🔗 Fusionar duplicados (conservar registro más completo y unir controles/causas)</button>'+
+        '<button class="btn-secondary btn-sm" onclick="excluirDuplicados('+r._grupo+')" title="Conserva el registro más completo y excluye los demás sin unir su contenido">Excluir duplicado</button></td></tr>';
+    }
+    var cls=(r._dup?'dup ':'')+(r._manual?'manual':'');
+    h+='<tr class="'+cls+'">'+
+      '<td><span class="hint">'+escH(r._origen)+'</span><br><span class="mini">'+(r._manual?'fila manual':'fila '+r._fila)+(r._grupo?' · grupo '+r._grupo:'')+
+        (r._editados&&r._editados.length?' · editado':'')+(r._rellenado?' · relleno':'')+(r._obs?' · <span title="'+escAttr(r._obs)+'">ℹ fusionado</span>':'')+'</span></td>'+
+      cols.map(function(c){
+        var cp=campoById(c), v=r[c]||'', clase=[];
+        if(cp.escala==='p5') clase.push('num');
+        if(c==='nivel'||c==='nivel_inherente'){ clase.push('num'); var cn=claseNivel(v); if(cn) clase.push(cn); if(r['_calc_'+c]) clase.push('calc'); }
+        var tit=(c==='nivel'&&r._calc_nivel)?'Calculado: '+r.probabilidad+' × '+r.impacto+' = '+r.puntaje:((c==='nivel_inherente'&&r._calc_nivel_inherente)?'Calculado: '+r.prob_inherente+' × '+r.imp_inherente+' = '+r.puntaje_inherente:'');
+        if(r['_orig_'+c]) tit='Original: '+r['_orig_'+c];
+        return '<td class="'+clase.join(' ')+'" contenteditable="true" data-uid="'+escAttr(r._uid)+'" data-campo="'+c+'"'+(tit?' title="'+escAttr(tit)+'"':'')+
+          ' onblur="editar(this.dataset.uid,this.dataset.campo,this.textContent,event.relatedTarget)">'+escH(v)+'</td>';
+      }).join('')+
+      '<td class="acc"><button class="btn-row-x" title="Excluir este registro del consolidado" onclick="excluirFila(\''+escAttr(r._uid)+'\')">🗑</button></td></tr>';
+  });
+  h+='</tbody></table></div><p class="hint" style="margin-top:8px">Mostrando '+regs.length+' de '+state.consolidado.length+' registros.</p>';
+  cont.innerHTML=h;
+}
+function verColumnas(modo){
+  state.opciones.columnas = modo==='todas'? columnasDisponibles() : null;
+  var vis=columnasVisibles();
+  document.querySelectorAll('#colsPop input[data-col]').forEach(function(ch){ ch.checked=vis.indexOf(ch.getAttribute('data-col'))>=0; });
+  actualizarResumenColumnas(); pintarTabla(); autoguardar();
+}
+function toggleColumna(c,on){
+  var vis=columnasVisibles();
+  if(on && vis.indexOf(c)<0) vis.push(c);
+  if(!on) vis=vis.filter(function(x){return x!==c;});
+  state.opciones.columnas=vis;
+  actualizarResumenColumnas(); pintarTabla(); autoguardar();
+}
+function actualizarResumenColumnas(){ var s=document.getElementById('colsSum'); if(s) s.textContent='Columnas visibles ('+columnasVisibles().length+' / '+columnasDisponibles().length+') ▾'; }
+function buscarFila(u){ for(var i=0;i<state.consolidado.length;i++){ if(state.consolidado[i]._uid===u) return state.consolidado[i]; } return null; }
+/* Guarda la edición en state.edicionesManuales (o en la fila manual) y refresca sin perder el foco */
+function editar(u,campo,val,siguiente){
+  val=String(val==null?'':val).replace(/\s+/g,' ').trim();
+  var r=buscarFila(u); if(!r) return;
+  if(String(r[campo]==null?'':r[campo])===val) return;
+  var m=manualPorUid(u);
+  if(m){ m[campo]=val; m._editados=m._editados||{}; m._editados[campo]=true; }
+  else { var e=state.edicionesManuales[u]=state.edicionesManuales[u]||{}; e[campo]=val; }
+  var foco=siguiente && siguiente.dataset? {uid:siguiente.dataset.uid, campo:siguiente.dataset.campo} : null;
+  var y=window.scrollY, cont=document.querySelector('#tablaCons .tbl-scroll'), sx=cont?cont.scrollLeft:0, sy=cont?cont.scrollTop:0;
+  refrescar4();
+  var c2=document.querySelector('#tablaCons .tbl-scroll'); if(c2){ c2.scrollLeft=sx; c2.scrollTop=sy; }
+  window.scrollTo(0,y);
+  if(foco && foco.uid){
+    var el=document.querySelector('#tablaCons td[data-uid="'+cssEsc(foco.uid)+'"][data-campo="'+foco.campo+'"]');
+    if(el){ el.focus(); var rg=document.createRange(); rg.selectNodeContents(el); rg.collapse(false); var s=window.getSelection(); s.removeAllRanges(); s.addRange(rg); }
+  }
+  autoguardar();
+}
+function cssEsc(s){ return String(s).replace(/["\\]/g,'\\$&'); }
+function excluirFila(u,motivo){
+  state.filasExcluidas[u]=motivo||'Excluido manualmente';
+  refrescar4(); autoguardar(); toast('Registro excluido. Puede recuperarlo con «Restaurar excluidos».','ok');
+}
+function agregarFila(){
+  var m={_uid:'m'+uid()};
+  CAMPOS.forEach(function(c){ m[c.id]=''; });
+  m.riesgo='Nuevo riesgo';
+  m._editados={riesgo:true};
+  state.filasManuales.push(m);
+  state.busqueda=''; state.soloDuplicados=false;
+  if(state.paso!==3) return irPaso(3);
+  renderPaso4(); autoguardar();
+  var el=document.querySelector('#tablaCons td[data-uid="'+m._uid+'"][data-campo="riesgo"]');
+  if(el){ el.scrollIntoView({block:'center'}); el.focus(); document.execCommand && document.execCommand('selectAll',false,null); }
+  toast('Fila agregada al final de la tabla: escriba sus datos','ok');
+}
+var RX_TOTAL=/^(sub ?total(es)?|total(es)?|gran total|total general|suma|sumatoria|promedio|conteo)\b/;
+var RX_VACIO=/^(-+|n\/?a|na|0|x|\.+|sin riesgo|ninguno|no aplica)$/;
+/* Excluye filas de totales y filas que solo tienen un nombre de riesgo sin ningún otro dato */
+function limpiarFilas(){
+  consolidar();
+  var tot=0, vac=0;
+  state.consolidado.forEach(function(r){
+    var esTotal=[r.proceso,r.codigo,r.riesgo].some(function(v){ return RX_TOTAL.test(normClave(v)); });
+    var otros=CAMPOS.filter(function(c){
+      if(c.id==='riesgo' || !r[c.id]) return false;
+      if(c.id==='proceso' && r._procDefecto) return false;
+      if((c.id==='nivel'&&r._calc_nivel)||(c.id==='nivel_inherente'&&r._calc_nivel_inherente)) return false;
+      return true;
+    }).length;
+    var esVacia=RX_VACIO.test(norm(r.riesgo)) || otros===0;
+    if(esTotal){ state.filasExcluidas[r._uid]='Fila de totales'; tot++; }
+    else if(esVacia){ state.filasExcluidas[r._uid]='Fila vacía'; vac++; }
+  });
+  refrescar4(); autoguardar();
+  toast((tot+vac)? ('Se excluyeron '+tot+' fila(s) de totales y '+vac+' fila(s) vacías'):'No se encontraron filas vacías ni de totales', (tot+vac)?'ok':'warn');
+}
+function restaurarExcluidas(){
+  var n=Object.keys(state.filasExcluidas).length;
+  if(!confirm('¿Restaurar los '+n+' registros excluidos o fusionados? Las fusiones se deshacen y los registros conservados vuelven a sus valores anteriores.')) return;
+  Object.keys(state.fusiones).forEach(function(u){
+    var f=state.fusiones[u], m=manualPorUid(u);
+    if(m){ Object.keys(m).forEach(function(k){ if(k!=='_uid') delete m[k]; }); Object.keys(f.previo||{}).forEach(function(k){ m[k]=f.previo[k]; }); }
+    else if(f.previo) state.edicionesManuales[u]=f.previo; else delete state.edicionesManuales[u];
+  });
+  state.filasExcluidas={}; state.fusiones={};
+  refrescar4(); autoguardar(); toast(n+' registro(s) restaurados','ok');
+}
+function llenos(r){ return CAMPOS.filter(function(c){ return r[c.id] && !((c.id==='nivel'&&r._calc_nivel)||(c.id==='nivel_inherente'&&r._calc_nivel_inherente)); }).length; }
+function masCompleto(miembros){ var mejor=miembros[0]; miembros.forEach(function(m){ if(llenos(m)>llenos(mejor)) mejor=m; }); return mejor; }
+function describir(r){ return r._manual? 'fila manual «'+r.riesgo+'»' : r._origen+' fila '+r._fila; }
+/* Fusiona un grupo: conserva el registro más completo, une sin repetir los textos de
+   causas, consecuencias, controles y planes, y completa los campos vacíos con los demás. */
+function fusionarGrupo(g,silencioso){
+  if(!silencioso) consolidar();
+  var miembros=state.consolidado.filter(function(r){return r._grupo===g;});
+  if(miembros.length<2) return false;
+  var cons=masCompleto(miembros), otros=miembros.filter(function(m){return m!==cons;});
+  var cambios={};
+  CAMPOS.forEach(function(c){
+    var actual=cons[c.id]||'';
+    if(c.concat){
+      var partes=[];
+      [cons].concat(otros).forEach(function(m){ String(m[c.id]||'').split(' | ').forEach(function(p){ p=p.trim(); if(p && !partes.some(function(x){ return normClave(x)===normClave(p); })) partes.push(p); }); });
+      var unido=partes.join(' | ');
+      if(unido!==actual) cambios[c.id]=unido;
+    } else if(!actual || (c.id==='nivel'&&cons._calc_nivel) || (c.id==='nivel_inherente'&&cons._calc_nivel_inherente)){
+      if(c.id==='nivel'||c.id==='nivel_inherente') return;
+      for(var i=0;i<otros.length;i++){ if(otros[i][c.id]){ cambios[c.id]=otros[i][c.id]; break; } }
+    }
+  });
+  var difs=[];
+  ['probabilidad','impacto','nivel','prob_inherente','imp_inherente','nivel_inherente'].forEach(function(k){
+    var vals=unicos(miembros.map(function(m){return m[k];}).filter(Boolean));
+    if(vals.length>1) difs.push(campoById(k).label+': '+vals.join(' / '));
+  });
+  var obs='Fusionado con '+otros.map(describir).join('; ')+(difs.length?'. Valoraciones distintas entre duplicados (se conservó la del registro más completo, revísela): '+difs.join(' · '):'');
+  var m=manualPorUid(cons._uid), previo;
+  if(m){
+    previo={}; Object.keys(m).forEach(function(k){ if(k!=='_uid') previo[k]=JSON.parse(JSON.stringify(m[k])); });
+    Object.keys(cambios).forEach(function(k){ m[k]=cambios[k]; m._editados=m._editados||{}; m._editados[k]=true; });
+    m._obs=obs;
+  } else {
+    previo=state.edicionesManuales[cons._uid]? JSON.parse(JSON.stringify(state.edicionesManuales[cons._uid])) : null;
+    var e=state.edicionesManuales[cons._uid]=state.edicionesManuales[cons._uid]||{};
+    Object.keys(cambios).forEach(function(k){ e[k]=cambios[k]; });
+    e._obs=obs;
+  }
+  otros.forEach(function(o){ state.filasExcluidas[o._uid]='Fusionado en '+describir(cons); });
+  if(!state.fusiones[cons._uid]) state.fusiones[cons._uid]={absorbidos:[], previo:previo, diferencias:[]};
+  state.fusiones[cons._uid].absorbidos=state.fusiones[cons._uid].absorbidos.concat(otros.map(function(o){return o._uid;}));
+  state.fusiones[cons._uid].diferencias=state.fusiones[cons._uid].diferencias.concat(difs);
+  if(!silencioso){ refrescar4(); autoguardar(); toast(miembros.length+' registros fusionados en uno'+(difs.length?' · revise las valoraciones distintas':''),'ok'); }
+  return true;
+}
+function fusionarTodos(){
+  consolidar();
+  var n=state._nGrupos||0; if(!n) return;
+  if(!confirm('¿Fusionar los '+n+' grupos de posibles duplicados? En cada grupo se conserva el registro más completo y se le unen los textos de los demás. Se puede deshacer con «Restaurar excluidos».')) return;
+  for(var g=1; g<=n; g++) fusionarGrupo(g,true);
+  refrescar4(); autoguardar(); toast(n+' grupo(s) fusionados','ok');
+}
+function excluirDuplicados(g){
+  consolidar();
+  var miembros=state.consolidado.filter(function(r){return r._grupo===g;});
+  if(miembros.length<2) return;
+  var cons=masCompleto(miembros);
+  miembros.forEach(function(m){ if(m!==cons) state.filasExcluidas[m._uid]='Duplicado excluido (se conservó '+describir(cons)+')'; });
+  refrescar4(); autoguardar(); toast((miembros.length-1)+' duplicado(s) excluidos; se conservó el registro más completo','ok');
+}
+
+/* ============================================================
+   PASO 5 — EXPORTACIÓN XLSX  (ZIP método Store, sin librerías)
+   ============================================================ */
+var CRC_T=(function(){ var t=[],c,n,k; for(n=0;n<256;n++){ c=n; for(k=0;k<8;k++) c=c&1? 0xEDB88320^(c>>>1) : c>>>1; t[n]=c>>>0; } return t; })();
+function crc32(b){ var c=0xFFFFFFFF; for(var i=0;i<b.length;i++) c=CRC_T[(c^b[i])&0xFF]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
+function strBytes(s){ return new TextEncoder().encode(s); }
+function xmlEsc(s){ return String(s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[m];}); }
+function limpiarXml(s){ s=String(s).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,''); return s.length>32000? s.slice(0,32000)+'…' : s; }
+/* Índices de estilo definidos en estilosXml() */
+var ST={normal:0, cab:1, txt:2, fecha:3, bajo:4, medio:5, alto:6, critico:7, titulo:8, seccion:9, num:10, fecha14:11};
+function estiloNivel(v){ var i=NIVELES.indexOf(v); return i<0? ST.num : ST.bajo+i; }
+function estilosXml(){
+  var borde='<border><left style="thin"><color rgb="FFD1D5DB"/></left><right style="thin"><color rgb="FFD1D5DB"/></right><top style="thin"><color rgb="FFD1D5DB"/></top><bottom style="thin"><color rgb="FFD1D5DB"/></bottom><diagonal/></border>';
+  function relleno(rgb){ return '<fill><patternFill patternType="solid"><fgColor rgb="FF'+rgb+'"/><bgColor indexed="64"/></patternFill></fill>'; }
+  var al='<alignment horizontal="center" vertical="center"/>';
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'+
+    '<numFmts count="1"><numFmt numFmtId="164" formatCode="yyyy-mm-dd"/></numFmts>'+
+    '<fonts count="3"><font><sz val="10"/><name val="Arial"/><family val="2"/></font>'+
+      '<font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Arial"/><family val="2"/></font>'+
+      '<font><b/><sz val="11"/><color rgb="FF000F47"/><name val="Arial"/><family val="2"/></font></fonts>'+
+    '<fills count="8"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+
+      relleno('000F47')+relleno('92D050')+relleno('FFEB84')+relleno('F8A95D')+relleno('F8696B')+relleno('CEECFF')+'</fills>'+
+    '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>'+borde+'</borders>'+
+    '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'+
+    '<cellXfs count="12">'+
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'+
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>'+
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'+
+      '<xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1">'+al+'</xf>'+
+      '<xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1">'+al+'</xf>'+
+      '<xf numFmtId="0" fontId="0" fillId="4" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1">'+al+'</xf>'+
+      '<xf numFmtId="0" fontId="0" fillId="5" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1">'+al+'</xf>'+
+      '<xf numFmtId="0" fontId="0" fillId="6" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1">'+al+'</xf>'+
+      '<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/>'+
+      '<xf numFmtId="0" fontId="2" fillId="7" borderId="0" xfId="0" applyFont="1" applyFill="1"/>'+
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1">'+al+'</xf>'+
+      '<xf numFmtId="14" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1">'+al+'</xf>'+
+    '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+}
+/* Una hoja: aoa = filas de celdas; cada celda es un valor o {v, s} con el índice de estilo */
+function hojaXml(spec){
+  var filas=spec.aoa.map(function(fila,i){
+    var celdas=fila.map(function(cel,j){
+      var v=cel, s=spec.estiloBase||0;
+      if(cel!==null && typeof cel==='object'){ v=cel.v; if(cel.s!==undefined) s=cel.s; }
+      var ref=colName(j)+(i+1), sa=s?' s="'+s+'"':'';
+      if(v===null||v===undefined||v==='') return s? '<c r="'+ref+'"'+sa+'/>' : '';
+      if(typeof v==='number' && isFinite(v)) return '<c r="'+ref+'"'+sa+'><v>'+v+'</v></c>';
+      return '<c r="'+ref+'"'+sa+' t="inlineStr"><is><t xml:space="preserve">'+xmlEsc(limpiarXml(v))+'</t></is></c>';
+    }).join('');
+    return '<row r="'+(i+1)+'">'+celdas+'</row>';
+  }).join('');
+  var x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">';
+  if(spec.congelar) x+='<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A2" sqref="A2"/></sheetView></sheetViews>';
+  x+='<sheetFormatPr defaultRowHeight="13.2"/>';
+  if(spec.anchos&&spec.anchos.length) x+='<cols>'+spec.anchos.map(function(w,j){ return '<col min="'+(j+1)+'" max="'+(j+1)+'" width="'+w+'" customWidth="1"/>'; }).join('')+'</cols>';
+  x+='<sheetData>'+filas+'</sheetData>';
+  if(spec.autoFiltro) x+='<autoFilter ref="'+spec.autoFiltro+'"/>';
+  if(spec.combinadas&&spec.combinadas.length) x+='<mergeCells count="'+spec.combinadas.length+'">'+spec.combinadas.map(function(r){ return '<mergeCell ref="'+r+'"/>'; }).join('')+'</mergeCells>';
+  return x+'</worksheet>';
+}
+function zipStore(archivos){
+  var locales=[], central=[], off=0;
+  archivos.forEach(function(f){
+    var nb=strBytes(f.name), db=f.data, crc=crc32(db);
+    var lh=new Uint8Array(30+nb.length); var dv=new DataView(lh.buffer);
+    dv.setUint32(0,0x04034b50,true); dv.setUint16(4,20,true); dv.setUint16(6,0x0800,true); dv.setUint16(8,0,true);
+    dv.setUint16(10,0,true); dv.setUint16(12,0x21,true); dv.setUint32(14,crc,true);
+    dv.setUint32(18,db.length,true); dv.setUint32(22,db.length,true);
+    dv.setUint16(26,nb.length,true); dv.setUint16(28,0,true);
+    lh.set(nb,30);
+    locales.push(lh,db);
+    var ch=new Uint8Array(46+nb.length); var cv=new DataView(ch.buffer);
+    cv.setUint32(0,0x02014b50,true); cv.setUint16(4,20,true); cv.setUint16(6,20,true);
+    cv.setUint16(8,0x0800,true); cv.setUint16(10,0,true); cv.setUint16(12,0,true); cv.setUint16(14,0x21,true);
+    cv.setUint32(16,crc,true); cv.setUint32(20,db.length,true); cv.setUint32(24,db.length,true);
+    cv.setUint16(28,nb.length,true); cv.setUint16(30,0,true); cv.setUint16(32,0,true);
+    cv.setUint16(34,0,true); cv.setUint16(36,0,true); cv.setUint32(38,0,true); cv.setUint32(42,off,true);
+    ch.set(nb,46);
+    central.push(ch);
+    off+=lh.length+db.length;
+  });
+  var cdSize=central.reduce(function(s,c){return s+c.length;},0);
+  var eocd=new Uint8Array(22); var ev=new DataView(eocd.buffer);
+  ev.setUint32(0,0x06054b50,true); ev.setUint16(4,0,true); ev.setUint16(6,0,true);
+  ev.setUint16(8,archivos.length,true); ev.setUint16(10,archivos.length,true);
+  ev.setUint32(12,cdSize,true); ev.setUint32(16,off,true); ev.setUint16(20,0,true);
+  var total=off+cdSize+22, out=new Uint8Array(total), p=0;
+  locales.forEach(function(b){ out.set(b,p); p+=b.length; });
+  central.forEach(function(b){ out.set(b,p); p+=b.length; });
+  out.set(eocd,p);
+  return out;
+}
+function construirXlsx(hojas){
+  var arch=[], n=hojas.length;
+  arch.push({name:'[Content_Types].xml', data:strBytes(
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
+    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'+
+    '<Default Extension="xml" ContentType="application/xml"/>'+
+    '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'+
+    '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'+
+    hojas.map(function(h,i){ return '<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'; }).join('')+
+    '</Types>')});
+  arch.push({name:'_rels/.rels', data:strBytes(
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>')});
+  var nombres=hojas.map(function(h){ return String(h.nombre).replace(/[\\\/\?\*\[\]:]/g,'_').slice(0,31); });
+  var defs=hojas.map(function(h,i){ return h.autoFiltro? '<definedName name="_xlnm._FilterDatabase" localSheetId="'+i+'" hidden="1">\''+xmlEsc(nombres[i].replace(/'/g,"''"))+'\'!'+h.autoFiltro.replace(/([A-Z]+)(\d+)/g,'$$$1$$$2')+'</definedName>' : ''; }).join('');
+  arch.push({name:'xl/workbook.xml', data:strBytes(
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>'+
+    nombres.map(function(nm,i){ return '<sheet name="'+xmlEsc(nm)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>'; }).join('')+
+    '</sheets>'+(defs?'<definedNames>'+defs+'</definedNames>':'')+'</workbook>')});
+  arch.push({name:'xl/_rels/workbook.xml.rels', data:strBytes(
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+    hojas.map(function(h,i){ return '<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>'; }).join('')+
+    '<Relationship Id="rId'+(n+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'+
+    '</Relationships>')});
+  arch.push({name:'xl/styles.xml', data:strBytes(estilosXml())});
+  hojas.forEach(function(h,i){ arch.push({name:'xl/worksheets/sheet'+(i+1)+'.xml', data:strBytes(hojaXml(h))}); });
+  return zipStore(arch);
+}
+function descargar(bytes,nombre,tipo){
+  var b=new Blob([bytes],{type:tipo||'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  var u=URL.createObjectURL(b), a=document.createElement('a');
+  a.href=u; a.download=nombre; document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(u); a.remove(); },400);
+}
+function contarPor(regs,campo,vacio){ var m={}; regs.forEach(function(r){ var k=r[campo]||vacio; m[k]=(m[k]||0)+1; }); return m; }
+function ordenNiveles(obj){ return Object.keys(obj).sort(function(a,b){ var x=NIVELES.indexOf(a), y=NIVELES.indexOf(b); if(x<0) x=99; if(y<0) y=99; return x-y || a.localeCompare(b,'es'); }); }
+var COLOR_HEAT={1:'#BBF7D0',2:'#FEF08A',3:'#FDBA74',4:'#FCA5A5'};
+function renderMatrizCalor5(regs){
+  var tieneInh=regs.some(function(r){ return entero15(r.prob_inherente) && entero15(r.imp_inherente); });
+  var modo=(UI.vistaHeat5==='inherente' && tieneInh)? 'inherente' : 'residual';
+  var cp=modo==='inherente'?'prob_inherente':'probabilidad', ci=modo==='inherente'?'imp_inherente':'impacto';
+  var grid={}, totalUbic=0;
+  regs.forEach(function(r){
+    var p=entero15(r[cp]), i=entero15(r[ci]);
+    if(!p||!i) return;
+    totalUbic++;
+    var k=p+'-'+i; (grid[k]=grid[k]||[]).push(r);
+  });
+  var svg='<svg class="heat5-svg" viewBox="0 0 360 315" role="img" aria-label="Matriz de Calor 5 por 5 Consolidada">';
+  svg+='<text x="195" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">IMPACTO ('+(modo==='inherente'?'INHERENTE':'RESIDUAL')+') →</text>';
+  svg+='<text x="14" y="165" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor" transform="rotate(-90 14 165)">PROBABILIDAD →</text>';
+  for(var col=1;col<=5;col++){
+    var cx=55+(col-1)*58;
+    svg+='<text x="'+(cx+27)+'" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">I'+col+'</text>';
+  }
+  for(var row=0;row<5;row++){
+    var p=5-row, ry=42+row*50;
+    svg+='<text x="44" y="'+(ry+29)+'" text-anchor="end" font-size="11" font-weight="700" fill="currentColor">P'+p+'</text>';
+    for(var i=1;i<=5;i++){
+      var x=55+(i-1)*58, s=p*i, nb=NIVELES.indexOf(nivelDePuntaje(s))+1;
+      var k=p+'-'+i, lista=grid[k]||[], n=lista.length, sel=UI.celdaHeat5===k;
+      svg+='<g class="heat5-cell'+(sel?' heat5-sel':'')+'" onclick="seleccionarCeldaHeat5(\''+k+'\')">'+
+        '<title>P'+p+' × I'+i+' = '+s+' ('+nivelDePuntaje(s)+'): '+n+' riesgo(s). Clic para ver el detalle.</title>'+
+        '<rect x="'+x+'" y="'+ry+'" width="54" height="46" rx="5" fill="'+COLOR_HEAT[nb]+'" stroke="#9CA3AF" stroke-width="1"/>'+
+        '<text x="'+(x+7)+'" y="'+(ry+13)+'" font-size="9.5" font-weight="600" fill="#374151">'+p+'×'+i+'='+s+'</text>'+
+        '<text x="'+(x+27)+'" y="'+(ry+33)+'" text-anchor="middle" font-size="15" font-weight="800" fill="'+(n?'#111827':'#6B7280')+'">'+n+'</text>'+
+      '</g>';
+    }
+  }
+  svg+='</svg>';
+  var det='';
+  if(UI.celdaHeat5){
+    var partesK=UI.celdaHeat5.split('-'), pSel=+partesK[0], iSel=+partesK[1], sSel=pSel*iSel;
+    var enCelda=grid[UI.celdaHeat5]||[];
+    det='<div class="heat-detail"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
+      '<b>Cuadrante (P'+pSel+', I'+iSel+') · Puntaje '+sSel+' ('+nivelDePuntaje(sSel)+') — '+enCelda.length+' riesgo(s)</b>'+
+      '<button class="btn-secondary btn-sm no-print" onclick="seleccionarCeldaHeat5(null)">✕ Cerrar (Esc)</button></div>';
+    if(enCelda.length){
+      det+='<div class="tbl-scroll" style="max-height:190px"><table><thead><tr><th>Código</th><th>Proceso</th><th>Riesgo</th><th>Origen</th></tr></thead><tbody>'+
+        enCelda.map(function(r){ return '<tr><td><b>'+escH(r.codigo||'—')+'</b></td><td>'+escH(r.proceso||'—')+'</td><td>'+escH(r.riesgo)+'</td><td class="mini">'+escH(r._origen)+'</td></tr>'; }).join('')+
+        '</tbody></table></div>';
+    } else det+='<p class="hint">Ningún riesgo cae en este cuadrante en la evaluación '+modo+'.</p>';
+    det+='</div>';
+  }
+  return '<div class="viz-box">'+
+    '<div class="viz-head"><h4>🔥 Matriz de Calor 5 × 5 Consolidada ('+totalUbic+' ubicados)</h4>'+
+      '<div class="seg-toggle no-print">'+
+        '<button class="'+(modo==='residual'?'active':'')+'" onclick="cambiarVistaHeat5(\'residual\')">Evaluación Residual</button>'+
+        '<button class="'+(modo==='inherente'?'active':'')+'" '+(tieneInh?'':'disabled title="Ningún registro tiene Probabilidad e Impacto Inherente"')+' onclick="cambiarVistaHeat5(\'inherente\')">Evaluación Inherente</button>'+
+      '</div>'+
+    '</div>'+
+    '<p class="hint">Una <b>matriz de calor</b> es una cuadrícula que cruza la probabilidad (filas) con el impacto (columnas) y pinta cada combinación según su gravedad, de verde (bajo) a rojo (crítico). '+
+    'No existe una sola matriz de calor: cada organización define la suya; esta usa las bandas del consolidador (puntaje P × I). '+
+    'Cada cuadrante muestra cuántos riesgos consolidados caen en él. <b>Haga clic en una celda</b> para ver cuáles son.</p>'+
+    svg+
+    '<div class="leg-row">'+
+      '<span><span class="pill lvb-1" style="color:#111">1–4</span> Bajo</span>'+
+      '<span><span class="pill lvb-2" style="color:#111">5–9</span> Medio</span>'+
+      '<span><span class="pill lvb-3" style="color:#111">10–15</span> Alto</span>'+
+      '<span><span class="pill lvb-4" style="color:#111">16–25</span> Crítico</span>'+
+    '</div>'+det+'</div>';
+}
+function cambiarVistaHeat5(m){ UI.vistaHeat5=m; renderPaso5(); }
+function seleccionarCeldaHeat5(k){ UI.celdaHeat5=(UI.celdaHeat5===k?null:k); renderPaso5(); }
+function renderBarrasProceso5(regs){
+  var usarProc=regs.some(function(r){return r.proceso;});
+  var campo=usarProc?'proceso':'_origen';
+  var grupos={}, maxT=0;
+  regs.forEach(function(r){
+    var k=r[campo]||'(Sin asignar)';
+    if(!grupos[k]) grupos[k]={Crítico:0,Alto:0,Medio:0,Bajo:0,Otro:0,total:0};
+    var nv=NIVELES.indexOf(r.nivel)>=0? r.nivel : 'Otro';
+    grupos[k][nv]++; grupos[k].total++;
+    if(grupos[k].total>maxT) maxT=grupos[k].total;
+  });
+  var claves=Object.keys(grupos).sort(function(a,b){ return (grupos[b].Crítico*100+grupos[b].Alto*10+grupos[b].total)-(grupos[a].Crítico*100+grupos[a].Alto*10+grupos[a].total); });
+  var cols={Crítico:'#FCA5A5',Alto:'#FDBA74',Medio:'#FEF08A',Bajo:'#BBF7D0',Otro:'#E5E7EB'};
+  var filas=claves.map(function(k){
+    var g=grupos[k];
+    var segs=['Crítico','Alto','Medio','Bajo','Otro'].map(function(nv){
+      if(!g[nv]) return '';
+      var pct=(g[nv]/g.total*100).toFixed(1);
+      return '<div class="bar-seg" style="width:'+pct+'%;background:'+cols[nv]+'" title="'+escAttr(k+' · '+nv+': '+g[nv]+' ('+pct+' %)')+'">'+(g[nv]>0?g[nv]:'')+'</div>';
+    }).join('');
+    return '<div class="bar-row"><div class="bar-lbl" title="'+escAttr(k)+'">'+escH(k)+'</div><div class="bar-track">'+segs+'</div><div class="val-count"><b>'+g.total+'</b> reg.</div></div>';
+  }).join('');
+  return '<div class="viz-box">'+
+    '<div class="viz-head"><h4>📊 Distribución de Riesgos por '+(usarProc?'Proceso / Gerencia':'Archivo de Origen')+'</h4></div>'+
+    '<p class="hint">Aporte de riesgos Críticos, Altos, Medios y Bajos por cada '+(usarProc?'proceso o gerencia':'matriz de origen')+' consolidada.</p>'+
+    '<div>'+filas+'</div>'+
+    '<div class="leg-row" style="margin-top:auto">'+
+      '<span><span class="pill lvb-4" style="color:#111">■</span> Crítico</span>'+
+      '<span><span class="pill lvb-3" style="color:#111">■</span> Alto</span>'+
+      '<span><span class="pill lvb-2" style="color:#111">■</span> Medio</span>'+
+      '<span><span class="pill lvb-1" style="color:#111">■</span> Bajo</span>'+
+      (claves.some(function(k){return grupos[k].Otro;})? '<span><span class="pill" style="background:#E5E7EB;color:#111">■</span> Sin nivel</span>':'')+
+    '</div></div>';
+}
+function textoResumenEjecutivo(){
+  var regs=state.consolidado||[], excl=state._excluidas||[];
+  var nArch=state.archivos.length;
+  var brutos=state.archivos.reduce(function(s,a){return s+(a.datos?a.datos.length:0);},0);
+  var sinR=Object.keys(state._sinRiesgo||{}).reduce(function(s,k){return s+(state._sinRiesgo[k]||0);},0);
+  var nExclTot=excl.filter(function(r){return /totales|vacía/i.test(r._excluida||'');}).length;
+  var nExclMan=excl.filter(function(r){return /manualmente/i.test(r._excluida||'');}).length;
+  var nExclDup=excl.filter(function(r){return /^Duplicado excluido/i.test(r._excluida||'');}).length;
+  function pl(n,s,p){ return n+' '+(n===1?s:p); }
+  var nFus=Object.keys(state.fusiones||{}).length;
+  var nAbs=Object.keys(state.fusiones||{}).reduce(function(s,u){return s+((state.fusiones[u].absorbidos||[]).length);},0);
+  var dupsPend=regs.filter(function(r){return r._dup;}).length;
+  /* Valores de escala que cambiaron al unificarlos (no se cuentan los que quedaron igual) */
+  var nEsc=0, nInc=0;
+  camposEscala().forEach(function(c){
+    state.archivos.forEach(function(a){
+      var m=((state.normalizacion[c.id]||{})[a.id])||{};
+      Object.keys(m).forEach(function(v){ if(m[v]!=='' && m[v]!==undefined && String(m[v])!==v) nEsc++; });
+      nInc+=Object.keys(((state.inciertos[c.id]||{})[a.id])||{}).length;
+    });
+  });
+  var nCalc=regs.filter(function(r){ return r._calc_nivel||r._calc_nivel_inherente; }).length;
+  var nHomoCat=Object.keys((state.homologacion||{}).categoria||{}).length;
+  var nHomoProc=Object.keys((state.homologacion||{}).proceso||{}).length;
+  var porN=contarPor(regs,'nivel','Sin calificar');
+  var total=regs.length||1;
+  function pct(n){ return ((n||0)*100/total).toFixed(1)+'%'; }
+  var org=state.empresa? ('para '+state.empresa) : 'del portafolio consolidado';
+  var l=[];
+  l.push('RESUMEN EJECUTIVO DEL PROCESO DE CONSOLIDACIÓN Y HOMOLOGACIÓN DE RIESGOS ('+hoyISO()+')');
+  l.push('• Fuentes integradas: '+nArch+' matriz(ces)/hoja(s) de origen '+org+' ('+state.archivos.map(function(a){return a.nombre;}).join(', ')+').');
+  l.push('• Depuración de datos: se leyeron '+pl(brutos,'registro','registros')+' con contenido; '+pl(sinR,'fila sin nombre de riesgo quedó','filas sin nombre de riesgo quedaron')+' fuera, '+
+    pl(nExclTot,'fila de totales o vacía se excluyó','filas de totales o vacías se excluyeron')+' y '+pl(nExclMan,'registro se excluyó','registros se excluyeron')+' a mano.');
+  l.push('• Gestión de duplicados: '+pl(nFus,'grupo fusionado','grupos fusionados')+' ('+pl(nAbs,'registro absorbido','registros absorbidos')+', con trazabilidad), '+
+    pl(nExclDup,'duplicado excluido','duplicados excluidos')+' y '+pl(state._nGrupos||0,'grupo pendiente de revisión','grupos pendientes de revisión')+' ('+pl(dupsPend,'registro','registros')+').');
+  l.push('• Estandarización y homologación: '+pl(nEsc,'valor de escala convertido','valores de escala convertidos')+' a la escala común (probabilidad e impacto de 1 a 5, nivel de Bajo a Crítico, efectividad de Débil a Fuerte)'+
+    (nInc?'; '+pl(nInc,'valor no se reconoció y quedó','valores no se reconocieron y quedaron')+' en el valor medio para revisión':'')+'; '+pl(nCalc,'registro tiene','registros tienen')+' el nivel calculado como probabilidad × impacto; '+
+    pl(nHomoProc,'nombre de proceso unificado','nombres de proceso unificados')+' y '+pl(nHomoCat,'categoría unificada','categorías unificadas')+'.');
+  l.push('• Distribución del portafolio resultante ('+regs.length+' riesgos activos): Crítico: '+(porN['Crítico']||0)+' ('+pct(porN['Crítico'])+') · Alto: '+(porN['Alto']||0)+' ('+pct(porN['Alto'])+') · Medio: '+(porN['Medio']||0)+' ('+pct(porN['Medio'])+') · Bajo: '+(porN['Bajo']||0)+' ('+pct(porN['Bajo'])+')'+(porN['Sin calificar']?' · Sin calificar: '+porN['Sin calificar']+' ('+pct(porN['Sin calificar'])+')':'')+'.');
+  return l.join('\n');
+}
+function copiarResumenEjecutivo(){
+  var txt=textoResumenEjecutivo();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ toast('Resumen ejecutivo copiado al portapapeles','ok'); }).catch(function(){ fallbackCopy(txt); });
+  } else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); toast('Resumen ejecutivo copiado al portapapeles','ok'); }catch(e){ toast('Seleccione el texto manualmente para copiarlo','warn'); }
+  ta.remove();
+}
+function renderPaso5(){
+  consolidar();
+  var regs=state.consolidado;
+  var pend=state._nGrupos||0;
+  var colsExtra=state._colsExtra||[];
+  /* Encabezado que solo aparece al imprimir (la cabecera de la app se oculta en el papel) */
+  var h='<div class="print-head"><h2>Consolidador de Matrices de Riesgos · Resumen del portafolio consolidado</h2>'+
+    '<div class="hint">'+escH(state.empresa||'Portafolio consolidado')+' · '+hoyISO()+' · '+regs.length+' riesgos de '+state.archivos.length+' matriz(ces) de origen</div></div>';
+  h+='<div class="card"><h3>5 · Resumen Ejecutivo y Exportación del Consolidado</h3>'+
+    '<p class="hint">Genera un Excel con cuatro hojas: <b>Consolidado</b> (todos los registros unificados, con filtros, encabezado fijo y colores por nivel), '+
+    '<b>Trazabilidad</b> (de qué archivo y fila salió cada registro, su <code>codigo_origen</code> y qué se le cambió), <b>Resumen</b> (conteos por origen, nivel y categoría) y '+
+    '<b>Diccionario_Homologacion</b> (pista de auditoría: archivos y hojas cargados, columna original de cada campo, equivalencias de escalas, unificaciones e intervenciones manuales).</p>'+
+    '<div class="banner banner-ok">'+regs.length+' registros listos para exportar desde '+state.archivos.length+' matriz(ces)'+((state._excluidas||[]).length?' · '+state._excluidas.length+' excluidos o fusionados':'')+'.</div>'+
+    (pend? '<div class="banner banner-warn">Quedan '+pend+' grupo(s) de posibles duplicados sin resolver. Puede exportar así o resolverlos en el paso 4.</div>':'')+
+    bloqueRecodificarHtml()+
+    '<div class="opt-box no-print">'+
+      '<label class="chk-row"><input type="checkbox" '+(state.opciones.conservarNoMapeadas?'checked':'')+' onchange="state.opciones.conservarNoMapeadas=this.checked;autoguardar();renderPaso5()"> '+
+      '<span><b>Conservar columnas adicionales no mapeadas al final de la hoja Consolidado (prefijadas con <code>[Extra] NombreColumna</code>)</b> '+
+      '<span class="hint">— incluye las '+colsExtra.length+' columna(s) marcadas como «— Ignorar —» en el Paso 2 ('+(colsExtra.length?colsExtra.map(function(c){return '<code>[Extra] '+escH(c)+'</code>';}).join(', '):'ninguna columna ignorada actualmente')+') como columnas anexo al final del Excel, para que ningún metadato específico de un área se pierda.</span></span></label>'+
+    '</div>'+
+    '<div class="toolbar"><button class="btn-primary" onclick="exportar()">⬇ Descargar Excel consolidado</button>'+
+    '<button class="btn-secondary" onclick="window.print()">🖨 Imprimir Resumen y Matriz de Calor (PDF)</button></div></div>';
+
+  /* Bloque Resumen Ejecutivo Copiable */
+  h+='<div class="card"><div class="viz-head"><h3>📋 Resumen Ejecutivo del Proceso de Consolidación (Copiar para informe)</h3>'+
+    '<button class="btn-secondary btn-sm no-print" onclick="copiarResumenEjecutivo()">📋 Copiar texto para informe</button></div>'+
+    '<p class="hint no-print" style="margin-bottom:8px">Síntesis redactada automáticamente con las métricas de homologación, depuración y distribución porcentual del portafolio resultante.</p>'+
+    '<div class="exec-summary" id="execSumTxt">'+escH(textoResumenEjecutivo())+'</div></div>';
+
+  /* Visualizaciones Ejecutivas en Paso 5: Matriz de Calor 5x5 + Barras Apiladas por Proceso */
+  h+='<div class="card"><h3>Visualización Ejecutiva del Portafolio Consolidado</h3>'+
+    '<div class="viz-grid">'+renderMatrizCalor5(regs)+renderBarrasProceso5(regs)+'</div></div>';
+
+  var porNivel=contarPor(regs,'nivel','(sin nivel)'), porNivelI=contarPor(regs,'nivel_inherente','(sin nivel)');
+  function filaNivel(k,obj){ var cn=claseNivel(k); return '<tr><td>'+(cn?'<span class="badge badge-'+cn+'">'+escH(k)+'</span>':escH(k))+'</td><td class="num">'+obj[k]+'</td><td class="num">'+((obj[k]/(regs.length||1))*100).toFixed(1)+'%</td></tr>'; }
+  h+='<div class="card"><h3>Tablas de Resumen por Nivel de Riesgo</h3><div class="kpi-grid">'+
+    '<div><div class="section-title">Nivel residual</div><div class="tbl-scroll"><table><thead><tr><th>Nivel</th><th>Registros</th><th>%</th></tr></thead><tbody>'+ordenNiveles(porNivel).map(function(k){return filaNivel(k,porNivel);}).join('')+'</tbody></table></div></div>'+
+    (regs.some(function(r){return r.nivel_inherente;})? '<div><div class="section-title">Nivel inherente</div><div class="tbl-scroll"><table><thead><tr><th>Nivel</th><th>Registros</th><th>%</th></tr></thead><tbody>'+ordenNiveles(porNivelI).map(function(k){return filaNivel(k,porNivelI);}).join('')+'</tbody></table></div></div>':'')+
+    '</div></div>';
+
+  h+='<div class="card no-print"><h3>Llevar el portafolio a otras herramientas</h3>'+
+    '<p class="hint">Descarga el consolidado en el formato de respaldo que abre cada aplicación hermana. Los riesgos sin probabilidad e impacto de 1 a 5 no se pueden ubicar en una matriz y se omiten en Risk Focus 3D y en el tablero (el aviso dice cuántos).</p>'+
+    '<div class="inline-field"><label for="empresa" style="margin:0">Organización o cliente</label><input id="empresa" value="'+escAttr(state.empresa)+'" placeholder="Ej.: Empresa Ejemplo S.A." onchange="state.empresa=this.value.trim();autoguardar();renderPaso5()"></div>'+
+    '<div class="bridge-grid">'+
+      '<div class="bridge"><h4>Risk Focus 3D</h4><p class="hint">Riesgos con probabilidad e impacto (1–5), efectividad del control como Débil / Moderado / Fuerte y los planes como recomendaciones. Se abre en el Editor con «Importar respaldo (JSON)»; reemplaza los datos cargados allí.</p><button class="btn-secondary" onclick="exportarJsonRiskFocus()">📤 Exportar JSON para Risk Focus 3D</button></div>'+
+      '<div class="bridge"><h4>Dashboard de Riesgos ERM</h4><p class="hint">Valoración inherente y residual, controles con tipo y efectividad, y planes de acción. Se abre con «Importar respaldo (JSON)»; reemplaza los datos actuales.</p><button class="btn-secondary" onclick="exportarJsonDashboard()">📤 Exportar JSON para Dashboard de Riesgos ERM</button></div>'+
+      '<div class="bridge"><h4>Mapa de Interdependencia</h4><p class="hint">Cada riesgo como nodo, con su proceso, categoría y magnitud (1–4, según el nivel). Las relaciones entre riesgos se dibujan después en el mapa. Se pega en el cajón «Matriz de riesgos» del mapa.</p><button class="btn-secondary" onclick="exportarJsonMapa()">📤 Exportar JSON para Mapa de Interdependencia</button></div>'+
+    '</div></div>';
+
+  /* Tabla Maestra Consolidada para vista e impresión limpia (@media print) */
+  h+='<div class="card print-only"><h3>Tabla Maestra Consolidada ('+regs.length+' riesgos)</h3>'+
+    '<table><thead><tr><th>Código</th><th>Cód. Origen</th><th>Proceso</th><th>Riesgo</th><th>Categoría</th><th>P. Res</th><th>I. Res</th><th>Nivel Residual</th><th>Control</th><th>Responsable</th></tr></thead><tbody>'+
+    regs.map(function(r){
+      var cn=claseNivel(r.nivel);
+      return '<tr><td><b>'+escH(r.codigo||'—')+'</b></td><td>'+escH(r.codigo_origen||'—')+'</td><td>'+escH(r.proceso||'')+'</td><td>'+escH(r.riesgo||'')+'</td><td>'+escH(r.categoria||'')+'</td><td class="num">'+escH(r.probabilidad||'')+'</td><td class="num">'+escH(r.impacto||'')+'</td><td class="num '+cn+'">'+escH(r.nivel||'')+'</td><td>'+escH(r.control||'')+'</td><td>'+escH(r.responsable||'')+'</td></tr>';
+    }).join('')+'</tbody></table></div>';
+
+  document.getElementById('body').innerHTML=h;
+}
+function tablaDiccionario(){
+  var aoa=[], S=function(t){ return {v:t, s:ST.seccion}; }, C=function(t){ return {v:t, s:ST.cab}; }, T=function(t){ return {v:t===undefined||t===null?'':t, s:ST.txt}; };
+  aoa.push([{v:'Diccionario de homologación — pista de auditoría de la consolidación', s:ST.titulo}]);
+  aoa.push([T('Generado: '+new Date().toLocaleString('es-CO')+' · Consolidador de Matrices de Riesgos, Versión beta'+(state.empresa?' · '+state.empresa:''))]);
+  aoa.push([]);
+  aoa.push([S('1. Archivos y hojas cargados')]);
+  aoa.push(['Archivo','Hoja','Fila de encabezado','Registros leídos','Codificación / descompresión','Celdas combinadas completadas','Rellenar hacia abajo','Proceso por defecto'].map(C));
+  state.archivos.forEach(function(a){
+    aoa.push([T(a.nombre),T(a.hoja),T(a.filaCab+1),T(a.datos.length),T(a.tipo==='csv'?(a.codificacion+' · separador '+(NOMBRE_DELIM[a.delimitador]||a.delimitador)):a.motor),T(a.combinadas||0),T(a.rellenarAbajo?'Sí':'No'),T(a.procesoDefecto?(a.procesoTexto||nombreBase(a)):'No')]);
+  });
+  aoa.push([]);
+  aoa.push([S('2. Columnas originales → campos estándar')]);
+  aoa.push(['Archivo','Hoja','Campo estándar','Columna(s) original(es)','Detección'].map(C));
+  state.archivos.forEach(function(a){
+    CAMPOS.forEach(function(c){
+      var cols=colsDe(a,c.id); if(!cols.length) return;
+      var auto=JSON.stringify(a.autoMapeo[c.id]||null)===JSON.stringify(cols);
+      aoa.push([T(a.nombre),T(a.hoja),T(c.label),T(cols.map(function(ci){ return colName(ci)+' · '+a.cabeceras[ci]; }).join(' | ')),T(auto?'Automática':'Ajustada a mano')]);
+    });
+  });
+  aoa.push([]);
+  aoa.push([S('3. Equivalencias de escalas aplicadas (paso 3)')]);
+  aoa.push(['Campo','Archivo','Escala de origen','Valor original','Valor unificado','Registros','Observación'].map(C));
+  camposEscala().forEach(function(c){
+    state.archivos.forEach(function(a){
+      valoresArchivo(c.id,a).forEach(function(v){
+        var dest=((state.normalizacion[c.id]||{})[a.id]||{})[v.valor];
+        var inc=(((state.inciertos[c.id]||{})[a.id])||{})[v.valor];
+        aoa.push([T(c.label),T(a.nombre),T(c.escala==='p5'?'1 a '+escalaDe(c,a):''),T(v.valor),T(dest||'(se conservó)'),T(v.n),T(inc?'No reconocido: valor medio por defecto':'')]);
+      });
+    });
+  });
+  aoa.push([]);
+  aoa.push([S('4. Unificación de categorías y procesos')]);
+  aoa.push(['Campo','Valor original','Nombre estándar'].map(C));
+  ['categoria','proceso'].forEach(function(k){ Object.keys(state.homologacion[k]).forEach(function(v){ aoa.push([T(k==='categoria'?'Categoría':'Proceso'),T(v),T(state.homologacion[k][v])]); }); });
+  aoa.push([]);
+  aoa.push([S('5. Parámetros de cálculo')]);
+  aoa.push(['Parámetro','Valor'].map(C));
+  aoa.push([T('Nivel = Probabilidad × Impacto'),T('1–4 Bajo · 5–9 Medio · 10–15 Alto · 16–25 Crítico')]);
+  aoa.push([T('Recalcular el nivel según P × I'),T(state.opciones.recalcularNivel?'Sí (reemplaza el nivel de los archivos)':'No (solo completa niveles vacíos)')]);
+  aoa.push([T('Recodificar códigos únicos estandarizados'),T(state.opciones.recodificar?'Sí (prefijo '+(state.opciones.prefijoCodigo||'automático de 3 letras del proceso')+')':'No (se conservan códigos de origen)')]);
+  aoa.push([T('Conservar columnas adicionales no mapeadas'),T(state.opciones.conservarNoMapeadas?'Sí (prefijadas con [Extra] al final de Consolidado)':'No')]);
+  aoa.push([T('Criterio de duplicados'),T((CRITERIOS_DUP.filter(function(c){return c.id===state.opciones.criterioDup;})[0]||{}).t||'')]);
+  aoa.push([]);
+  aoa.push([S('6. Intervenciones manuales')]);
+  aoa.push(['Tipo','Registro','Detalle'].map(C));
+  var todos=state.consolidado.concat(state._excluidas||[]);
+  function etiqueta(u){ var r=todos.filter(function(x){return x._uid===u;})[0]; return r? describir(r)+' — '+r.riesgo : u; }
+  Object.keys(state.edicionesManuales).forEach(function(u){
+    var e=state.edicionesManuales[u];
+    Object.keys(e).forEach(function(k){ if(k.charAt(0)==='_') return; var c=campoById(k); aoa.push([T('Edición'),T(etiqueta(u)),T((c?c.label:k)+' = «'+e[k]+'»')]); });
+  });
+  state.filasManuales.forEach(function(m){ aoa.push([T('Fila agregada'),T(m.riesgo),T(state.filasExcluidas[m._uid]?'Excluida después':'')]); });
+  Object.keys(state.fusiones).forEach(function(u){ var f=state.fusiones[u]; aoa.push([T('Fusión'),T(etiqueta(u)),T('Absorbió '+f.absorbidos.length+' registro(s)'+(f.diferencias.length?' · valoraciones distintas: '+f.diferencias.join(' · '):''))]); });
+  (state._excluidas||[]).forEach(function(r){ aoa.push([T('Exclusión'),T(describir(r)+' — '+r.riesgo),T(r._excluida)]); });
+  return {nombre:'Diccionario_Homologacion', aoa:aoa, anchos:[34,40,34,44,30,16,26,26]};
+}
+function exportar(){
+  consolidar();
+  var regs=state.consolidado;
+  if(!regs.length){ toast('No hay registros para exportar','err'); return; }
+  var colsExtra=state.opciones.conservarNoMapeadas? (state._colsExtra||[]) : [];
+  var anchoCampo={proceso:20,codigo:11,riesgo:42,descripcion:46,categoria:18,origen_riesgo:14,causas:42,consecuencias:42,prob_inherente:12,imp_inherente:12,nivel_inherente:13,control:44,tipo_control:18,efectividad_control:14,probabilidad:12,impacto:12,nivel:13,responsable:24,estado:14,plan:42,fecha:13};
+  var cab=['Matriz de origen','Hoja','Fila'].concat(CAMPOS.map(function(c){return c.label;})).concat(['Puntaje inherente (P×I)','Puntaje residual (P×I)','Posible duplicado','Observaciones']).concat(colsExtra.map(function(c){return '[Extra] '+c;}));
+  var cons=[cab.map(function(t){ return {v:t, s:ST.cab}; })];
+  regs.forEach(function(r){
+    var fila=[{v:r._origen,s:ST.txt},{v:r._hoja||'',s:ST.txt},{v:typeof r._fila==='number'?r._fila:'',s:ST.num}];
+    CAMPOS.forEach(function(c){
+      var v=r[c.id]||'', s=ST.txt;
+      if(c.id==='nivel'||c.id==='nivel_inherente') s=estiloNivel(v);
+      else if(c.id==='fecha' && fechaASerial(v)!==null){ v=fechaASerial(v); s=ST.fecha; }
+      else if(c.escala==='p5' && entero15(v)){ v=entero15(v); s=ST.num; }
+      fila.push({v:v,s:s});
+    });
+    fila.push({v:r.puntaje_inherente||'',s:ST.num},{v:r.puntaje||'',s:ST.num},{v:r._dup?'Sí (grupo '+r._grupo+')':'No',s:ST.num},{v:r._obs||'',s:ST.txt});
+    colsExtra.forEach(function(ce){ fila.push({v:(r._extras&&r._extras[ce])||'',s:ST.txt}); });
+    cons.push(fila);
+  });
+  var anchos=[22,16,7].concat(CAMPOS.map(function(c){return anchoCampo[c.id]||16;})).concat([12,12,14,50]).concat(colsExtra.map(function(){return 22;}));
+  var traz=[['Matriz de origen','Hoja','Fila original','Código original','Código consolidado','Riesgo','Posible duplicado','Campos editados a mano','Nivel calculado (P × I)','Proceso por defecto','Relleno hacia abajo','Unificación aplicada','Observaciones'].map(function(t){return {v:t,s:ST.cab};})];
+  regs.forEach(function(r){
+    var homo=['categoria','proceso'].filter(function(k){return r['_orig_'+k];}).map(function(k){ return campoById(k).label+': '+r['_orig_'+k]+' → '+r[k]; }).join(' · ');
+    traz.push([r._origen,r._hoja||'',typeof r._fila==='number'?r._fila:'manual',r.codigo_origen||'',r.codigo,r.riesgo,r._dup?'Sí (grupo '+r._grupo+')':'No',
+      (r._editados||[]).map(function(k){ var c=campoById(k); return c?c.label:k; }).join(', ')||(r._manual?'Fila agregada a mano':''),
+      [r._calc_nivel?'Residual':'',r._calc_nivel_inherente?'Inherente':''].filter(Boolean).join(' y ')||'No',
+      r._procDefecto?'Sí':'No', r._rellenado?'Sí':'No', homo, r._obs||''].map(function(v){ return {v:v,s:ST.txt}; }));
+  });
+  var porOrigen=contarPor(regs,'_origen',''), porNivel=contarPor(regs,'nivel','(sin nivel)'), porNivelI=contarPor(regs,'nivel_inherente','(sin nivel)'), porCat=contarPor(regs,'categoria','(sin categoría)');
+  var res=[[{v:'Métrica',s:ST.cab},{v:'Valor',s:ST.cab}],['Fecha de consolidación',new Date().toLocaleString('es-CO')],
+           ['Organización',state.empresa||''],['Matrices de origen',state.archivos.length],['Registros consolidados',regs.length],
+           ['Registros excluidos o fusionados',(state._excluidas||[]).length],
+           ['Posibles duplicados sin resolver',regs.filter(function(r){return r._dup;}).length],[]];
+  res.push([{v:'Registros por matriz de origen',s:ST.seccion},'']);
+  Object.keys(porOrigen).forEach(function(o){ res.push([o,porOrigen[o]]); });
+  res.push([]); res.push([{v:'Registros por nivel residual',s:ST.seccion},'']);
+  ordenNiveles(porNivel).forEach(function(k){ res.push([{v:k,s:estiloNivel(k)},porNivel[k]]); });
+  if(regs.some(function(r){return r.nivel_inherente;})){ res.push([]); res.push([{v:'Registros por nivel inherente',s:ST.seccion},'']); ordenNiveles(porNivelI).forEach(function(k){ res.push([{v:k,s:estiloNivel(k)},porNivelI[k]]); }); }
+  res.push([]); res.push([{v:'Registros por categoría',s:ST.seccion},'']);
+  Object.keys(porCat).sort(function(a,b){return a.localeCompare(b,'es');}).forEach(function(k){ res.push([k,porCat[k]]); });
+  var bytes=construirXlsx([
+    {nombre:'Consolidado', aoa:cons, anchos:anchos, congelar:true, autoFiltro:'A1:'+colName(cab.length-1)+cons.length},
+    {nombre:'Trazabilidad', aoa:traz, anchos:[22,16,10,13,14,42,16,30,20,14,14,40,60], congelar:true, autoFiltro:'A1:M'+traz.length},
+    {nombre:'Resumen', aoa:res, anchos:[40,26]},
+    tablaDiccionario()
+  ]);
+  descargar(bytes,'Matriz_Consolidada_'+hoyISO()+'.xlsx');
+  toast('Excel consolidado descargado','ok');
+}
+
+/* ---------- Puentes JSON hacia las aplicaciones hermanas ---------- */
+function partes(v){ return String(v||'').split(' | ').map(function(s){return s.trim();}).filter(Boolean); }
+function evaluacion(r){
+  var pr=entero15(r.probabilidad), ir=entero15(r.impacto), pi=entero15(r.prob_inherente), ii=entero15(r.imp_inherente);
+  return {pr:pr||pi, ir:ir||ii, pi:pi||pr, ii:ii||ir, ok:!!((pr&&ir)||(pi&&ii))};
+}
+function descargarJson(obj,nombre){ descargar(strBytes(JSON.stringify(obj,null,2)),nombre,'application/json'); }
+function nombreOrg(){ return state.empresa || 'Portafolio consolidado'; }
+/* Matriz 5 × 5 con las mismas bandas que el consolidador (0 Bajo … 3 Crítico/Extremo) */
+function matrizBandas(){ var m=[]; for(var p=1;p<=5;p++){ var f=[]; for(var i=1;i<=5;i++) f.push(NIVELES.indexOf(nivelDePuntaje(p*i))); m.push(f); } return m; }
+function exportarJsonRiskFocus(){
+  consolidar();
+  var anio=new Date().getFullYear(), omit=0, riesgos=[];
+  state.consolidado.forEach(function(r){
+    var ev=evaluacion(r); if(!ev.ok){ omit++; return; }
+    riesgos.push({uid:'cm'+(riesgos.length+1)+'_'+Date.now().toString(36), cliCodigo:'CONS', cliNombre:nombreOrg(),
+      cliContinente:'', cliPais:'', cliSegmento:'', cliIndustria:'', cliSubindustria:'',
+      anio:anio, ejercicio:'Consolidación '+anio, codigo:r.codigo||('R'+(riesgos.length+1)), nombre:r.riesgo,
+      p:ev.pr, i:ev.ir, control:EFECTIVIDADES.indexOf(r.efectividad_control)>=0? r.efectividad_control : '',
+      categoria:r.categoria||'', proceso:r.proceso||'',
+      asegurable:'No', asegurado:'No', poliza:'N/A', orden:riesgos.length+1, recs:partes(r.plan), nRecArchivo:null,
+      extra:{'Proceso':r.proceso||'', 'Categoría':r.categoria||'', 'Responsable':r.responsable||'', 'Controles':r.control||'', 'Origen':r._origen},
+      notas:[]});
+  });
+  if(!riesgos.length){ toast('Ningún registro tiene probabilidad e impacto de 1 a 5','err'); return; }
+  descargarJson({app:'Risk Focus 3D', exportado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión beta',
+    datos:{schemaVersion:1, config:{titulo:'Risk Focus', matriz:matrizBandas()}, riesgos:riesgos, origen:'Consolidador de Matrices · '+nombreOrg()},
+    bitacora:[]}, 'RiskFocus_desde_consolidador_'+hoyISO()+'.json');
+  toast(riesgos.length+' riesgos exportados para Risk Focus 3D'+(omit?' · '+omit+' omitidos por no tener P e I de 1 a 5':''), omit?'warn':'ok');
+}
+var CATS_DASH=['Estratégico','Operativo','Financiero','Cumplimiento','Tecnológico','Socioambiental'];
+function catDashboard(c){
+  var n=normClave(c);
+  if(/tecnolog|^ti$|sistem|informat|ciber|seguridad de la informacion|digital/.test(n)) return 'Tecnológico';
+  if(/financ|credito|liquidez|mercado|tributar|contab|tesorer|cartera|presupuest/.test(n)) return 'Financiero';
+  if(/cumplim|legal|regulat|normativ|juridic|complian|fraude|corrupc|lavado/.test(n)) return 'Cumplimiento';
+  if(/estrateg|reputac|negocio|comercial|imagen/.test(n)) return 'Estratégico';
+  if(/ambient|social|sostenib|clima|comunidad/.test(n)) return 'Socioambiental';
+  return 'Operativo';
+}
+function codTipoControl(t){ var n=normClave(t); return /detect/.test(n)?'D':(/correct/.test(n)?'C':'P'); }
+function codNaturaleza(t){ return /automat/.test(normClave(t))?'A':'M'; }
+function pctEfectividad(v){ var x=numeroDe(v); if(x&&(x.pct||x.n>5)) return Math.max(0,Math.min(100,Math.round(x.n))); return ({'Fuerte':80,'Moderado':55,'Débil':30})[v]||50; }
+function sumarDias(iso,d){ var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso); var t=new Date(Date.UTC(+m[1],+m[2]-1,+m[3]+d)); return t.getUTCFullYear()+'-'+pad2(t.getUTCMonth()+1)+'-'+pad2(t.getUTCDate()); }
+function exportarJsonDashboard(){
+  consolidar();
+  var hoy=hoyISO(), omit=0, riesgos=[], controles=[], planes=[], cats={};
+  state.consolidado.forEach(function(r){
+    var ev=evaluacion(r); if(!ev.ok){ omit++; return; }
+    var id='R'+pad2(riesgos.length+1), cat=catDashboard(r.categoria||r.proceso); cats[cat]=1;
+    riesgos.push({id:id, nombre:r.riesgo, categoria:cat, proceso:r.proceso||'', dueno:r.responsable||'',
+      pi:ev.pi, ii:ev.ii, pr:ev.pr, ir:ev.ir, po:ev.pr, io:ev.ir, vel:3, vul:3, tend:0,
+      descripcion:r.descripcion||'', causas:partes(r.causas), consecuencias:partes(r.consecuencias), notas:[], cuanti:null});
+    partes(r.control).forEach(function(c){
+      controles.push({id:'C'+pad2(controles.length+1), riesgoId:id, nombre:c, tipo:codTipoControl(r.tipo_control), naturaleza:codNaturaleza(r.tipo_control), efectividad:pctEfectividad(r.efectividad_control), estado:'I'});
+    });
+    partes(r.plan).forEach(function(p){
+      var fin=fechaASerial(r.fecha)!==null && r.fecha>=hoy? r.fecha : sumarDias(hoy,90);
+      planes.push({id:'P'+pad2(planes.length+1), riesgoId:id, accion:p, responsable:r.responsable||'', inicio:hoy, fin:fin, avance:0});
+    });
+  });
+  if(!riesgos.length){ toast('Ningún registro tiene probabilidad e impacto de 1 a 5','err'); return; }
+  var apetito={}; Object.keys(cats).forEach(function(c){ apetito[c]=[9,12]; });
+  descargarJson({app:'Tablero de Riesgos', exportado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión beta',
+    datos:{schemaVersion:1, empresa:nombreOrg(), corte:hoy, apetitoGeneral:9, apetito:apetito, riesgos:riesgos, controles:controles, kris:[], planes:planes, relaciones:[]},
+    bitacora:[]}, 'Tablero_desde_consolidador_'+hoyISO()+'.json');
+  toast(riesgos.length+' riesgos, '+controles.length+' controles y '+planes.length+' planes exportados'+(omit?' · '+omit+' omitidos por no tener P e I':''), omit?'warn':'ok');
+}
+function exportarJsonMapa(){
+  consolidar();
+  var zonas=[{id:'z1',nombre:'Bajo'},{id:'z2',nombre:'Medio'},{id:'z3',nombre:'Alto'},{id:'z4',nombre:'Crítico'}];
+  var matriz={}; for(var p=1;p<=5;p++) for(var i=1;i<=5;i++) matriz[p+'-'+i]=zonas[NIVELES.indexOf(nivelDePuntaje(p*i))].id;
+  var riesgos=[], crits=[], vistos={}, rep=0, cats={};
+  state.consolidado.forEach(function(r){
+    var k=normClave(r.riesgo); if(vistos[k]){ rep++; return; } vistos[k]=1;
+    var id='r'+(riesgos.length+1), ev=evaluacion(r);
+    var niv=NIVELES.indexOf(r.nivel); if(niv<0) niv=NIVELES.indexOf(r.nivel_inherente);
+    var mag=niv>=0? niv+1 : (ev.ok? NIVELES.indexOf(nivelDePuntaje(ev.pr*ev.ir))+1 : 2);
+    if(r.categoria) cats[r.categoria]=1;
+    riesgos.push({id:id, nombre:r.riesgo, proceso:r.proceso||'', categoria:r.categoria||'', mag:mag, fuerzas:[], origen:'consolidador',
+      cliId:'cons', proc:r.proceso||'', cat:r.categoria||''});
+    if(ev.ok){ crits.push({rskId:id, tipo:'residual', prob:ev.pr, impMax:ev.ir}); crits.push({rskId:id, tipo:'inherente', prob:ev.pi, impMax:ev.ii}); }
+  });
+  if(!riesgos.length){ toast('No hay riesgos para exportar','err'); return; }
+  descargarJson({formato:'mapa_interdependencia', generado:new Date().toISOString(), generadoPor:'Consolidador de Matrices de Riesgos · Versión beta',
+    umbral:0, categorias:Object.keys(cats), riesgos:riesgos, relaciones:[],
+    clientes:[{id:'cons', nombre:nombreOrg(), cfg:{matriz:matriz, zonas:zonas}}], crits:crits}, 'Mapa_desde_consolidador_'+hoyISO()+'.json');
+  toast(riesgos.length+' riesgos exportados para el Mapa de Interdependencia'+(rep?' · '+rep+' con nombre repetido se omitieron':''),'ok');
+}
+
+/* ============================================================
+   DATOS DE DEMOSTRACIÓN
+   Se fabrican archivos reales en memoria (dos .xlsx con celdas
+   combinadas, fechas con formato y varias hojas, y un .csv en
+   Windows-1252 con punto y coma) y se leen con el mismo lector
+   que los archivos del usuario. Empresas y datos ficticios.
+   ============================================================ */
+function bytesCp1252(txt){
+  var mapa={'€':0x80,'‚':0x82,'„':0x84,'…':0x85,'–':0x96,'—':0x97,'‘':0x91,'’':0x92,'“':0x93,'”':0x94};
+  var out=new Uint8Array(txt.length);
+  for(var i=0;i<txt.length;i++){ var c=txt.charCodeAt(i); out[i]=c<256? c : (mapa[txt[i]]||0x3F); }
+  return out;
+}
+function libroFinanzas(){
+  var D=function(iso){ return {v:fechaASerial(iso), s:ST.fecha14}; };
+  var aoa=[
+    [{v:'Matriz de riesgos — Gerencia Financiera 2026', s:ST.titulo}],
+    [],
+    ['Proceso','Cód.','Nombre del riesgo','Causa 1','Causa 2','Prob. (1-3)','Impacto (1-3)','Control existente','Responsable','Fecha de revisión'],
+    ['Tesorería','FIN-01','Fraude en pagos a proveedores','Suplantación de proveedores','Cambios de cuenta bancaria sin verificación',2,3,'Doble firma y verificación telefónica de cambios de cuenta','Tesorero',D('2026-03-15')],
+    ['','FIN-02','Falta de liquidez para atender obligaciones de corto plazo','Concentración de vencimientos','Cartera vencida de clientes',2,3,'Flujo de caja semanal con alertas','Director financiero',D('2026-04-30')],
+    ['','FIN-03','Pérdida por diferencia en cambio','Deuda en dólares sin cobertura','',3,2,'Coberturas parciales con forwards','Tesorero',D('2026-05-31')],
+    ['Contabilidad','FIN-04','Error material en los estados financieros','Cierres manuales en hojas de cálculo','Cambios en las normas contables',1,3,'Revisión independiente del cierre mensual','Contador general',D('2026-06-30')],
+    ['','FIN-05','Incumplimiento de obligaciones tributarias','Reformas tributarias frecuentes','',2,2,'Calendario tributario con responsables','Contador general',D('2026-02-28')],
+    ['Compras','FIN-06','Fraude en el proceso de compras','Colusión con proveedores','Compras urgentes sin cotización',2,3,'Segregación de funciones en compras','Jefe de compras',D('2026-07-31')],
+    ['Sistemas','FIN-07','Caída del sistema ERP','Un solo centro de datos','',2,3,'Soporte del proveedor con acuerdo de nivel de servicio','Director financiero',D('2026-09-30')],
+    ['TOTAL','','7 riesgos identificados']
+  ];
+  return construirXlsx([{nombre:'Matriz Finanzas', aoa:aoa, combinadas:['A1:J1','A4:A6','A7:A8']}]);
+}
+function libroOperaciones(){
+  var D=function(iso){ return {v:fechaASerial(iso), s:ST.fecha}; };
+  var cab=['Macroproceso','ID','Evento de riesgo','Descripción','Categoría','Probabilidad Inherente','Impacto Inherente','Control','Tipo de control','Calificación del control','Probabilidad Residual','Impacto Residual','Dueño del riesgo','Plan de acción','Fecha límite'];
+  var planta=[cab,
+    ['Producción','OP-01','Falla crítica del horno principal','Parada no programada que detiene la línea de producción','Operacional',4,5,'Mantenimiento predictivo con sensores','Preventivo automático','Fuerte',2,5,'Gerente de planta','Reemplazar el refractario del horno',D('2026-12-15')],
+    ['','','','','','','','Inventario de repuestos críticos','Correctivo manual','Moderado','','','','',''],
+    ['Producción','OP-02','Accidente laboral grave en la línea de producción','Lesión grave de un trabajador en operaciones de alto riesgo','Seguridad y salud en el trabajo',3,5,'Permisos de trabajo de alto riesgo','Preventivo manual','Moderado',2,4,'Jefe de seguridad y salud en el trabajo','Reforzar el bloqueo y etiquetado de energías',D('2026-10-31')],
+    ['Producción','OP-03','Ataque de ransomware que cifra los sistemas de planta','Cifrado malicioso de los equipos que controlan la producción','Tecnológico',4,5,'Red de planta segmentada','Preventivo automático','Moderado',3,4,'Jefe de automatización','Respaldos fuera de línea de los sistemas de planta',D('2026-11-30')],
+    ['Compras','OP-04','Fraude en el proceso de compras','Colusión con proveedores en la adjudicación','Cumplimiento',3,4,'Doble aprobación de órdenes de compra','Preventivo manual','Fuerte',2,4,'Jefe de compras','Rotar a los compradores cada dos años',D('2026-08-31')],
+    ['Compras','OP-05','Interrupción del suministro de materia prima crítica','Proveedor único para insumos importados','Operativo',4,4,'Stock de seguridad de 15 días','Correctivo manual','Débil',3,4,'Gerente de compras','Homologar un segundo proveedor',D('2026-09-15')],
+    ['Producción','OP-06','Sanción por incumplir la licencia ambiental','Requisitos legales sin seguimiento','Legal',2,4,'Matriz de requisitos legales','Detectivo manual','Moderado','','','Coordinador ambiental','','']
+  ];
+  var comb=['A2:A3','B2:B3','C2:C3','D2:D3','E2:E3','F2:F3','G2:G3','K2:K3','L2:L3','M2:M3','N2:N3','O2:O3'];
+  var logistica=[cab,
+    ['Logística','LG-01','Incumplimiento de los transportadores','Entregas tardías por fallas de la flota tercerizada','Operacional',4,3,'Evaluación mensual de transportadores','Detectivo manual','Moderado',3,3,'Jefe de logística','Contratar un segundo transportador',D('2026-12-01')],
+    ['Logística','LG-02','Pérdida de inventario por hurto en bodegas','Faltantes por hurto interno o externo','Operacional',3,3,'Conteos cíclicos de inventario','Detectivo manual','En revisión',3,3,'Jefe de bodega','Instalar control de acceso biométrico',D('2027-01-31')],
+    ['Logística','LG-03','Inundación del centro de distribución','Evento climático que daña el inventario','Socioambiental',2,5,'Póliza de daños materiales','Correctivo manual','Fuerte',2,4,'Jefe de logística','Construir un muro de contención',D('2026-11-15')]
+  ];
+  var instr=[[{v:'Instrucciones de diligenciamiento', s:ST.titulo}],['Califique de 1 a 5 la probabilidad y el impacto, antes y después de los controles.']];
+  return construirXlsx([
+    {nombre:'Instrucciones', aoa:instr},
+    {nombre:'Planta y compras', aoa:planta, combinadas:comb},
+    {nombre:'Logística', aoa:logistica}
+  ]);
+}
+function csvTI(){
+  var l=[
+    'Matriz de riesgos de Tecnología - Corte junio 2026;;;;;;;;;;;;',
+    ';;;;;;;;;;;;',
+    'Proceso;Código;Riesgo;Tipo de riesgo;Causas;Probabilidad;Impacto;Nivel;Controles;Responsable;Plan de tratamiento;Fecha compromiso;Comentarios del comité',
+    'Tecnología;TI-01;Caída del sistema ERP;TI;Un solo centro de datos sin réplica;Media;Alta;Alto;Réplica diaria de la base de datos en la nube;Jefe de infraestructura;Configurar un sitio alterno de recuperación;30/09/2026;Revisar en el comité de octubre',
+    'Tecnología;TI-02;Ataque de ransomware que cifra los sistemas;Seguridad de la información;Phishing dirigido a usuarios con privilegios;Alta;Alta;Alto;Filtro avanzado de correo;Oficial de seguridad;Simulacros de phishing trimestrales;31/08/2026;Prioridad del plan anual',
+    ';;;;;;;;Copias de respaldo inmutables fuera de línea;;;;',
+    'Tecnología;TI-03;Fuga de datos personales de clientes;Tecnología;Bases de datos sin cifrado completo;Media;Alta;Alto;Cifrado de bases de datos;Oficial de protección de datos;Cifrar las bases restantes;15/12/2026;',
+    'Tecnología;TI-04;Obsolescencia de la infraestructura tecnológica;TI;Equipos fuera de soporte del fabricante;Alta;Media;Medio;Inventario de activos tecnológicos;Jefe de infraestructura;Plan de renovación de equipos;31/03/2027;Presupuesto aprobado',
+    'Mesa de ayuda;TI-05;Accesos no revocados de personal retirado;Cumplimiento;Retiros sin notificación oportuna a TI;Media;Media;Medio;Revisión trimestral de accesos;Jefe de seguridad;Integrar el retiro de personal con Talento Humano;30/11/2026;',
+    'Tecnología;TI-06;"Migración a la nube con sobrecostos; alcance sin controlar";Estratégico;Alcance sin controlar;Baja;Media;Bajo;Comité quincenal del proyecto;Gerente de proyectos;Replanificar el cronograma;1/02/2027;'
+  ];
+  return bytesCp1252(l.join('\r\n')+'\r\n');
+}
+async function cargarDemo(){
+  if(state.archivos.length && !confirm('Se agregarán 3 matrices de demostración a los archivos ya cargados. ¿Continuar?')) return;
+  try{
+    await cargarBytes('Finanzas_Matriz_2026.xlsx', libroFinanzas());
+    await cargarBytes('Operaciones_Matriz.xlsx', libroOperaciones());
+    var ti=await cargarBytes('TI_Matriz_riesgos.csv', csvTI());
+    ti.rellenarAbajo=true;
+    renderPaso1(); renderSteps(); autoguardar();
+    toast('3 matrices de demostración cargadas (datos ficticios)','ok');
+  }catch(err){ toast('No se pudo crear la demostración: '+err.message,'err'); }
+}
+
+/* ============================================================
+   PERSISTENCIA: AUTOGUARDADO Y PROYECTO .JSON
+   ============================================================ */
+var LS_OK=true, tAuto=null, avisoGrande=false;
+function serializar(){
+  var s={};
+  Object.keys(state).forEach(function(k){ if(k.charAt(0)!=='_' && k!=='consolidado' && k!=='archivos') s[k]=state[k]; });
+  s.archivos=state.archivos.map(function(a){
+    return {id:a.id, nombre:a.nombre, tipo:a.tipo, hojas:a.hojas, hoja:a.hoja, hojaIdx:a.hojaIdx, filasCrudas:a.filasCrudas, filaCab:a.filaCab,
+      mapeo:a.mapeo, autoMapeo:a.autoMapeo, codificacion:a.codificacion, delimitador:a.delimitador, motor:a.motor, combinadas:a.combinadas,
+      rellenarAbajo:a.rellenarAbajo, procesoDefecto:a.procesoDefecto, procesoTexto:a.procesoTexto, desglosado:a.desglosado, libro:a.libro};
+  });
+  return {app:'Consolidador de Matrices de Riesgos', edicion:'Beta', formato:1, guardado:new Date().toISOString(), state:s};
+}
+function aplicarProyecto(obj){
+  var s=obj && obj.state;
+  if(!s || !Array.isArray(s.archivos)) throw new Error('el archivo no es un proyecto del Consolidador de Matrices');
+  var base=estadoInicial();
+  Object.keys(base).forEach(function(k){ if(s[k]!==undefined && k!=='archivos' && k!=='consolidado') base[k]=s[k]; });
+  base.opciones=Object.assign(estadoInicial().opciones, s.opciones||{});
+  base.homologacion=Object.assign({categoria:{},proceso:{}}, s.homologacion||{});
+  base.archivos=s.archivos.map(function(a){
+    var r=nuevoRegistro(a.nombre,a.tipo);
+    Object.keys(a).forEach(function(k){ r[k]=a[k]; });
+    r.lector=null; r.hojasInfo=null;
+    if(!Array.isArray(r.filasCrudas)) r.filasCrudas=[];
+    recalcularArchivo(r);
+    return r;
+  });
+  base.paso=Math.max(0,Math.min(PASOS.length-1,parseInt(base.paso,10)||0));
+  state=base; UI={previa:{}, desglose:{}, regValores:[], regHomo:[], vistaHeat5:'residual', celdaHeat5:null};
+  aplicarPreferenciasVisuales();
+}
+function autoguardar(){
+  if(!LS_OK) return;
+  clearTimeout(tAuto);
+  tAuto=setTimeout(guardarAhora,500);
+}
+function guardarAhora(){
+  if(!LS_OK) return;
+  try{
+    var txt=JSON.stringify(serializar());
+    if(txt.length>4500000){
+      if(!avisoGrande){ avisoGrande=true; toast('El proyecto es muy grande para el autoguardado del navegador. Use «💾 Guardar proyecto».','warn'); }
+      marcaGuardado('Autoguardado: proyecto demasiado grande'); return;
+    }
+    localStorage.setItem(CLAVE_LS, txt);
+    var d=new Date(); marcaGuardado('Autoguardado '+pad2(d.getHours())+':'+pad2(d.getMinutes()));
+  }catch(e){ LS_OK=false; marcaGuardado('Autoguardado no disponible en este navegador'); }
+}
+function marcaGuardado(t){ var el=document.getElementById('saveState'); if(el) el.textContent=t; }
+function restaurarAutoguardado(){
+  var txt=null;
+  try{ txt=localStorage.getItem(CLAVE_LS); }catch(e){ LS_OK=false; marcaGuardado('Autoguardado no disponible en este navegador'); return false; }
+  if(!txt) return false;
+  try{
+    var obj=JSON.parse(txt);
+    if(!obj.state || !obj.state.archivos || !obj.state.archivos.length) return false;
+    aplicarProyecto(obj);
+    var f=new Date(obj.guardado);
+    toast('Se recuperó el proyecto guardado automáticamente ('+f.toLocaleString('es-CO')+')','ok');
+    marcaGuardado('Recuperado del autoguardado');
+    return true;
+  }catch(e){ return false; }
+}
+function guardarProyecto(){
+  if(!state.archivos.length){ toast('Todavía no hay nada que guardar','warn'); return; }
+  descargarJson(serializar(),'Proyecto_Consolidacion_'+hoyISO()+'.json');
+  toast('Proyecto guardado. Ábralo en cualquier computador con «📂 Abrir proyecto».','ok');
+}
+document.getElementById('projPick').addEventListener('change',function(e){
+  var f=e.target.files[0]; e.target.value='';
+  if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var obj=JSON.parse(r.result);
+      if(state.archivos.length && !confirm('Se reemplazará el trabajo actual por el proyecto «'+f.name+'». ¿Continuar?')) return;
+      aplicarProyecto(obj);
+      guardarAhora(); irPaso(state.paso,true);
+      toast('Proyecto abierto: '+state.archivos.length+' matriz(ces)','ok');
+    }catch(err){ toast('No se pudo abrir «'+f.name+'»: '+err.message,'err'); }
+  };
+  r.readAsText(f,'utf-8');
+});
+
+/* ============================================================
+   NAVEGACIÓN, IDENTIDAD / TEMA Y ATAJOS DE TECLADO
+   ============================================================ */
+function aplicarPreferenciasVisuales(){
+  var id=state.identidad='personal', tm=state.tema||'claro';
+  /* Con la identidad personal la marca tampoco aparece en el título de la pestaña ni del PDF */
+  document.title='Consolidador de Matrices de Riesgos · Versión beta';
+  document.documentElement.setAttribute('data-identidad',id);
+  document.documentElement.setAttribute('data-tema',tm);
+  var sel=document.getElementById('selIdentidad'); if(sel) sel.value=id;
+  var bt=document.getElementById('btnTema'); if(bt) bt.textContent=(tm==='oscuro'?'☾ Oscuro':'☀ Claro');
+}
+function setIdentidad(id){
+  state.identidad='personal';
+  aplicarPreferenciasVisuales(); autoguardar();
+  toast('Identidad: Portafolio Personal activada','ok');
+}
+function toggleTema(){
+  state.tema=(state.tema==='oscuro'?'claro':'oscuro');
+  aplicarPreferenciasVisuales(); autoguardar();
+}
+function vacio(ic,t,d){ return '<div class="empty"><div class="ic">'+ic+'</div><div class="t">'+escH(t)+'</div><p class="hint">'+d+'</p></div>'; }
+function puedeIr(p){
+  if(p<=0) return true;
+  if(!state.archivos.length) return false;
+  if(p>=3){ return state.archivos.some(function(a){ return colsDe(a,'riesgo').length>0; }); }
+  return true;
+}
+function renderSteps(){
+  document.getElementById('steps').innerHTML=PASOS.map(function(t,i){
+    var cls = i===state.paso? 'active' : (i<state.paso?'done':'');
+    if(!puedeIr(i)) cls+=' lock';
+    return '<div class="step '+cls+'" onclick="irPaso('+i+')"><span class="n">'+(i<state.paso?'✓':(i+1))+'</span>'+t+'</div>';
+  }).join('');
+  ['btnPrev','btnPrevTop'].forEach(function(id){
+    var b=document.getElementById(id); if(b) b.style.visibility = state.paso===0?'hidden':'visible';
+  });
+  ['btnNext','btnNextTop'].forEach(function(id){
+    var next=document.getElementById(id);
+    if(next){
+      next.style.visibility = state.paso===PASOS.length-1?'hidden':'visible';
+      next.disabled=!puedeIr(state.paso+1);
+    }
+  });
+}
+function irPaso(p,forzar){
+  if(p<0||p>=PASOS.length) return;
+  if(!puedeIr(p)){
+    if(forzar) p=0;
+    else {
+      if(!state.archivos.length) toast('Cargue al menos un archivo para continuar','warn');
+      else toast('Relacione la columna «Riesgo» de al menos un archivo','warn');
+      return;
+    }
+  }
+  state.paso=p; renderSteps();
+  if(p===0) renderPaso1();
+  else if(p===1) renderPaso2();
+  else if(p===2) renderPaso3();
+  else if(p===3) renderPaso4();
+  else renderPaso5();
+  window.scrollTo({top:0,behavior:'smooth'});
+  autoguardar();
+}
+function reiniciar(){
+  if(!confirm('¿Reiniciar? Se descartarán los archivos cargados, el mapeo, las equivalencias y las ediciones (también el autoguardado de este navegador).')) return;
+  var id=state.identidad, tm=state.tema;
+  state=estadoInicial(); state.identidad=id; state.tema=tm;
+  UI={previa:{}, desglose:{}, regValores:[], regHomo:[], vistaHeat5:'residual', celdaHeat5:null};
+  try{ localStorage.removeItem(CLAVE_LS); }catch(e){}
+  aplicarPreferenciasVisuales(); renderSteps(); renderPaso1(); marcaGuardado(''); toast('Aplicación reiniciada','ok');
+}
+window.addEventListener('keydown',function(e){
+  if(e.altKey && (e.key==='ArrowRight' || e.key==='ArrowLeft')){
+    e.preventDefault();
+    /* Si el usuario está editando una celda, se guarda antes de cambiar de paso:
+       al repintar, la celda desaparece sin disparar su evento de salida. */
+    var act=document.activeElement;
+    if(act && act.isContentEditable && act.dataset && act.dataset.uid){
+      editar(act.dataset.uid, act.dataset.campo, act.textContent, null);
+    }
+    irPaso(state.paso + (e.key==='ArrowRight'?1:-1));
+    return;
+  }
+  if(e.key==='Escape'){
+    var pop=document.getElementById('colsPop');
+    if(pop && pop.open){ pop.open=false; return; }
+    if(state.paso===0){
+      var cerr=false;
+      Object.keys(UI.previa||{}).forEach(function(k){ if(UI.previa[k]){ UI.previa[k]=false; cerr=true; } });
+      Object.keys(UI.desglose||{}).forEach(function(k){ if(UI.desglose[k]){ UI.desglose[k]=false; cerr=true; } });
+      if(cerr) renderPaso1();
+    } else if(state.paso===3){
+      if(state.busqueda || state.soloDuplicados){
+        state.busqueda=''; state.soloDuplicados=false;
+        var ib=document.getElementById('inpBusq4'); if(ib) ib.value='';
+        var cd=document.getElementById('chkDup'); if(cd) cd.checked=false;
+        pintarTabla();
+        toast('Filtros rápidos limpiados','ok');
+      }
+    } else if(state.paso===4){
+      if(UI.celdaHeat5){ seleccionarCeldaHeat5(null); }
+    }
+  }
+});
+window.addEventListener('pagehide',function(){ if(tAuto){ clearTimeout(tAuto); guardarAhora(); } });
+restaurarAutoguardado();
+aplicarPreferenciasVisuales();
+irPaso(state.paso,true);
+</script>
+<script>
+/* Abierta por su URL directa, la herramienta ofrece volver al portafolio; dentro del visor del portafolio sobra */
+(function(){
+  if (window.self !== window.top || location.protocol === 'file:') return;
+  var h = document.querySelector('.app-header'); if (!h) return;
+  var a = document.createElement('a');
+  a.className = 'volver-portafolio'; a.href = '../index.html'; a.setAttribute('aria-label', 'Volver al portafolio');
+  a.innerHTML = '\u2190<span class="lbl"> Portafolio</span>';
+  h.insertBefore(a, h.firstChild);
+})();
+</script>
+</body>
+</html>

@@ -665,7 +665,7 @@
             <h2 id="titulo-instrumentos">The instruments I work with</h2>
             <p class="intro">Each one solves a problem I have run into in the field. They are live: open them and use them. The interfaces are in Spanish; the frameworks behind them are COSO and ISO 31000.</p>
           </div>
-          <p class="nota"><strong>These are demonstration versions</strong>, simplified and loaded with sample data. The full versions are configured for each organisation’s methodology, scales and reporting; if one is genuinely useful to you, write to me and I will show you the working version.</p>
+          <p class="nota"><strong>Four are demonstrations</strong>, simplified and loaded with sample data; <strong>those marked beta</strong> are the complete tools, still being tested. All of them are configured for each organisation’s methodology, scales and reporting; if one is genuinely useful to you, write to me and I will show you the working version.</p>
         </div>
 
         <div class="tools-grid">
@@ -715,10 +715,10 @@
 
         <article class="tool-card reveal" style="--i:2">
           <div class="vista" onclick="openTool('consolidador', this.closest('.tool-card').querySelector('.btn-open'))">
-            <img src="herramientas/capturas/consolidador.jpg" alt="Two matrices in different formats and, below, the consolidated register on a common scale with possible duplicates highlighted" width="880" height="550" loading="lazy" decoding="async">
+            <img src="herramientas/capturas/consolidador.jpg" alt="Register consolidated from three sample matrices: five-by-five heat map with the risks placed and their distribution by process" width="880" height="550" loading="lazy" decoding="async">
           </div>
           <div class="tool-body">
-            <div class="tool-category">Data Normalisation <span class="badge-demo">Demo</span></div>
+            <div class="tool-category">Data Normalisation <span class="badge-beta">Beta</span></div>
             <h3 class="tool-title">Matrix Consolidator</h3>
             <p class="tool-description">Every area handed in its matrix in a different format. Reconcile the structures, catch the same risk written three ways and end up with one consolidated register.</p>
             <button type="button" class="btn-open" onclick="openTool('consolidador', this)" aria-haspopup="dialog" aria-expanded="false">
@@ -743,12 +743,12 @@
 
         <article class="tool-card reveal" style="--i:1">
           <div class="vista" onclick="openTool('muestreo', this.closest('.tool-card').querySelector('.btn-open'))">
-            <img src="herramientas/capturas/muestreo.jpg" alt="Calculated sample size, 56 items, and the reproducible random selection" width="880" height="550" loading="lazy" decoding="async">
+            <img src="herramientas/capturas/muestreo.jpg" alt="Summary of a sample engagement: engagement indicators and the result of three control tests with their conclusion" width="880" height="550" loading="lazy" decoding="async">
           </div>
           <div class="tool-body">
-            <div class="tool-category">Control and Audit <span class="badge-demo">Demo</span></div>
-            <h3 class="tool-title">Audit Sampling</h3>
-            <p class="tool-description">You have to test a control and do not know how many items to pull. Calculate the sample size and leave the statistical basis documented.</p>
+            <div class="tool-category">Control and Audit <span class="badge-beta">Beta</span></div>
+            <h3 class="tool-title">Working Papers and Control Testing</h3>
+            <p class="tool-description">You have to test a control and leave evidence that stands up to review. Design the test, size the sample, document each item and close with the conclusion and the findings.</p>
             <button type="button" class="btn-open" onclick="openTool('muestreo', this)" aria-haspopup="dialog" aria-expanded="false">
               Open tool <span aria-hidden="true">→</span>
             </button>
@@ -935,9 +935,9 @@
       mapa3d: { title: "3D Risk Map", src: "herramientas/Mapa_Riesgos_3D_Demo.html" },
       matriz: { title: "Process Risk Matrix", src: "herramientas/Matriz_Riesgos_Demo.html" },
       bowtie: { title: "RiskVantage — Bow Tie", src: "herramientas/RiskVantage_Demo.html" },
-      consolidador: { title: "Matrix Consolidator", src: "herramientas/Consolidador_Demo.html" },
+      consolidador: { title: "Matrix Consolidator (beta)", src: "herramientas/Consolidador_Beta.html" },
       apetito: { title: "Risk Appetite and Tolerance", src: "herramientas/Apetito_Demo.html" },
-      muestreo: { title: "Audit Sampling", src: "herramientas/Papeles_Demo.html" },
+      muestreo: { title: "Working Papers and Control Testing (beta)", src: "herramientas/Papeles_Trabajo_Beta.html" },
       minikri: { title: "Designing a KRI (beta)", src: "minijuegos/Minijuego_KRI.html", game: true },
       minibowtie: { title: "Bow-tie: warehouse fire (beta)", src: "minijuegos/Minijuego_BowTie.html", game: true }
     };
